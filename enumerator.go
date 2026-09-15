@@ -163,7 +163,7 @@ func (e *Enumerator) precomputeRow(y, x int, pieces []Piece) {
 			continue
 		}
 		p := y*w + x
-		pieces = append(pieces, Piece{p, s, Horizontal})
+		pieces = append(pieces, Piece{Position: p, Size: s, Orientation: Horizontal})
 		e.precomputeRow(y, x+s, pieces)
 		pieces = pieces[:len(pieces)-1]
 	}
@@ -190,7 +190,7 @@ func (e *Enumerator) precomputeCol(x, y int, pieces []Piece) {
 			continue
 		}
 		p := y*w + x
-		pieces = append(pieces, Piece{p, s, Vertical})
+		pieces = append(pieces, Piece{Position: p, Size: s, Orientation: Vertical})
 		e.precomputeCol(x, y+s, pieces)
 		pieces = pieces[:len(pieces)-1]
 	}

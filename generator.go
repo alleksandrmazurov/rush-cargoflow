@@ -22,7 +22,7 @@ func (g *Generator) Generate(iterations int) *Board {
 	board := NewEmptyBoard(g.Width, g.Height)
 
 	// place the primary piece
-	board.AddPiece(Piece{g.PrimaryRow * g.Width, g.PrimarySize, Horizontal})
+	board.AddPiece(Piece{Position: g.PrimaryRow * g.Width, Size: g.PrimarySize, Orientation: Horizontal})
 
 	// simulated annealing
 	board = anneal(board, 20, 0.5, iterations)

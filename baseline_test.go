@@ -73,7 +73,7 @@ func TestLegalMoveGeneration(t *testing.T) {
 	if len(moves) != 3 {
 		t.Fatalf("expected 3 legal moves, got %d: %v", len(moves), moves)
 	}
-	want := []Move{{1, 1}, {1, 2}, {1, 3}}
+	want := []Move{{Piece: 1, Steps: 1}, {Piece: 1, Steps: 2}, {Piece: 1, Steps: 3}}
 	if !reflect.DeepEqual(moves, want) {
 		t.Fatalf("moves: got %v want %v", moves, want)
 	}
@@ -94,7 +94,7 @@ func TestSolverSolvesKnownSimplePuzzle(t *testing.T) {
 	if solution.NumSteps != 7 {
 		t.Fatalf("expected 7 steps, got %d", solution.NumSteps)
 	}
-	want := []Move{{1, 3}, {0, 4}}
+	want := []Move{{Piece: 1, Steps: 3}, {Piece: 0, Steps: 4}}
 	if !reflect.DeepEqual(solution.Moves, want) {
 		t.Fatalf("moves: got %v want %v", solution.Moves, want)
 	}

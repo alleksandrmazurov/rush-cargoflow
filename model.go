@@ -21,10 +21,13 @@ const (
 // Piece represents a piece (a car or a truck) on the grid. Its position is
 // a zero-indexed int, 0 <= Position < W*H. Its size specifies how many cells
 // it occupies. Its orientation specifies whether it is vertical or horizontal.
+// Kind is PieceNormal for original Rush Hour; Cargo Flow may use PieceTarget
+// or PieceUnit (zero-value Kind keeps legacy boards unchanged).
 type Piece struct {
 	Position    int
 	Size        int
 	Orientation Orientation
+	Kind        PieceKind
 }
 
 func (piece *Piece) Stride(w int) int {
@@ -45,12 +48,23 @@ func (piece *Piece) Col(w int) int {
 // Move represents a move to make on the board. Piece indicates which piece
 // (by index) to move and Steps is a non-zero positive or negative int that
 // specifies how many cells to move the piece.
+//
+// Each Move is one player gesture: a multi-cell slide along a single axis is
+// still one Move (cost 1). Exit marks the Cargo Flow Target leaving via the
+// top gate (terminal victory gesture; no half-off-board state is stored).
+// Axis is used for PieceUnit (both axes); for single-axis pieces DoMove uses
+// the piece orientation.
 type Move struct {
 	Piece int
 	Steps int
+	Exit  bool
+	Axis  Orientation
 }
 
 func (move Move) AbsSteps() int {
+	if move.Exit {
+		return 0
+	}
 	if move.Steps < 0 {
 		return -move.Steps
 	}
@@ -62,6 +76,9 @@ func (move Move) Label() string {
 }
 
 func (move Move) String() string {
+	if move.Exit {
+		return fmt.Sprintf("%s->Exit", move.Label())
+	}
 	return fmt.Sprintf("%s%+d", move.Label(), move.Steps)
 }
 
@@ -69,24 +86,31 @@ func (move Move) String() string {
 // placement, size, orientation of the pieces. The placement of walls
 // (immovable obstacles). Which cells are occupied, either by a piece or a
 // wall.
+//
+// Rules selects OriginalRush (default) or CargoFlow semantics.
+// won is set only for CargoFlow after the Target Exit gesture.
+// Labels are optional display names aligned with Pieces (Cargo Flow).
 type Board struct {
 	Width    int
 	Height   int
 	Pieces   []Piece
 	Walls    []int
+	Rules    Ruleset
+	Labels   []string
 	occupied []bool
 	memoKey  MemoKey
+	won      bool
 }
 
 func NewEmptyBoard(w, h int) *Board {
 	occupied := make([]bool, w*h)
 	memoKey := MakeMemoKey(nil)
-	return &Board{w, h, nil, nil, occupied, memoKey}
+	return &Board{Width: w, Height: h, occupied: occupied, memoKey: memoKey}
 }
 
 func NewRandomBoard(w, h, primaryRow, primarySize, numPieces, numWalls int) *Board {
 	board := NewEmptyBoard(w, h)
-	board.AddPiece(Piece{primaryRow * w, primarySize, Horizontal})
+	board.AddPiece(Piece{Position: primaryRow * w, Size: primarySize, Orientation: Horizontal})
 	for i := 1; i < numPieces; i++ {
 		board.mutateAddPiece(100)
 	}
@@ -167,11 +191,11 @@ func NewBoard(desc []string) (*Board, error) {
 		if stride != 1 {
 			dir = Vertical
 		}
-		pieces = append(pieces, Piece{ps[0], len(ps), dir})
+		pieces = append(pieces, Piece{Position: ps[0], Size: len(ps), Orientation: dir})
 	}
 
-	// create board
-	board := &Board{w, h, pieces, walls, occupied, MakeMemoKey(pieces)}
+	// create board (RulesOriginalRush zero value)
+	board := &Board{Width: w, Height: h, Pieces: pieces, Walls: walls, occupied: occupied, memoKey: MakeMemoKey(pieces)}
 	return board, board.Validate()
 }
 
@@ -228,16 +252,23 @@ func (board *Board) Hash() string {
 }
 
 func (board *Board) Copy() *Board {
-	w := board.Width
-	h := board.Height
 	pieces := make([]Piece, len(board.Pieces))
 	walls := make([]int, len(board.Walls))
 	occupied := make([]bool, len(board.occupied))
-	memoKey := board.memoKey
 	copy(pieces, board.Pieces)
 	copy(walls, board.Walls)
 	copy(occupied, board.occupied)
-	return &Board{w, h, pieces, walls, occupied, memoKey}
+	return &Board{
+		Width:    board.Width,
+		Height:   board.Height,
+		Pieces:   pieces,
+		Walls:    walls,
+		Rules:    board.Rules,
+		Labels:   append([]string(nil), board.Labels...),
+		occupied: occupied,
+		memoKey:  board.memoKey,
+		won:      board.won,
+	}
 }
 
 func (board *Board) SortPieces() {
@@ -278,6 +309,10 @@ func (board *Board) HasFullRowOrCol() bool {
 }
 
 func (board *Board) Validate() error {
+	if board.Rules == RulesCargoFlow {
+		return board.validateCargoFlow()
+	}
+
 	w := board.Width
 	h := board.Height
 	pieces := board.Pieces
@@ -437,6 +472,9 @@ func (board *Board) Target() int {
 }
 
 func (board *Board) Moves(buf []Move) []Move {
+	if board.Rules == RulesCargoFlow {
+		return board.cargoMoves(buf)
+	}
 	moves := buf[:0]
 	w := board.Width
 	h := board.Height
@@ -459,7 +497,7 @@ func (board *Board) Moves(buf []Move) []Move {
 			if board.occupied[idx] {
 				break
 			}
-			moves = append(moves, Move{i, steps})
+			moves = append(moves, Move{Piece: i, Steps: steps})
 			idx -= stride
 		}
 		// forward (positive steps)
@@ -468,7 +506,7 @@ func (board *Board) Moves(buf []Move) []Move {
 			if board.occupied[idx] {
 				break
 			}
-			moves = append(moves, Move{i, steps})
+			moves = append(moves, Move{Piece: i, Steps: steps})
 			idx += stride
 		}
 	}
@@ -476,8 +514,12 @@ func (board *Board) Moves(buf []Move) []Move {
 }
 
 func (board *Board) DoMove(move Move) {
+	if move.Exit {
+		board.won = true
+		return
+	}
 	piece := &board.Pieces[move.Piece]
-	stride := piece.Stride(board.Width)
+	stride := board.moveStride(*piece, move)
 
 	idx := piece.Position
 	for i := 0; i < piece.Size; i++ {
@@ -496,7 +538,11 @@ func (board *Board) DoMove(move Move) {
 }
 
 func (board *Board) UndoMove(move Move) {
-	board.DoMove(Move{move.Piece, -move.Steps})
+	if move.Exit {
+		board.won = false
+		return
+	}
+	board.DoMove(Move{Piece: move.Piece, Steps: -move.Steps, Axis: move.Axis})
 }
 
 func (board *Board) StateIterator() <-chan *Board {
@@ -744,7 +790,7 @@ func (board *Board) randomPiece(maxAttempts int) (Piece, bool) {
 			y = rand.Intn(h)
 		}
 		position := y*w + x
-		piece := Piece{position, size, orientation}
+		piece := Piece{Position: position, Size: size, Orientation: orientation}
 		if !board.isOccupied(piece) {
 			return piece, true
 		}

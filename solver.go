@@ -33,6 +33,9 @@ func NewSolver(board *Board) *Solver {
 }
 
 func (solver *Solver) isSolved() bool {
+	if solver.board.Rules == RulesCargoFlow {
+		return solver.board.cargoIsSolved()
+	}
 	return solver.board.Pieces[0].Position == solver.target
 }
 
@@ -47,24 +50,28 @@ func (solver *Solver) search(depth, maxDepth, previousPiece int) bool {
 		return false
 	}
 
-	// count occupied squares between primary piece and target
-	primary := board.Pieces[0]
-	i0 := primary.Position + primary.Size
-	i1 := solver.target + primary.Size - 1
-	minMoves := 0
-	for i := i0; i <= i1; i++ {
-		if board.occupied[i] {
-			minMoves++
+	// Original Rush Hour admissible pruning only.
+	if board.Rules == RulesOriginalRush {
+		primary := board.Pieces[0]
+		i0 := primary.Position + primary.Size
+		i1 := solver.target + primary.Size - 1
+		minMoves := 0
+		for i := i0; i <= i1; i++ {
+			if board.occupied[i] {
+				minMoves++
+			}
 		}
-	}
-	if minMoves >= height {
-		return false
+		if minMoves >= height {
+			return false
+		}
 	}
 
 	buf := &solver.moves[depth]
 	*buf = board.Moves(*buf)
 	for _, move := range *buf {
-		if move.Piece == previousPiece {
+		// Original Rush: consecutive same-piece moves are dominated by multi-cell slides.
+		// Cargo Flow 1x1 may legally gesture twice in a row on different axes.
+		if board.Rules == RulesOriginalRush && move.Piece == previousPiece {
 			continue
 		}
 		board.DoMove(move)
@@ -87,7 +94,7 @@ func (solver *Solver) solve(skipChecks bool) Solution {
 		if err := board.Validate(); err != nil {
 			return Solution{}
 		}
-		if solver.sa.Impossible(board) {
+		if board.Rules == RulesOriginalRush && solver.sa != nil && solver.sa.Impossible(board) {
 			return Solution{}
 		}
 	}
@@ -99,6 +106,10 @@ func (solver *Solver) solve(skipChecks bool) Solution {
 	previousMemoSize := 0
 	noChange := 0
 	cutoff := board.Width - board.Pieces[0].Size
+	if board.Rules == RulesCargoFlow {
+		// Target exits upward; use height as a generous plateau cutoff.
+		cutoff = board.Height
+	}
 	for i := 1; ; i++ {
 		solver.path = make([]Move, i)
 		solver.moves = make([][]Move, i)
