@@ -34,3 +34,12 @@ desktop.ini
 .env.*
 *.pem
 *.key
+
+# Large external datasets and solve caches (do not commit)
+/data/external/
+/data/cache/
+/output/
+
+# Keep calibration JSON and docs; ignore only large blobs under data/
+!/data/calibration/
+!/data/calibration/**

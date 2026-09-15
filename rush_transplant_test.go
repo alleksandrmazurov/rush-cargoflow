@@ -50,7 +50,7 @@ func TestDatasetParser_MetadataParsed(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if recs[0].SourcePuzzleID != "rush1000:L0001" || recs[0].LineNumber != 1 {
+	if recs[0].SourcePuzzleID != "rush1000:L0000001" || recs[0].LineNumber != 1 {
 		t.Fatalf("%+v", recs[0])
 	}
 	if recs[0].OriginalClusterSize <= 0 {

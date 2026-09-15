@@ -1,0 +1,19 @@
+{
+  "corpusId": "rush008_human_review",
+  "note": "Approximate human play data for curator calibration only — not ground-truth optimal labels.",
+  "batchDir": "output/RUSH008_DatabaseTransplant_Pilot",
+  "entries": [
+    {"candidateId": "Candidate_001", "humanMovesApprox": 30, "similarityFamily": "A"},
+    {"candidateId": "Candidate_002", "humanMovesApprox": 30, "similarityFamily": "A"},
+    {"candidateId": "Candidate_003", "humanMovesApprox": 30, "similarityFamily": "A"},
+    {"candidateId": "Candidate_004", "humanMovesApprox": 22, "humanMovesRange": "20..25", "similarityFamily": "B"},
+    {"candidateId": "Candidate_005", "humanMovesApprox": 22, "humanMovesRange": "20..25", "similarityFamily": "B"},
+    {"candidateId": "Candidate_006", "humanMovesApprox": 40, "humanDifficulty": "VeryHigh", "similarityFamily": "C"},
+    {"candidateId": "Candidate_007", "humanMovesApprox": 50, "humanDifficulty": "Extreme", "similarityFamily": "D"},
+    {"candidateId": "Candidate_008", "humanMovesApprox": 15, "similarityFamily": "E"},
+    {"candidateId": "Candidate_009", "humanMovesApprox": 14, "similarityFamily": "F"},
+    {"candidateId": "Candidate_010", "humanMovesApprox": 10, "similarityFamily": "G"},
+    {"candidateId": "Candidate_011", "humanMovesApprox": 10, "similarityFamily": "G"},
+    {"candidateId": "Candidate_012", "humanMovesApprox": 15, "similarityFamily": "E"}
+  ]
+}

@@ -1,9 +1,7 @@
 package rush
 
 import (
-	"bufio"
 	"fmt"
-	"os"
 	"strconv"
 	"strings"
 )
@@ -24,8 +22,13 @@ type RushDBRecord struct {
 	OriginalClusterSize int
 }
 
-// ParseRushDBLine parses a single database line.
+// ParseRushDBLine parses a single database line (default tag rush1000 for POC tests).
 func ParseRushDBLine(line string, lineNumber int) (RushDBRecord, error) {
+	return ParseRushDBLineNamed(line, lineNumber, "rush1000")
+}
+
+// ParseRushDBLineNamed parses a database line with an explicit dataset tag for SourcePuzzleID.
+func ParseRushDBLineNamed(line string, lineNumber int, datasetTag string) (RushDBRecord, error) {
 	line = strings.TrimSpace(line)
 	if line == "" {
 		return RushDBRecord{}, fmt.Errorf("empty line")
@@ -57,9 +60,12 @@ func ParseRushDBLine(line string, lineNumber int) (RushDBRecord, error) {
 	if err != nil {
 		return RushDBRecord{}, fmt.Errorf("clusterSize: %w", err)
 	}
+	if datasetTag == "" {
+		datasetTag = "rush"
+	}
 	return RushDBRecord{
 		LineNumber:           lineNumber,
-		SourcePuzzleID:       fmt.Sprintf("rush1000:L%04d", lineNumber),
+		SourcePuzzleID:       fmt.Sprintf("%s:L%07d", datasetTag, lineNumber),
 		Board36:              board,
 		OriginalOptimalMoves: moves,
 		OriginalClusterSize:  cluster,
@@ -68,27 +74,16 @@ func ParseRushDBLine(line string, lineNumber int) (RushDBRecord, error) {
 
 // LoadRushDBFile loads up to maxRecords records (0 = all).
 func LoadRushDBFile(path string, maxRecords int) ([]RushDBRecord, error) {
-	f, err := os.Open(path)
-	if err != nil {
-		return nil, err
-	}
-	defer f.Close()
+	tag := datasetTagFromPath(path)
 	out := []RushDBRecord{}
-	sc := bufio.NewScanner(f)
-	// Large lines not expected; default buffer is fine.
-	lineNo := 0
-	for sc.Scan() {
-		lineNo++
-		rec, err := ParseRushDBLine(sc.Text(), lineNo)
-		if err != nil {
-			return nil, fmt.Errorf("line %d: %w", lineNo, err)
-		}
+	_, err := StreamRushDBFile(path, tag, func(rec RushDBRecord) error {
 		out = append(out, rec)
 		if maxRecords > 0 && len(out) >= maxRecords {
-			break
+			return ErrStreamStop
 		}
-	}
-	if err := sc.Err(); err != nil {
+		return nil
+	})
+	if err != nil && err != ErrStreamStop {
 		return nil, err
 	}
 	return out, nil
