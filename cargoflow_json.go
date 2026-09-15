@@ -56,6 +56,7 @@ type SolutionJSON struct {
 	TimedOut         bool           `json:"timedOut"`
 	BudgetExceeded   bool           `json:"budgetExceeded"`
 	ReplayPass       bool           `json:"replayPass"`
+	ReplayVerified   bool           `json:"replayVerified"`
 	Fingerprint      string         `json:"fingerprint"`
 	Moves            []MoveJSON     `json:"moves"`
 }
@@ -425,6 +426,7 @@ func ExportSolutionJSON(level *LevelJSON, board *Board, sol Solution, elapsed ti
 		TimedOut:        sol.TimedOut,
 		BudgetExceeded:  sol.BudgetExceeded,
 		ReplayPass:      replayPass,
+		ReplayVerified:  replayPass,
 		Fingerprint:     level.FingerprintUnity(),
 		Moves:           make([]MoveJSON, 0, len(sol.Moves)),
 	}
