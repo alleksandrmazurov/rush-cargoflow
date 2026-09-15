@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "levelId": "level_28",
+  "solved": false,
+  "optimal": false,
+  "optimalGestures": 0,
+  "visitedStates": 8000000,
+  "elapsedMs": 16947,
+  "timedOut": false,
+  "budgetExceeded": true,
+  "replayPass": false,
+  "fingerprint": "unity 7x8 exit=3\n.xBB..B\n.xx.xxB\n.xoooxB\n.xoooxB\n.xoooxB\n.xxTxxo\n...TBBB\n.......\n",
+  "moves": []
+}
