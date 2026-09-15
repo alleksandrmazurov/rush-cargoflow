@@ -1,2 +1,36 @@
+# Images produced by render/generate demos
 *.png
 
+# Binaries / build output
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+/bin/
+/dist/
+/rush
+/rush-*
+
+# Go workspace local
+vendor/
+
+# IDE / editor
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Local / secrets
+.env
+.env.*
+*.pem
+*.key
