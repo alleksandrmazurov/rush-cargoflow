@@ -219,6 +219,9 @@ func (solver *Solver) UnsafeSolve() Solution {
 // SolveWithBudget runs a bounded search. A successful return without TimedOut/
 // BudgetExceeded is a true shortest-path (optimal gesture count).
 func (board *Board) SolveWithBudget(budget SolveBudget) Solution {
+	if board.Rules == RulesCargoFlow {
+		return board.solveCargoBFS(budget, false)
+	}
 	solver := NewSolver(board)
 	solver.hasBudget = true
 	solver.budget = budget

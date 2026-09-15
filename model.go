@@ -601,6 +601,9 @@ func (board *Board) MemoKey() *MemoKey {
 }
 
 func (board *Board) Solve() Solution {
+	if board.Rules == RulesCargoFlow {
+		return board.solveCargoBFS(SolveBudget{}, false)
+	}
 	return NewSolver(board).Solve()
 }
 

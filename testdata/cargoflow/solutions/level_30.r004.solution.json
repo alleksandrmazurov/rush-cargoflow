@@ -1,0 +1,225 @@
+{
+  "schemaVersion": 1,
+  "levelId": "level_30",
+  "solved": true,
+  "optimal": true,
+  "optimalGestures": 21,
+  "visitedStates": 2204214,
+  "elapsedMs": 6409,
+  "timedOut": false,
+  "budgetExceeded": false,
+  "replayPass": true,
+  "fingerprint": "unity 7x8 exit=3\n..x.ooo\n....xBB\nBBBBBBB\nBBBBBBx\nBBB.xxB\nxxxBBBB\n...ToBB\n...To..\n",
+  "moves": [
+    {
+      "pieceId": "M13",
+      "fromX": 4,
+      "fromY": 7,
+      "toX": 3,
+      "toY": 7,
+      "axis": "horizontal",
+      "distance": 1,
+      "isExit": false
+    },
+    {
+      "pieceId": "M13",
+      "fromX": 3,
+      "fromY": 7,
+      "toX": 3,
+      "toY": 6,
+      "axis": "vertical",
+      "distance": 1,
+      "isExit": false
+    },
+    {
+      "pieceId": "M14",
+      "fromX": 5,
+      "fromY": 7,
+      "toX": 3,
+      "toY": 7,
+      "axis": "horizontal",
+      "distance": 2,
+      "isExit": false
+    },
+    {
+      "pieceId": "M15",
+      "fromX": 6,
+      "fromY": 7,
+      "toX": 4,
+      "toY": 7,
+      "axis": "horizontal",
+      "distance": 2,
+      "isExit": false
+    },
+    {
+      "pieceId": "M11",
+      "fromX": 5,
+      "fromY": 5,
+      "toX": 5,
+      "toY": 6,
+      "axis": "vertical",
+      "distance": 1,
+      "isExit": false
+    },
+    {
+      "pieceId": "M12",
+      "fromX": 6,
+      "fromY": 5,
+      "toX": 6,
+      "toY": 6,
+      "axis": "vertical",
+      "distance": 1,
+      "isExit": false
+    },
+    {
+      "pieceId": "M10",
+      "fromX": 2,
+      "fromY": 5,
+      "toX": 4,
+      "toY": 5,
+      "axis": "horizontal",
+      "distance": 2,
+      "isExit": false
+    },
+    {
+      "pieceId": "M5",
+      "fromX": 4,
+      "fromY": 0,
+      "toX": 5,
+      "toY": 0,
+      "axis": "horizontal",
+      "distance": 1,
+      "isExit": false
+    },
+    {
+      "pieceId": "M4",
+      "fromX": 4,
+      "fromY": 1,
+      "toX": 4,
+      "toY": 0,
+      "axis": "vertical",
+      "distance": 1,
+      "isExit": false
+    },
+    {
+      "pieceId": "M3",
+      "fromX": 5,
+      "fromY": 1,
+      "toX": 4,
+      "toY": 1,
+      "axis": "horizontal",
+      "distance": 1,
+      "isExit": false
+    },
+    {
+      "pieceId": "M2",
+      "fromX": 6,
+      "fromY": 2,
+      "toX": 6,
+      "toY": 0,
+      "axis": "vertical",
+      "distance": 2,
+      "isExit": false
+    },
+    {
+      "pieceId": "M1",
+      "fromX": 3,
+      "fromY": 2,
+      "toX": 4,
+      "toY": 2,
+      "axis": "horizontal",
+      "distance": 1,
+      "isExit": false
+    },
+    {
+      "pieceId": "M7",
+      "fromX": 2,
+      "fromY": 3,
+      "toX": 2,
+      "toY": 5,
+      "axis": "vertical",
+      "distance": 2,
+      "isExit": false
+    },
+    {
+      "pieceId": "M8",
+      "fromX": 1,
+      "fromY": 3,
+      "toX": 1,
+      "toY": 5,
+      "axis": "vertical",
+      "distance": 2,
+      "isExit": false
+    },
+    {
+      "pieceId": "M9",
+      "fromX": 0,
+      "fromY": 3,
+      "toX": 0,
+      "toY": 5,
+      "axis": "vertical",
+      "distance": 2,
+      "isExit": false
+    },
+    {
+      "pieceId": "M6",
+      "fromX": 3,
+      "fromY": 4,
+      "toX": 0,
+      "toY": 4,
+      "axis": "horizontal",
+      "distance": 3,
+      "isExit": false
+    },
+    {
+      "pieceId": "M13",
+      "fromX": 3,
+      "fromY": 6,
+      "toX": 3,
+      "toY": 4,
+      "axis": "vertical",
+      "distance": 2,
+      "isExit": false
+    },
+    {
+      "pieceId": "M13",
+      "fromX": 3,
+      "fromY": 4,
+      "toX": 4,
+      "toY": 4,
+      "axis": "horizontal",
+      "distance": 1,
+      "isExit": false
+    },
+    {
+      "pieceId": "M14",
+      "fromX": 3,
+      "fromY": 7,
+      "toX": 3,
+      "toY": 3,
+      "axis": "vertical",
+      "distance": 4,
+      "isExit": false
+    },
+    {
+      "pieceId": "M14",
+      "fromX": 3,
+      "fromY": 3,
+      "toX": 2,
+      "toY": 3,
+      "axis": "horizontal",
+      "distance": 1,
+      "isExit": false
+    },
+    {
+      "pieceId": "target",
+      "fromX": 3,
+      "fromY": 0,
+      "toX": 3,
+      "toY": 8,
+      "axis": "vertical",
+      "distance": 8,
+      "isExit": true
+    }
+  ]
+}

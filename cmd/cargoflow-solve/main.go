@@ -53,6 +53,7 @@ func main() {
 	start := time.Now()
 	sol := board.SolveWithBudget(budget)
 	elapsed := time.Since(start)
+	stats := rush.LastCargoSolveStats()
 
 	replayPass := false
 	if sol.Solvable {
@@ -77,6 +78,13 @@ func main() {
 	fmt.Printf("Optimal: %v\n", sol.Solvable && !sol.TimedOut && !sol.BudgetExceeded)
 	fmt.Printf("Optimal Gestures: %d\n", sol.NumMoves)
 	fmt.Printf("Visited States: %d\n", sol.MemoSize)
+	fmt.Printf("Expanded: %d\n", stats.ExpandedStates)
+	fmt.Printf("Generated successors: %d\n", stats.GeneratedSuccessors)
+	fmt.Printf("Duplicates rejected: %d\n", stats.DuplicateRejected)
+	fmt.Printf("Peak frontier: %d\n", stats.PeakFrontier)
+	fmt.Printf("Alloc bytes Δ: %d\n", stats.AllocatedBytes)
+	fmt.Printf("Mallocs Δ: %d\n", stats.Mallocs)
+	fmt.Printf("GC Δ: %d\n", stats.NumGC)
 	fmt.Printf("Elapsed: %s (%d ms)\n", elapsed, elapsed.Milliseconds())
 	if sol.TimedOut {
 		fmt.Println("Status: TIMEOUT")
