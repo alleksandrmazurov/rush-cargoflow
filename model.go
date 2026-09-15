@@ -88,6 +88,7 @@ func (move Move) String() string {
 // wall.
 //
 // Rules selects OriginalRush (default) or CargoFlow semantics.
+// ExitCol is Cargo Flow exit column (Unity/Rush column identity; default 3).
 // won is set only for CargoFlow after the Target Exit gesture.
 // Labels are optional display names aligned with Pieces (Cargo Flow).
 type Board struct {
@@ -96,6 +97,7 @@ type Board struct {
 	Pieces   []Piece
 	Walls    []int
 	Rules    Ruleset
+	ExitCol  int
 	Labels   []string
 	occupied []bool
 	memoKey  MemoKey
@@ -264,6 +266,7 @@ func (board *Board) Copy() *Board {
 		Pieces:   pieces,
 		Walls:    walls,
 		Rules:    board.Rules,
+		ExitCol:  board.ExitCol,
 		Labels:   append([]string(nil), board.Labels...),
 		occupied: occupied,
 		memoKey:  board.memoKey,

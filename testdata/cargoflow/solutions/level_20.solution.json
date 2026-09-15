@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "levelId": "level_20",
+  "solved": true,
+  "optimal": true,
+  "optimalGestures": 9,
+  "visitedStates": 884811,
+  "elapsedMs": 2440,
+  "timedOut": false,
+  "budgetExceeded": false,
+  "replayPass": true,
+  "fingerprint": "unity 7x8 exit=3\n.......\n..oo..x\n..B...B\n..BBBBB\n.oBBBxB\n.xBBB.o\n...T.BB\n...T...\n",
+  "moves": [
+    {
+      "pieceId": "M10",
+      "fromX": 3,
+      "fromY": 6,
+      "toX": 4,
+      "toY": 6,
+      "axis": "horizontal",
+      "distance": 1,
+      "isExit": false
+    },
+    {
+      "pieceId": "M2",
+      "fromX": 5,
+      "fromY": 1,
+      "toX": 4,
+      "toY": 1,
+      "axis": "horizontal",
+      "distance": 1,
+      "isExit": false
+    },
+    {
+      "pieceId": "M3",
+      "fromX": 6,
+      "fromY": 2,
+      "toX": 6,
+      "toY": 1,
+      "axis": "vertical",
+      "distance": 1,
+      "isExit": false
+    },
+    {
+      "pieceId": "M1",
+      "fromX": 2,
+      "fromY": 2,
+      "toX": 4,
+      "toY": 2,
+      "axis": "horizontal",
+      "distance": 2,
+      "isExit": false
+    },
+    {
+      "pieceId": "M6",
+      "fromX": 2,
+      "fromY": 3,
+      "toX": 2,
+      "toY": 0,
+      "axis": "vertical",
+      "distance": 3,
+      "isExit": false
+    },
+    {
+      "pieceId": "M7",
+      "fromX": 1,
+      "fromY": 3,
+      "toX": 0,
+      "toY": 3,
+      "axis": "horizontal",
+      "distance": 1,
+      "isExit": false
+    },
+    {
+      "pieceId": "M5",
+      "fromX": 3,
+      "fromY": 3,
+      "toX": 1,
+      "toY": 3,
+      "axis": "horizontal",
+      "distance": 2,
+      "isExit": false
+    },
+    {
+      "pieceId": "M8",
+      "fromX": 3,
+      "fromY": 4,
+      "toX": 0,
+      "toY": 4,
+      "axis": "horizontal",
+      "distance": 3,
+      "isExit": false
+    },
+    {
+      "pieceId": "target",
+      "fromX": 3,
+      "fromY": 0,
+      "toX": 3,
+      "toY": 8,
+      "axis": "vertical",
+      "distance": 8,
+      "isExit": true
+    }
+  ]
+}

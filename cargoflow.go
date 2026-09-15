@@ -95,6 +95,7 @@ func NewCargoFlowBoard(desc []string) (*Board, error) {
 		occupied: occupied,
 		memoKey:  MakeMemoKey(pieces),
 		Rules:    RulesCargoFlow,
+		ExitCol:  CargoFlowExitCol,
 	}
 	return board, board.Validate()
 }
@@ -279,16 +280,26 @@ func (board *Board) cargoTargetCanExit() bool {
 		return false
 	}
 	w := board.Width
-	if target.Col(w) != CargoFlowExitCol {
+	exitCol := board.exitColumn()
+	if target.Col(w) != exitCol {
 		return false
 	}
-	// Cells strictly above the target in the exit column must be empty.
+	// Cells strictly above the target (toward Rush row 0 / Unity +Y exit) must be empty.
 	for row := 0; row < target.Row(w); row++ {
-		if board.occupied[row*w+CargoFlowExitCol] {
+		if board.occupied[row*w+exitCol] {
 			return false
 		}
 	}
 	return true
+}
+
+// exitColumn returns the Cargo Flow exit column. Constructors always set ExitCol;
+// fallback keeps ASCII POC boards working if ExitCol was left zero-initialized.
+func (board *Board) exitColumn() int {
+	if board.ExitCol != 0 {
+		return board.ExitCol
+	}
+	return CargoFlowExitCol
 }
 
 func (board *Board) cargoIsSolved() bool {

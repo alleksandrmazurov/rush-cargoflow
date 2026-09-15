@@ -1,22 +1,31 @@
 package rush
 
+import "time"
+
 type Solution struct {
-	Solvable bool
-	Moves    []Move
-	NumMoves int
-	NumSteps int
-	Depth    int
-	MemoSize int
-	MemoHits uint64
+	Solvable       bool
+	Moves          []Move
+	NumMoves       int
+	NumSteps       int
+	Depth          int
+	MemoSize       int
+	MemoHits       uint64
+	TimedOut       bool
+	BudgetExceeded bool
 }
 
 type Solver struct {
-	board  *Board
-	target int
-	memo   *Memo
-	sa     *StaticAnalyzer
-	path   []Move
-	moves  [][]Move
+	board     *Board
+	target    int
+	memo      *Memo
+	sa        *StaticAnalyzer
+	path      []Move
+	moves     [][]Move
+	budget    SolveBudget
+	deadline  time.Time
+	hasBudget bool
+	aborted   bool
+	abortKind string // "timeout" | "visited"
 }
 
 func NewSolverWithStaticAnalyzer(board *Board, sa *StaticAnalyzer) *Solver {
@@ -39,7 +48,27 @@ func (solver *Solver) isSolved() bool {
 	return solver.board.Pieces[0].Position == solver.target
 }
 
+func (solver *Solver) budgetExceeded() bool {
+	if !solver.hasBudget {
+		return false
+	}
+	if solver.budget.TimeLimit > 0 && time.Now().After(solver.deadline) {
+		solver.aborted = true
+		solver.abortKind = "timeout"
+		return true
+	}
+	if solver.budget.MaxVisited > 0 && solver.memo.Size() >= solver.budget.MaxVisited {
+		solver.aborted = true
+		solver.abortKind = "visited"
+		return true
+	}
+	return false
+}
+
 func (solver *Solver) search(depth, maxDepth, previousPiece int) bool {
+	if solver.budgetExceeded() {
+		return false
+	}
 	height := maxDepth - depth
 	if height == 0 {
 		return solver.isSolved()
@@ -82,6 +111,9 @@ func (solver *Solver) search(depth, maxDepth, previousPiece int) bool {
 			solver.path[depth] = move
 			return true
 		}
+		if solver.aborted {
+			return false
+		}
 	}
 	return false
 }
@@ -107,10 +139,31 @@ func (solver *Solver) solve(skipChecks bool) Solution {
 	noChange := 0
 	cutoff := board.Width - board.Pieces[0].Size
 	if board.Rules == RulesCargoFlow {
-		// Target exits upward; use height as a generous plateau cutoff.
 		cutoff = board.Height
 	}
+	maxDepth := 0
+	if solver.hasBudget && solver.budget.MaxDepth > 0 {
+		maxDepth = solver.budget.MaxDepth
+	}
+
 	for i := 1; ; i++ {
+		if maxDepth > 0 && i > maxDepth {
+			return Solution{
+				Depth:          i - 1,
+				MemoSize:       memo.Size(),
+				MemoHits:       memo.Hits(),
+				BudgetExceeded: true,
+			}
+		}
+		if solver.budgetExceeded() {
+			return Solution{
+				Depth:          i - 1,
+				MemoSize:       memo.Size(),
+				MemoHits:       memo.Hits(),
+				TimedOut:       solver.abortKind == "timeout",
+				BudgetExceeded: solver.abortKind == "visited" || solver.abortKind == "timeout",
+			}
+		}
 		solver.path = make([]Move, i)
 		solver.moves = make([][]Move, i)
 		if solver.search(0, i, -1) {
@@ -119,7 +172,7 @@ func (solver *Solver) solve(skipChecks bool) Solution {
 			for _, move := range moves {
 				steps += move.AbsSteps()
 			}
-			result := Solution{
+			return Solution{
 				Solvable: true,
 				Moves:    moves,
 				NumMoves: len(moves),
@@ -128,7 +181,15 @@ func (solver *Solver) solve(skipChecks bool) Solution {
 				MemoSize: memo.Size(),
 				MemoHits: memo.Hits(),
 			}
-			return result
+		}
+		if solver.aborted {
+			return Solution{
+				Depth:          i,
+				MemoSize:       memo.Size(),
+				MemoHits:       memo.Hits(),
+				TimedOut:       solver.abortKind == "timeout",
+				BudgetExceeded: true,
+			}
 		}
 		memoSize := memo.Size()
 		if memoSize == previousMemoSize {
@@ -153,4 +214,16 @@ func (solver *Solver) Solve() Solution {
 
 func (solver *Solver) UnsafeSolve() Solution {
 	return solver.solve(true)
+}
+
+// SolveWithBudget runs a bounded search. A successful return without TimedOut/
+// BudgetExceeded is a true shortest-path (optimal gesture count).
+func (board *Board) SolveWithBudget(budget SolveBudget) Solution {
+	solver := NewSolver(board)
+	solver.hasBudget = true
+	solver.budget = budget
+	if budget.TimeLimit > 0 {
+		solver.deadline = time.Now().Add(budget.TimeLimit)
+	}
+	return solver.Solve()
 }
