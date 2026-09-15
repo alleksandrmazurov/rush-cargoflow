@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"sort"
+	"strings"
 	"time"
 
 	"github.com/fogleman/rush"
@@ -19,19 +20,53 @@ func main() {
 	output := flag.String("output", "output/pilot", "output directory")
 	timeLimit := flag.Duration("time-limit", 10*time.Second, "per-candidate solve time limit")
 	maxVisited := flag.Int("max-visited", 4_000_000, "per-candidate max visited states")
+	diverse := flag.Bool("diverse", false, "enable puzzle archetypes + functional diversity (RUSH-007)")
+	archetypes := flag.String("archetypes", "all", "comma list or 'all'")
+	humanRef := flag.String("human-rejected-ref", "", "dir with RUSH-005 Candidate_001..005 for functional anti-clone filter")
 	flag.Parse()
 
-	cfg := rush.DefaultCargoFlowGenerationConfig(*seed)
+	var cfg rush.CargoFlowGenerationConfig
+	if *diverse {
+		cfg = rush.DefaultDiverseCargoFlowGenerationConfig(*seed)
+		if *archetypes != "all" && *archetypes != "" {
+			parts := strings.Split(*archetypes, ",")
+			cfg.Archetypes = nil
+			for _, p := range parts {
+				p = strings.TrimSpace(p)
+				if p != "" {
+					cfg.Archetypes = append(cfg.Archetypes, rush.PuzzleArchetype(p))
+				}
+			}
+		}
+		refDir := *humanRef
+		if refDir == "" {
+			refDir = "output/pilot"
+		}
+		ids := []string{"Candidate_001", "Candidate_002", "Candidate_003", "Candidate_004", "Candidate_005"}
+		sigs, err := rush.LoadHumanRejectedPilotSignatures(refDir, ids)
+		if err != nil {
+			log.Printf("warning: human-rejected refs not loaded (%v); continuing without ref filter", err)
+		} else {
+			cfg.HumanRejectedSignatures = sigs
+			fmt.Printf("Loaded %d human-rejected reference signatures from %s\n", len(sigs), refDir)
+		}
+	} else {
+		cfg = rush.DefaultCargoFlowGenerationConfig(*seed)
+	}
 	cfg.TargetAccepted = *count
 	cfg.MinOptimalGestures = *minOptimal
 	cfg.MaxAttempts = *maxAttempts
 	cfg.SolveTimeLimit = *timeLimit
 	cfg.MaxVisitedStates = *maxVisited
 
-	fmt.Println("Cargo Flow Generator POC")
-	fmt.Printf("version=%s seed=%d count=%d minOptimal=%d maxAttempts=%d\n",
-		cfg.GeneratorVersion, cfg.MasterSeed, cfg.TargetAccepted, cfg.MinOptimalGestures, cfg.MaxAttempts)
+	fmt.Println("Cargo Flow Generator")
+	fmt.Printf("version=%s seed=%d count=%d minOptimal=%d maxAttempts=%d diverse=%v\n",
+		cfg.GeneratorVersion, cfg.MasterSeed, cfg.TargetAccepted, cfg.MinOptimalGestures, cfg.MaxAttempts, cfg.DiverseMode)
 	fmt.Printf("solveBudget: time=%s visited=%d\n", cfg.SolveTimeLimit, cfg.MaxVisitedStates)
+	if cfg.DiverseMode {
+		fmt.Printf("functionalThreshold=%.2f layoutThreshold=%.2f maxPerArchetype=%d\n",
+			cfg.FunctionalSimilarityThreshold, cfg.SimilarityThreshold, cfg.MaxPerArchetype)
+	}
 	fmt.Println()
 
 	gen := rush.NewCargoFlowGenerator(cfg)
@@ -58,31 +93,51 @@ func main() {
 	for _, k := range keys {
 		fmt.Printf("  %s: %d\n", k, result.Rejected[rush.RejectionReason(k)])
 	}
-	fmt.Println()
-	fmt.Println("Candidate\tProfile\tSeed\tPieces\tOptimal\tVisited\tElapsedMs\tSim\tReplay")
-	for _, c := range result.Accepted {
-		fmt.Printf("%s\t%s\t%d\t%d\t%d\t%d\t%d\t%.3f\tPASS\n",
-			c.CandidateID, c.Profile, c.AttemptSeed, len(c.Level.Pieces),
-			c.OptimalGestures, c.VisitedStates, c.ElapsedMs, c.SimilarityToNearest)
-	}
 
-	buckets := map[string]int{"10-12": 0, "13-15": 0, "16-20": 0, "21+": 0}
-	for _, c := range result.Accepted {
-		switch {
-		case c.OptimalGestures <= 12:
-			buckets["10-12"]++
-		case c.OptimalGestures <= 15:
-			buckets["13-15"]++
-		case c.OptimalGestures <= 20:
-			buckets["16-20"]++
-		default:
-			buckets["21+"]++
+	if cfg.DiverseMode {
+		fmt.Println()
+		fmt.Println("Candidate\tArchetype\tSeed\tPieces\tOptimal\tDepDepth\tMoved\tBlockers\tLaySim\tFunSim\tNearest\tReplay")
+		for _, c := range result.Accepted {
+			fmt.Printf("%s\t%s\t%d\t%d\t%d\t%d\t%d\t%d\t%.3f\t%.3f\t%s\tPASS\n",
+				c.CandidateID, c.Archetype, c.AttemptSeed, len(c.Level.Pieces),
+				c.OptimalGestures, c.Signature.DependencyDepth, c.Signature.DistinctMovedPieces,
+				c.Signature.InitialTargetBlockerCount, c.SimilarityToNearest,
+				c.FunctionalSimilarityNearest, c.NearestCandidateID)
 		}
-	}
-	fmt.Println()
-	fmt.Println("Optimal distribution:")
-	for _, k := range []string{"10-12", "13-15", "16-20", "21+"} {
-		fmt.Printf("  %s: %d\n", k, buckets[k])
+		fmt.Println()
+		fmt.Println("Archetype distribution:")
+		dist := map[string]int{}
+		for _, c := range result.Accepted {
+			dist[string(c.Archetype)]++
+		}
+		for _, a := range rush.AllPuzzleArchetypes() {
+			fmt.Printf("  %s: %d\n", a, dist[string(a)])
+		}
+		if len(result.Accepted) > 1 {
+			fmt.Println()
+			fmt.Println("FunctionalSimilarity matrix:")
+			fmt.Print("      ")
+			for i := range result.Accepted {
+				fmt.Printf(" %03d", i+1)
+			}
+			fmt.Println()
+			for i := range result.Accepted {
+				fmt.Printf("%03d  ", i+1)
+				for j := range result.Accepted {
+					s := rush.FunctionalSimilarity(result.Accepted[i].Signature, result.Accepted[j].Signature)
+					fmt.Printf(" %.2f", s)
+				}
+				fmt.Println()
+			}
+		}
+	} else {
+		fmt.Println()
+		fmt.Println("Candidate\tProfile\tSeed\tPieces\tOptimal\tVisited\tElapsedMs\tSim\tReplay")
+		for _, c := range result.Accepted {
+			fmt.Printf("%s\t%s\t%d\t%d\t%d\t%d\t%d\t%.3f\tPASS\n",
+				c.CandidateID, c.Profile, c.AttemptSeed, len(c.Level.Pieces),
+				c.OptimalGestures, c.VisitedStates, c.ElapsedMs, c.SimilarityToNearest)
+		}
 	}
 
 	fmt.Printf("\nWrote batch to %s\n", *output)

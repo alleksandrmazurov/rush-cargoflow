@@ -1,0 +1,195 @@
+{
+  "schemaVersion": 1,
+  "levelId": "Candidate_004",
+  "width": 7,
+  "height": 8,
+  "coordinateSpace": "unity",
+  "exit": {
+    "side": "top",
+    "column": 3
+  },
+  "pieces": [
+    {
+      "id": "target",
+      "type": "target",
+      "x": 3,
+      "y": 2,
+      "width": 1,
+      "height": 2,
+      "movable": true
+    },
+    {
+      "id": "P01",
+      "type": "movable1x1",
+      "x": 3,
+      "y": 4,
+      "width": 1,
+      "height": 1,
+      "movable": true
+    },
+    {
+      "id": "P02",
+      "type": "movable1x1",
+      "x": 3,
+      "y": 5,
+      "width": 1,
+      "height": 1,
+      "movable": true
+    },
+    {
+      "id": "P03",
+      "type": "movable1x1",
+      "x": 3,
+      "y": 6,
+      "width": 1,
+      "height": 1,
+      "movable": true
+    },
+    {
+      "id": "P04",
+      "type": "movable1x2",
+      "x": 2,
+      "y": 7,
+      "width": 2,
+      "height": 1,
+      "movable": true
+    },
+    {
+      "id": "P05",
+      "type": "movable1x3",
+      "x": 3,
+      "y": 1,
+      "width": 3,
+      "height": 1,
+      "movable": true
+    },
+    {
+      "id": "P06",
+      "type": "movable1x3",
+      "x": 0,
+      "y": 0,
+      "width": 3,
+      "height": 1,
+      "movable": true
+    },
+    {
+      "id": "P07",
+      "type": "movable1x2",
+      "x": 1,
+      "y": 6,
+      "width": 1,
+      "height": 2,
+      "movable": true
+    },
+    {
+      "id": "P08",
+      "type": "movable1x3",
+      "x": 5,
+      "y": 2,
+      "width": 1,
+      "height": 3,
+      "movable": true
+    },
+    {
+      "id": "P09",
+      "type": "movable1x2",
+      "x": 1,
+      "y": 3,
+      "width": 1,
+      "height": 2,
+      "movable": true
+    },
+    {
+      "id": "P10",
+      "type": "movable1x2",
+      "x": 4,
+      "y": 7,
+      "width": 2,
+      "height": 1,
+      "movable": true
+    },
+    {
+      "id": "P11",
+      "type": "movable1x2",
+      "x": 4,
+      "y": 0,
+      "width": 2,
+      "height": 1,
+      "movable": true
+    },
+    {
+      "id": "P12",
+      "type": "movable1x3",
+      "x": 0,
+      "y": 3,
+      "width": 1,
+      "height": 3,
+      "movable": true
+    },
+    {
+      "id": "P13",
+      "type": "movable1x1",
+      "x": 4,
+      "y": 2,
+      "width": 1,
+      "height": 1,
+      "movable": true
+    },
+    {
+      "id": "S1",
+      "type": "static1x1",
+      "x": 2,
+      "y": 4,
+      "width": 1,
+      "height": 1,
+      "movable": false
+    },
+    {
+      "id": "S2",
+      "type": "static1x1",
+      "x": 4,
+      "y": 4,
+      "width": 1,
+      "height": 1,
+      "movable": false
+    },
+    {
+      "id": "S3",
+      "type": "static1x1",
+      "x": 2,
+      "y": 5,
+      "width": 1,
+      "height": 1,
+      "movable": false
+    },
+    {
+      "id": "S4",
+      "type": "static1x1",
+      "x": 4,
+      "y": 5,
+      "width": 1,
+      "height": 1,
+      "movable": false
+    },
+    {
+      "id": "S5",
+      "type": "static1x1",
+      "x": 4,
+      "y": 6,
+      "width": 1,
+      "height": 1,
+      "movable": false
+    },
+    {
+      "id": "S6",
+      "type": "static1x1",
+      "x": 2,
+      "y": 6,
+      "width": 1,
+      "height": 1,
+      "movable": false
+    }
+  ],
+  "canonicalGestures": 11,
+  "source": "cf-gen-diverse-1/LongBlockChain/seed=1747914227905619700"
+}

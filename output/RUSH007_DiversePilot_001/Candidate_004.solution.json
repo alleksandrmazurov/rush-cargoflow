@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "levelId": "Candidate_004",
+  "solved": true,
+  "optimal": true,
+  "optimalGestures": 11,
+  "visitedStates": 3337431,
+  "elapsedMs": 7216,
+  "timedOut": false,
+  "budgetExceeded": false,
+  "replayPass": true,
+  "replayVerified": true,
+  "fingerprint": "unity 7x8 exit=3\n.BBBBB.\n.Bxox..\nB.xox..\nBBxoxB.\nBB.T.B.\n...ToB.\n...BBB.\nBBB.BB.\n",
+  "moves": [
+    {
+      "pieceId": "P05",
+      "fromX": 3,
+      "fromY": 1,
+      "toX": 0,
+      "toY": 1,
+      "axis": "horizontal",
+      "distance": 3,
+      "isExit": false
+    },
+    {
+      "pieceId": "target",
+      "fromX": 3,
+      "fromY": 2,
+      "toX": 3,
+      "toY": 1,
+      "axis": "vertical",
+      "distance": 1,
+      "isExit": false
+    },
+    {
+      "pieceId": "P01",
+      "fromX": 3,
+      "fromY": 4,
+      "toX": 3,
+      "toY": 3,
+      "axis": "vertical",
+      "distance": 1,
+      "isExit": false
+    },
+    {
+      "pieceId": "P01",
+      "fromX": 3,
+      "fromY": 3,
+      "toX": 2,
+      "toY": 3,
+      "axis": "horizontal",
+      "distance": 1,
+      "isExit": false
+    },
+    {
+      "pieceId": "P02",
+      "fromX": 3,
+      "fromY": 5,
+      "toX": 3,
+      "toY": 3,
+      "axis": "vertical",
+      "distance": 2,
+      "isExit": false
+    },
+    {
+      "pieceId": "P02",
+      "fromX": 3,
+      "fromY": 3,
+      "toX": 4,
+      "toY": 3,
+      "axis": "horizontal",
+      "distance": 1,
+      "isExit": false
+    },
+    {
+      "pieceId": "P07",
+      "fromX": 1,
+      "fromY": 6,
+      "toX": 1,
+      "toY": 5,
+      "axis": "vertical",
+      "distance": 1,
+      "isExit": false
+    },
+    {
+      "pieceId": "P04",
+      "fromX": 2,
+      "fromY": 7,
+      "toX": 0,
+      "toY": 7,
+      "axis": "horizontal",
+      "distance": 2,
+      "isExit": false
+    },
+    {
+      "pieceId": "P03",
+      "fromX": 3,
+      "fromY": 6,
+      "toX": 3,
+      "toY": 7,
+      "axis": "vertical",
+      "distance": 1,
+      "isExit": false
+    },
+    {
+      "pieceId": "P03",
+      "fromX": 3,
+      "fromY": 7,
+      "toX": 2,
+      "toY": 7,
+      "axis": "horizontal",
+      "distance": 1,
+      "isExit": false
+    },
+    {
+      "pieceId": "target",
+      "fromX": 3,
+      "fromY": 1,
+      "toX": 3,
+      "toY": 8,
+      "axis": "vertical",
+      "distance": 7,
+      "isExit": true
+    }
+  ]
+}

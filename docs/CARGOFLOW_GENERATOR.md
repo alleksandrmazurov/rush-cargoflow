@@ -1,90 +1,90 @@
-# Cargo Flow Generator POC (RUSH-005)
+# Cargo Flow Generator — Functional Diversity (RUSH-007)
 
-Offline candidate generation for Cargo Flow using the exact gesture solver as the
-sole quantitative difficulty oracle.
+Extends the RUSH-005 offline generator with **PuzzleSignature**,
+**FunctionalSimilarity**, and **puzzle archetypes** so batches are not
+geometric clones of one “clear 1×1 corridor” idea.
 
-## Strategy
+RUSH-005 `output/pilot/` is kept as the human-reviewed regression corpus
+(complexity OK, diversity poor). Do not delete it.
 
-**Nested corridor placement + exact-solver filter + solution-guided deepen**
-(hybrid).
+## Why RUSH-005 felt identical
 
-Why this approach for the POC:
+All five human-played candidates share:
 
-- Original Rush uses annealing + unsolve toward *harder* Rush Hour positions;
-  those assumptions (horizontal primary, right exit, no 1×1, reverse-search
-  Unsolver) do not transfer cleanly to Cargo Flow.
-- Pure random placement tended to produce either trivial optima (2–5) or
-  permanently blocked exit columns (static walls on the Target column).
-- The POC therefore:
-  1. Places Target deep on exit column 3;
-  2. Stacks **movable** 1×1 units on that column with off-column static pins;
-  3. Fills the remaining inventory at random (never static on the exit column
-     above Target — Target is vertically column-locked);
-  4. Light scramble (not a difficulty metric);
-  5. Exact BFS filter; if `Optimal < MinOptimal`, deepen by walking the short
-     solution almost to Exit then scrambling into a farther reachable state and
-     re-solving.
-- Difficulty is **never** inferred from scramble/deepen length — only from
-  `ExactOptimalGestures`.
+- stacked **1×1** direct exit-corridor blockers;
+- shuttle choreography (slide units aside, then Target-exit);
+- similar inventory / dependency depth.
 
-Original `Generator` / `anneal` / `Unsolver` remain untouched for Rush Hour.
+Layout Jaccard often sat at 0.5–0.7 (below the 0.85 layout reject), so
+geometric filtering alone did not catch the shared **solution pattern**.
 
-## Profiles
+## PuzzleSignature
 
-| Profile | 1x1 | 1x2H | 1x2V | 1x3H | 1x3V | Static |
-|---------|----:|-----:|-----:|-----:|-----:|-------:|
-| MediumDense | 5 | 2 | 2 | 1 | 1 | 4 |
-| HardDense | 6 | 2 | 1 | 1 | 1 | 5 |
-| HardMixed | 5 | 2 | 2 | 2 | 1 | 4 |
+Built from the exact solution (class tokens, never piece IDs):
 
-Corridor construction may consume some of the 1×1 budget and adds off-column
-static pins. Piece count respects `MaxPieces = 18`.
+- InventorySignature
+- InitialTargetBlockerCount / DirectTargetBlockerClasses / TargetBlockerTypes
+- DistinctMovedPieces / DistinctNonTargetMovedPieces
+- TargetMoveCount / NonTargetMovesBeforeFirstTargetMove
+- MovedPieceClassHistogram
+- OptimalSolutionClassSequence (`1x2H-left-1`, `Target-exit`, …)
+- DependencyDepth / DependencyEdges (approx. freed-cell → later-move edges)
+- OptimalGestures / TargetStartRow
 
-## Filters
+## FunctionalSimilarity
 
-1. Valid layout / single Target / no overlaps  
-2. Reject **ImmediateVictory** (`Target` can Exit immediately)  
-3. Exact solve with budget (`TimeLimit`, `MaxVisited`)  
-4. Reject unsolved / budget → `DifficultyUnknown`  
-5. If `Optimal < MinOptimal`, deepen (bounded) and re-solve  
-6. `OptimalGestures >= MinOptimal` (pilot default **10**) else `TooEasy`  
-7. Replay PASS (stable `P01`… IDs so JSON load order matches indices)  
-8. Layout fingerprint duplicate reject  
-9. Occupancy Jaccard (+ horizontal mirror) ≥ 0.85 → `TooSimilar`
+Deterministic weighted blend in `[0,1]` (layout excluded):
+
+| Term | Weight |
+|------|-------:|
+| corridor shuttle pattern | 0.28 |
+| solution class sequence (LCS) | 0.22 |
+| blocker signature | 0.14 |
+| moved-class histogram | 0.10 |
+| dependency depth | 0.10 |
+| inventory | 0.08 |
+| target move pattern | 0.08 |
+
+Reject if **layout ≥ 0.85** OR **functional ≥ 0.72**.
+
+Human-rejected gate: only when signature is shuttle-like
+(≥85% 1×1 corridor blockers, ≥4 blockers, ≥65% 1×1 moves) AND
+functional ≥ 0.70 vs RUSH-005 001–005.
+
+## Archetypes
+
+| Archetype | Generation bias | Post-solve validation |
+|-----------|-----------------|------------------------|
+| LongBlockChain | 1×2/1×3 inventory + long corridor pieces | ≥1 long-block move |
+| CrossLock | nested corridor + H bars on exit column | ≥2 blockers + H involvement |
+| StaticGate | static channels + H locks | walls + adjacency |
+| SideChain | side column chain + H lock | DependencyDepth ≥ 2 |
+| SmallBlockShuttle | dense 1×1 nested corridor | ≥2 moved 1×1 |
+
+Max **2** accepted per archetype. Custom placement falls back to the RUSH-005
+`tryPlace` hardness path when structural placement fails; archetype is still
+enforced by `ValidateArchetype`.
 
 ## CLI
 
 ```bash
+# RUSH-005 style
+go run ./cmd/cargoflow-generate --count 10 --seed 12345 --output output/pilot
+
+# RUSH-007 diverse
 go run ./cmd/cargoflow-generate \
-  --count 10 \
-  --min-optimal 10 \
-  --seed 12345 \
-  --max-attempts 300 \
-  --output output/pilot
+  --diverse --archetypes all \
+  --human-rejected-ref output/pilot \
+  --count 10 --min-optimal 10 --seed 202707 --max-attempts 300 \
+  --output output/RUSH007_DiversePilot_001
 ```
-
-## Output
-
-```
-output/pilot/
-  Candidate_001.json
-  Candidate_001.solution.json
-  ...
-  BatchManifest.json
-```
-
-JSON schema matches RUSH-003 (`coordinateSpace: unity`). Solution docs include
-`replayVerified: true`.
-
-## Determinism
-
-Same `GeneratorVersion` + config + `MasterSeed` ⇒ same attempt seeds and
-accepted fingerprints (see `TestSameSeed_SameBatch`).
 
 ## Known limitations
 
-- Acceptance rate depends on deepen; HardDense can still hit `DifficultyUnknown`.
-- Similarity is occupancy Jaccard only (not full P7B).
-- No Unity import / campaign promotion.
-- Not a claim that ≥10 gestures equals “human hard”.
-- `MaxPieces = 18` caps inventory (inherited from Rush).
+- Exact floor (≥10) + nested-corridor hardness still biases many solutions
+  toward related clearing patterns; functional filter then rejects heavily
+  (`TooSimilarFunctional`), so pilots may finish with 3–6 accepts / 3–4
+  archetypes inside 300 attempts.
+- DependencyDepth is approximate.
+- SmallBlockShuttle is usually blocked by the human-rejected shuttle gate.
+- Unity is not modified; import remains a separate RUSH-006 step.

@@ -8,21 +8,28 @@ import (
 	"time"
 )
 
-const CargoFlowGeneratorVersion = "cf-gen-poc-3"
+const CargoFlowGeneratorVersion = "cf-gen-diverse-1"
 
 // CargoFlowGenerationConfig controls offline Cargo Flow candidate generation.
 type CargoFlowGenerationConfig struct {
-	MasterSeed             int64
-	TargetAccepted         int
-	MaxAttempts            int
-	MinOptimalGestures     int
-	MaxVisitedStates       int
-	SolveTimeLimit         time.Duration
-	SimilarityThreshold    float64 // reject if similarity >= threshold
-	MinCorridorBlockers    int     // forced occupied cells in exit column above Target
-	ScrambleMoves          int     // random legal non-exit gestures after placement
-	Profiles               []CargoFlowInventoryProfile
-	GeneratorVersion       string
+	MasterSeed                      int64
+	TargetAccepted                  int
+	MaxAttempts                     int
+	MinOptimalGestures              int
+	MaxVisitedStates                int
+	SolveTimeLimit                  time.Duration
+	SimilarityThreshold             float64 // layout reject if >= threshold
+	FunctionalSimilarityThreshold   float64 // functional reject if >= threshold
+	MinCorridorBlockers             int
+	ScrambleMoves                   int
+	Profiles                        []CargoFlowInventoryProfile
+	GeneratorVersion                string
+	DiverseMode                     bool
+	Archetypes                      []PuzzleArchetype
+	MaxPerArchetype                 int
+	MinDistinctArchetypes           int
+	HumanRejectedSignatures         []PuzzleSignature
+	HumanRejectedFunctionalThreshold float64
 }
 
 // CargoFlowInventoryProfile names a piece inventory for random placement.
@@ -57,60 +64,86 @@ func DefaultCargoFlowProfiles() []CargoFlowInventoryProfile {
 
 func DefaultCargoFlowGenerationConfig(seed int64) CargoFlowGenerationConfig {
 	return CargoFlowGenerationConfig{
-		MasterSeed:          seed,
-		TargetAccepted:      10,
-		MaxAttempts:         300,
-		MinOptimalGestures:  10,
-		MaxVisitedStates:    4_000_000,
-		SolveTimeLimit:      10 * time.Second,
-		SimilarityThreshold: 0.85,
-		MinCorridorBlockers: 4,
-		ScrambleMoves:       8,
-		Profiles:            DefaultCargoFlowProfiles(),
-		GeneratorVersion:    CargoFlowGeneratorVersion,
+		MasterSeed:                       seed,
+		TargetAccepted:                   10,
+		MaxAttempts:                      300,
+		MinOptimalGestures:               10,
+		MaxVisitedStates:                 4_000_000,
+		SolveTimeLimit:                   10 * time.Second,
+		SimilarityThreshold:              0.85,
+		FunctionalSimilarityThreshold:    0.72, // calibrated: RUSH-005 mean≈0.75; allow mild cross-archetype overlap
+		MinCorridorBlockers:              4,
+		ScrambleMoves:                    8,
+		Profiles:                         DefaultCargoFlowProfiles(),
+		GeneratorVersion:                 CargoFlowGeneratorVersion,
+		DiverseMode:                      false,
+		MaxPerArchetype:                  2,
+		MinDistinctArchetypes:            4,
+		HumanRejectedFunctionalThreshold: 0.70,
 	}
+}
+
+// DefaultDiverseCargoFlowGenerationConfig enables archetype + functional diversity.
+func DefaultDiverseCargoFlowGenerationConfig(seed int64) CargoFlowGenerationConfig {
+	cfg := DefaultCargoFlowGenerationConfig(seed)
+	cfg.DiverseMode = true
+	cfg.Archetypes = AllPuzzleArchetypes()
+	cfg.GeneratorVersion = CargoFlowGeneratorVersion
+	cfg.ScrambleMoves = 8
+	cfg.MinCorridorBlockers = 4
+	return cfg
 }
 
 // RejectionReason categorizes failed attempts.
 type RejectionReason string
 
 const (
-	RejectInvalidLayout      RejectionReason = "InvalidLayout"
-	RejectImmediateVictory   RejectionReason = "ImmediateVictory"
-	RejectUnsolvable         RejectionReason = "Unsolvable"
-	RejectTooEasy            RejectionReason = "TooEasy"
-	RejectDuplicate          RejectionReason = "Duplicate"
-	RejectTooSimilar         RejectionReason = "TooSimilar"
-	RejectDifficultyUnknown  RejectionReason = "DifficultyUnknown"
-	RejectReplayFailed       RejectionReason = "ReplayFailed"
-	RejectOther              RejectionReason = "Other"
+	RejectInvalidLayout                 RejectionReason = "InvalidLayout"
+	RejectImmediateVictory              RejectionReason = "ImmediateVictory"
+	RejectUnsolvable                    RejectionReason = "Unsolvable"
+	RejectTooEasy                       RejectionReason = "TooEasy"
+	RejectDuplicate                     RejectionReason = "Duplicate"
+	RejectTooSimilar                    RejectionReason = "TooSimilar"
+	RejectTooSimilarFunctional          RejectionReason = "TooSimilarFunctional"
+	RejectTooSimilarToHumanRejectedPilot RejectionReason = "TooSimilarToHumanRejectedPilot"
+	RejectArchetypeMismatch             RejectionReason = "ArchetypeMismatch"
+	RejectArchetypeQuota                RejectionReason = "ArchetypeQuota"
+	RejectDifficultyUnknown             RejectionReason = "DifficultyUnknown"
+	RejectReplayFailed                  RejectionReason = "ReplayFailed"
+	RejectOther                         RejectionReason = "Other"
 )
 
 // CargoFlowAcceptedCandidate is one validated generated puzzle.
 type CargoFlowAcceptedCandidate struct {
-	CandidateID          string
-	Attempt              int
-	Profile              string
-	AttemptSeed          int64
-	Level                *LevelJSON
-	OptimalGestures      int
-	VisitedStates        int
-	ElapsedMs            int64
-	Fingerprint          string
-	SimilarityToNearest  float64
-	Solution             Solution
-	SolutionDoc          SolutionJSON
+	CandidateID                 string
+	Attempt                     int
+	Profile                     string
+	Archetype                   PuzzleArchetype
+	AttemptSeed                 int64
+	Level                       *LevelJSON
+	OptimalGestures             int
+	VisitedStates               int
+	ElapsedMs                   int64
+	Fingerprint                 string
+	SimilarityToNearest         float64 // layout
+	FunctionalSimilarityNearest float64
+	NearestCandidateID          string
+	Signature                   PuzzleSignature
+	Solution                    Solution
+	SolutionDoc                 SolutionJSON
+	ReplayVerified              bool
 }
 
 // CargoFlowGenerationResult summarizes a pilot batch.
 type CargoFlowGenerationResult struct {
-	Config           CargoFlowGenerationConfig
-	Accepted         []CargoFlowAcceptedCandidate
-	Attempts         int
-	Rejected         map[RejectionReason]int
-	TotalElapsed     time.Duration
-	SolveTimesMs     []int64
-	ProfileAttempts  map[string]int
+	Config            CargoFlowGenerationConfig
+	Accepted          []CargoFlowAcceptedCandidate
+	Attempts          int
+	Rejected          map[RejectionReason]int
+	TotalElapsed      time.Duration
+	SolveTimesMs      []int64
+	ProfileAttempts   map[string]int
+	ArchetypeAttempts map[string]int
 }
 
 // CargoFlowGenerator creates Cargo Flow candidates via random valid placement
@@ -137,22 +170,56 @@ func NewCargoFlowGenerator(cfg CargoFlowGenerationConfig) *CargoFlowGenerator {
 func (g *CargoFlowGenerator) Generate() CargoFlowGenerationResult {
 	start := time.Now()
 	res := CargoFlowGenerationResult{
-		Config:          g.cfg,
-		Rejected:        map[RejectionReason]int{},
-		ProfileAttempts: map[string]int{},
-		SolveTimesMs:    []int64{},
+		Config:            g.cfg,
+		Rejected:          map[RejectionReason]int{},
+		ProfileAttempts:   map[string]int{},
+		ArchetypeAttempts: map[string]int{},
+		SolveTimesMs:      []int64{},
 	}
 	seenFP := map[string]bool{}
 	acceptedFP := []string{}
 	acceptedOcc := [][]bool{}
+	acceptedSigs := []PuzzleSignature{}
+	archCounts := map[PuzzleArchetype]int{}
+
+	archetypes := g.cfg.Archetypes
+	if g.cfg.DiverseMode && len(archetypes) == 0 {
+		archetypes = AllPuzzleArchetypes()
+	}
 
 	for attempt := 1; attempt <= g.cfg.MaxAttempts && len(res.Accepted) < g.cfg.TargetAccepted; attempt++ {
 		res.Attempts = attempt
 		attemptSeed := g.rng.Int63()
-		profile := g.cfg.Profiles[(attempt-1)%len(g.cfg.Profiles)]
-		res.ProfileAttempts[profile.Name]++
 
-		board, level, reason := g.tryPlace(profile, attemptSeed)
+		var (
+			board   *Board
+			level   *LevelJSON
+			reason  RejectionReason
+			arch    PuzzleArchetype
+			profile CargoFlowInventoryProfile
+		)
+
+		if g.cfg.DiverseMode {
+			// Prefer archetypes still under per-archetype quota.
+			underQuota := make([]PuzzleArchetype, 0, len(archetypes))
+			for _, a := range archetypes {
+				if g.cfg.MaxPerArchetype <= 0 || archCounts[a] < g.cfg.MaxPerArchetype {
+					underQuota = append(underQuota, a)
+				}
+			}
+			if len(underQuota) == 0 {
+				res.Rejected[RejectArchetypeQuota]++
+				continue
+			}
+			arch = underQuota[(attempt-1)%len(underQuota)]
+			res.ArchetypeAttempts[string(arch)]++
+			profile = ArchetypeProfile(arch)
+			board, level, reason = g.tryPlaceArchetype(arch, attemptSeed)
+		} else {
+			profile = g.cfg.Profiles[(attempt-1)%len(g.cfg.Profiles)]
+			res.ProfileAttempts[profile.Name]++
+			board, level, reason = g.tryPlace(profile, attemptSeed)
+		}
 		if reason != "" {
 			res.Rejected[reason]++
 			continue
@@ -163,7 +230,7 @@ func (g *CargoFlowGenerator) Generate() CargoFlowGenerationResult {
 			continue
 		}
 
-		attemptRng := rand.New(rand.NewSource(attemptSeed ^ int64(-7046029254386353131))) // golden ratio mix
+		attemptRng := rand.New(rand.NewSource(attemptSeed ^ int64(-7046029254386353131)))
 		budget := SolveBudget{
 			TimeLimit:  g.cfg.SolveTimeLimit,
 			MaxVisited: g.cfg.MaxVisitedStates,
@@ -171,7 +238,7 @@ func (g *CargoFlowGenerator) Generate() CargoFlowGenerationResult {
 
 		var sol Solution
 		var elapsed time.Duration
-		const maxDeepen = 6
+		maxDeepen := 6
 		for deepen := 0; deepen <= maxDeepen; deepen++ {
 			t0 := time.Now()
 			sol = board.SolveWithBudget(budget)
@@ -180,7 +247,7 @@ func (g *CargoFlowGenerator) Generate() CargoFlowGenerationResult {
 
 			if sol.TimedOut || sol.BudgetExceeded {
 				res.Rejected[RejectDifficultyUnknown]++
-				sol = Solution{} // mark handled
+				sol = Solution{}
 				break
 			}
 			if !sol.Solvable {
@@ -191,7 +258,6 @@ func (g *CargoFlowGenerator) Generate() CargoFlowGenerationResult {
 			if sol.NumMoves >= g.cfg.MinOptimalGestures || deepen == maxDeepen {
 				break
 			}
-			// Too easy: push away from the short solution via mid-path scramble.
 			if !g.deepenAwayFromSolution(board, attemptRng, sol) {
 				res.Rejected[RejectTooEasy]++
 				sol = Solution{}
@@ -202,8 +268,12 @@ func (g *CargoFlowGenerator) Generate() CargoFlowGenerationResult {
 				sol = Solution{}
 				break
 			}
+			src := profile.Name
+			if g.cfg.DiverseMode {
+				src = string(arch)
+			}
 			var err error
-			level, err = LevelJSONFromBoard(board, "pending", profile.Name)
+			level, err = LevelJSONFromBoard(board, "pending", src)
 			if err != nil {
 				res.Rejected[RejectInvalidLayout]++
 				sol = Solution{}
@@ -231,6 +301,14 @@ func (g *CargoFlowGenerator) Generate() CargoFlowGenerationResult {
 			continue
 		}
 
+		sig := BuildPuzzleSignature(board, sol)
+		if g.cfg.DiverseMode {
+			if r := ValidateArchetype(arch, sig, board); r != "" {
+				res.Rejected[r]++
+				continue
+			}
+		}
+
 		fp := layoutFingerprint(board)
 		if seenFP[fp] {
 			res.Rejected[RejectDuplicate]++
@@ -238,41 +316,108 @@ func (g *CargoFlowGenerator) Generate() CargoFlowGenerationResult {
 		}
 
 		occ := occupancyMask(board)
-		sim, _ := maxSimilarity(occ, acceptedOcc, acceptedFP, fp)
-		if len(acceptedOcc) > 0 && sim >= g.cfg.SimilarityThreshold {
+		layoutSim, layoutIdx := maxSimilarity(occ, acceptedOcc, acceptedFP, fp)
+		if len(acceptedOcc) > 0 && layoutSim >= g.cfg.SimilarityThreshold {
 			res.Rejected[RejectTooSimilar]++
 			continue
+		}
+
+		funcSim := 0.0
+		funcIdx := -1
+		if len(acceptedSigs) > 0 {
+			funcSim, funcIdx = maxFunctionalSimilarity(sig, acceptedSigs)
+			thr := g.cfg.FunctionalSimilarityThreshold
+			if thr <= 0 {
+				thr = 0.70
+			}
+			if g.cfg.DiverseMode && funcSim >= thr {
+				res.Rejected[RejectTooSimilarFunctional]++
+				continue
+			}
+		}
+
+		if g.cfg.DiverseMode && len(g.cfg.HumanRejectedSignatures) > 0 {
+			href := g.cfg.HumanRejectedFunctionalThreshold
+			if href <= 0 {
+				href = 0.70
+			}
+			if hs, _ := maxFunctionalSimilarity(sig, g.cfg.HumanRejectedSignatures); hs >= href {
+				// Only block clear 1x1-corridor-shuttle clones of the human-rejected set.
+				if oneByOneBlockerFraction(sig) >= 0.85 && sig.InitialTargetBlockerCount >= 4 &&
+					oneByOneMoveFraction(sig) >= 0.65 {
+					res.Rejected[RejectTooSimilarToHumanRejectedPilot]++
+					continue
+				}
+			}
+		}
+
+		nearestID := ""
+		nearestFunc := funcSim
+		if funcIdx >= 0 && funcIdx < len(res.Accepted) {
+			nearestID = res.Accepted[funcIdx].CandidateID
+		} else if layoutIdx >= 0 && layoutIdx < len(res.Accepted) {
+			nearestID = res.Accepted[layoutIdx].CandidateID
+			nearestFunc = 0
+		}
+		if g.cfg.DiverseMode && funcIdx >= 0 {
+			nearestFunc = funcSim
 		}
 
 		seenFP[fp] = true
 		acceptedFP = append(acceptedFP, fp)
 		acceptedOcc = append(acceptedOcc, occ)
+		acceptedSigs = append(acceptedSigs, sig)
+		if g.cfg.DiverseMode {
+			archCounts[arch]++
+		}
 
 		id := fmt.Sprintf("Candidate_%03d", len(res.Accepted)+1)
 		level.LevelID = id
-		level.Source = fmt.Sprintf("%s/%s/seed=%d", g.cfg.GeneratorVersion, profile.Name, attemptSeed)
+		srcName := profile.Name
+		if g.cfg.DiverseMode {
+			srcName = string(arch)
+		}
+		level.Source = fmt.Sprintf("%s/%s/seed=%d", g.cfg.GeneratorVersion, srcName, attemptSeed)
 		opt := sol.NumMoves
 		level.CanonicalGestures = &opt
 
 		doc := ExportSolutionJSON(level, board, sol, elapsed, true)
 		res.Accepted = append(res.Accepted, CargoFlowAcceptedCandidate{
-			CandidateID:         id,
-			Attempt:             attempt,
-			Profile:             profile.Name,
-			AttemptSeed:         attemptSeed,
-			Level:               level,
-			OptimalGestures:     sol.NumMoves,
-			VisitedStates:       sol.MemoSize,
-			ElapsedMs:           elapsed.Milliseconds(),
-			Fingerprint:         fp,
-			SimilarityToNearest: sim,
-			Solution:            sol,
-			SolutionDoc:         doc,
+			CandidateID:                 id,
+			Attempt:                     attempt,
+			Profile:                     srcName,
+			Archetype:                   arch,
+			AttemptSeed:                 attemptSeed,
+			Level:                       level,
+			OptimalGestures:             sol.NumMoves,
+			VisitedStates:               sol.MemoSize,
+			ElapsedMs:                   elapsed.Milliseconds(),
+			Fingerprint:                 fp,
+			SimilarityToNearest:         layoutSim,
+			FunctionalSimilarityNearest: nearestFunc,
+			NearestCandidateID:          nearestID,
+			Signature:                   sig,
+			Solution:                    sol,
+			SolutionDoc:                 doc,
+			ReplayVerified:              true,
 		})
 	}
 
 	res.TotalElapsed = time.Since(start)
 	return res
+}
+
+func maxFunctionalSimilarity(sig PuzzleSignature, others []PuzzleSignature) (float64, int) {
+	best := 0.0
+	bestI := -1
+	for i, o := range others {
+		s := FunctionalSimilarity(sig, o)
+		if s > best {
+			best = s
+			bestI = i
+		}
+	}
+	return best, bestI
 }
 
 func (g *CargoFlowGenerator) tryPlace(profile CargoFlowInventoryProfile, attemptSeed int64) (*Board, *LevelJSON, RejectionReason) {
@@ -471,7 +616,6 @@ func (g *CargoFlowGenerator) deepenAwayFromSolution(board *Board, rng *rand.Rand
 		}
 		work.DoMove(m)
 	}
-	// From a near-exit state, scramble into a farther reachable position.
 	g.scramble(work, rng, 70+rng.Intn(40))
 	if work.cargoTargetCanExit() {
 		g.scramble(work, rng, 30)
@@ -659,32 +803,48 @@ func maxSimilarity(occ []bool, accepted [][]bool, fps []string, fp string) (floa
 
 // ManifestJSON is written for a generation batch.
 type ManifestJSON struct {
-	GeneratorVersion string                         `json:"generatorVersion"`
-	MasterSeed       int64                          `json:"masterSeed"`
-	MinOptimal       int                            `json:"minOptimalGestures"`
-	MaxAttempts      int                            `json:"maxAttempts"`
-	TargetAccepted   int                            `json:"targetAccepted"`
-	Attempts         int                            `json:"attempts"`
-	AcceptedCount    int                            `json:"accepted"`
-	Rejected         map[string]int                 `json:"rejected"`
-	TotalElapsedMs   int64                          `json:"totalElapsedMs"`
-	Profiles         []string                       `json:"profiles"`
-	Candidates       []ManifestCandidateJSON        `json:"candidates"`
+	GeneratorVersion string                  `json:"generatorVersion"`
+	MasterSeed       int64                   `json:"masterSeed"`
+	DiverseMode      bool                    `json:"diverseMode"`
+	MinOptimal       int                     `json:"minOptimalGestures"`
+	MaxAttempts      int                     `json:"maxAttempts"`
+	TargetAccepted   int                     `json:"targetAccepted"`
+	Attempts         int                     `json:"attempts"`
+	AcceptedCount    int                     `json:"accepted"`
+	Rejected         map[string]int          `json:"rejected"`
+	TotalElapsedMs   int64                   `json:"totalElapsedMs"`
+	Profiles         []string                `json:"profiles"`
+	Archetypes       []string                `json:"archetypes,omitempty"`
+	Candidates       []ManifestCandidateJSON `json:"candidates"`
 }
 
 type ManifestCandidateJSON struct {
-	CandidateID         string  `json:"candidateId"`
-	Profile             string  `json:"profile"`
-	AttemptSeed         int64   `json:"attemptSeed"`
-	Attempt             int     `json:"attempt"`
-	PieceCount          int     `json:"pieceCount"`
-	OptimalGestures     int     `json:"optimalGestures"`
-	VisitedStates       int     `json:"visitedStates"`
-	ElapsedMs           int64   `json:"elapsedMs"`
-	Fingerprint         string  `json:"fingerprint"`
-	SimilarityToNearest float64 `json:"similarityToNearest"`
-	LevelFile           string  `json:"levelFile"`
-	SolutionFile        string  `json:"solutionFile"`
+	CandidateID                     string             `json:"candidateId"`
+	Profile                         string             `json:"profile"`
+	Archetype                       string             `json:"archetype,omitempty"`
+	AttemptSeed                     int64              `json:"attemptSeed"`
+	Attempt                         int                `json:"attempt"`
+	PieceCount                      int                `json:"pieceCount"`
+	OptimalGestures                 int                `json:"optimalGestures"`
+	VisitedStates                   int                `json:"visitedStates"`
+	ElapsedMs                       int64              `json:"elapsedMs"`
+	Fingerprint                     string             `json:"fingerprint"`
+	LayoutSimilarityNearest         float64            `json:"layoutSimilarityNearest"`
+	FunctionalSimilarityNearest     float64            `json:"functionalSimilarityNearest"`
+	NearestCandidateId              string             `json:"nearestCandidateId,omitempty"`
+	InventorySignature              string             `json:"inventorySignature"`
+	InitialTargetBlockerCount       int                `json:"initialTargetBlockerCount"`
+	DistinctMovedPieces             int                `json:"distinctMovedPieces"`
+	DistinctNonTargetMovedPieces    int                `json:"distinctNonTargetMovedPieces"`
+	TargetMoveCount                 int                `json:"targetMoveCount"`
+	NonTargetMovesBeforeFirstTarget int                `json:"nonTargetMovesBeforeFirstTargetMove"`
+	DependencyDepth                 int                `json:"dependencyDepth"`
+	MovedPieceClassHistogram        map[string]int     `json:"movedPieceClassHistogram"`
+	PuzzleSignature                 PuzzleSignature    `json:"puzzleSignature"`
+	ReplayVerified                  bool               `json:"replayVerified"`
+	LevelFile                       string             `json:"levelFile"`
+	SolutionFile                    string             `json:"solutionFile"`
+	SignatureFile                   string             `json:"signatureFile"`
 }
 
 func (r CargoFlowGenerationResult) ToManifest() ManifestJSON {
@@ -696,9 +856,14 @@ func (r CargoFlowGenerationResult) ToManifest() ManifestJSON {
 	for _, p := range r.Config.Profiles {
 		profiles = append(profiles, p.Name)
 	}
+	arches := make([]string, 0, len(r.Config.Archetypes))
+	for _, a := range r.Config.Archetypes {
+		arches = append(arches, string(a))
+	}
 	m := ManifestJSON{
 		GeneratorVersion: r.Config.GeneratorVersion,
 		MasterSeed:       r.Config.MasterSeed,
+		DiverseMode:      r.Config.DiverseMode,
 		MinOptimal:       r.Config.MinOptimalGestures,
 		MaxAttempts:      r.Config.MaxAttempts,
 		TargetAccepted:   r.Config.TargetAccepted,
@@ -707,21 +872,36 @@ func (r CargoFlowGenerationResult) ToManifest() ManifestJSON {
 		Rejected:         rej,
 		TotalElapsedMs:   r.TotalElapsed.Milliseconds(),
 		Profiles:         profiles,
+		Archetypes:       arches,
 	}
 	for _, c := range r.Accepted {
 		m.Candidates = append(m.Candidates, ManifestCandidateJSON{
-			CandidateID:         c.CandidateID,
-			Profile:             c.Profile,
-			AttemptSeed:         c.AttemptSeed,
-			Attempt:             c.Attempt,
-			PieceCount:          len(c.Level.Pieces),
-			OptimalGestures:     c.OptimalGestures,
-			VisitedStates:       c.VisitedStates,
-			ElapsedMs:           c.ElapsedMs,
-			Fingerprint:         c.Fingerprint,
-			SimilarityToNearest: c.SimilarityToNearest,
-			LevelFile:           c.CandidateID + ".json",
-			SolutionFile:        c.CandidateID + ".solution.json",
+			CandidateID:                     c.CandidateID,
+			Profile:                         c.Profile,
+			Archetype:                       string(c.Archetype),
+			AttemptSeed:                     c.AttemptSeed,
+			Attempt:                         c.Attempt,
+			PieceCount:                      len(c.Level.Pieces),
+			OptimalGestures:                 c.OptimalGestures,
+			VisitedStates:                   c.VisitedStates,
+			ElapsedMs:                       c.ElapsedMs,
+			Fingerprint:                     c.Fingerprint,
+			LayoutSimilarityNearest:         c.SimilarityToNearest,
+			FunctionalSimilarityNearest:     c.FunctionalSimilarityNearest,
+			NearestCandidateId:              c.NearestCandidateID,
+			InventorySignature:              c.Signature.InventorySignature,
+			InitialTargetBlockerCount:       c.Signature.InitialTargetBlockerCount,
+			DistinctMovedPieces:             c.Signature.DistinctMovedPieces,
+			DistinctNonTargetMovedPieces:    c.Signature.DistinctNonTargetMovedPieces,
+			TargetMoveCount:                 c.Signature.TargetMoveCount,
+			NonTargetMovesBeforeFirstTarget: c.Signature.NonTargetMovesBeforeFirstTargetMove,
+			DependencyDepth:                 c.Signature.DependencyDepth,
+			MovedPieceClassHistogram:        c.Signature.MovedPieceClassHistogram,
+			PuzzleSignature:                 c.Signature,
+			ReplayVerified:                  c.ReplayVerified,
+			LevelFile:                       c.CandidateID + ".json",
+			SolutionFile:                    c.CandidateID + ".solution.json",
+			SignatureFile:                   c.CandidateID + ".signature.json",
 		})
 	}
 	return m

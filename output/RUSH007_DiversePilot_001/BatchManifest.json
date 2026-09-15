@@ -1,0 +1,473 @@
+{
+  "generatorVersion": "cf-gen-diverse-1",
+  "masterSeed": 202707,
+  "diverseMode": true,
+  "minOptimalGestures": 10,
+  "maxAttempts": 300,
+  "targetAccepted": 10,
+  "attempts": 300,
+  "accepted": 4,
+  "rejected": {
+    "ArchetypeMismatch": 1,
+    "DifficultyUnknown": 20,
+    "ImmediateVictory": 1,
+    "TooEasy": 235,
+    "TooSimilarFunctional": 31,
+    "TooSimilarToHumanRejectedPilot": 1,
+    "Unsolvable": 7
+  },
+  "totalElapsedMs": 486337,
+  "profiles": [
+    "MediumDense",
+    "HardDense",
+    "HardMixed"
+  ],
+  "archetypes": [
+    "LongBlockChain",
+    "CrossLock",
+    "StaticGate",
+    "SideChain",
+    "SmallBlockShuttle"
+  ],
+  "candidates": [
+    {
+      "candidateId": "Candidate_001",
+      "profile": "StaticGate",
+      "archetype": "StaticGate",
+      "attemptSeed": 9074697082562246167,
+      "attempt": 18,
+      "pieceCount": 25,
+      "optimalGestures": 11,
+      "visitedStates": 11945,
+      "elapsedMs": 10,
+      "fingerprint": "[31 3 10 17 32 0 51 39 22 42 255 255 255 255 255 255 255 255]|won=false|walls=[2 4 8 9 11 13 15 16 18 23 26 30 40 41 45]",
+      "layoutSimilarityNearest": 0,
+      "functionalSimilarityNearest": 0,
+      "inventorySignature": "1x1:4,1x2H:2,1x2V:1,1x3H:1,1x3V:1,Static:15,Target:1",
+      "initialTargetBlockerCount": 3,
+      "distinctMovedPieces": 5,
+      "distinctNonTargetMovedPieces": 4,
+      "targetMoveCount": 1,
+      "nonTargetMovesBeforeFirstTargetMove": 10,
+      "dependencyDepth": 5,
+      "movedPieceClassHistogram": {
+        "1x1": 10
+      },
+      "puzzleSignature": {
+        "inventorySignature": "1x1:4,1x2H:2,1x2V:1,1x3H:1,1x3V:1,Static:15,Target:1",
+        "initialTargetBlockerCount": 3,
+        "distinctMovedPieces": 5,
+        "distinctNonTargetMovedPieces": 4,
+        "targetMoveCount": 1,
+        "nonTargetMovesBeforeFirstTargetMove": 10,
+        "movedPieceClassHistogram": {
+          "1x1": 10
+        },
+        "optimalSolutionClassSequence": [
+          "1x1-right-2",
+          "1x1-down-1",
+          "1x1-right-1",
+          "1x1-down-1",
+          "1x1-right-1",
+          "1x1-down-2",
+          "1x1-right-1",
+          "1x1-down-1",
+          "1x1-down-3+",
+          "1x1-right-1",
+          "Target-exit"
+        ],
+        "directTargetBlockerClasses": [
+          "1x1",
+          "1x1",
+          "1x1"
+        ],
+        "optimalGestures": 11,
+        "dependencyDepth": 5,
+        "dependencyEdges": 19,
+        "targetBlockerTypes": [
+          {
+            "class": "1x1",
+            "orientation": "both",
+            "escapeLeft": false,
+            "escapeRight": false,
+            "escapeUp": false,
+            "escapeDown": false,
+            "initiallyMovable": true
+          },
+          {
+            "class": "1x1",
+            "orientation": "both",
+            "escapeLeft": false,
+            "escapeRight": false,
+            "escapeUp": false,
+            "escapeDown": false,
+            "initiallyMovable": true
+          },
+          {
+            "class": "1x1",
+            "orientation": "both",
+            "escapeLeft": false,
+            "escapeRight": false,
+            "escapeUp": false,
+            "escapeDown": true,
+            "initiallyMovable": true
+          }
+        ],
+        "targetStartRow": 4,
+        "sequenceDigest": "1x1-right-2|1x1-down-1|1x1-right-1|1x1-down-1|1x1-right-1|1x1-down-2|1x1-right-1|1x1-down-1|1x1-down-3+|1x1-right-1|Target-exit"
+      },
+      "replayVerified": true,
+      "levelFile": "Candidate_001.json",
+      "solutionFile": "Candidate_001.solution.json",
+      "signatureFile": "Candidate_001.signature.json"
+    },
+    {
+      "candidateId": "Candidate_002",
+      "profile": "CrossLock",
+      "archetype": "CrossLock",
+      "attemptSeed": 749705507158567586,
+      "attempt": 27,
+      "pieceCount": 18,
+      "optimalGestures": 10,
+      "visitedStates": 1532797,
+      "elapsedMs": 2329,
+      "fingerprint": "[45 10 17 24 31 1 42 22 46 50 20 255 255 255 255 255 255 255]|won=false|walls=[9 11 16 18 25 30 32]",
+      "layoutSimilarityNearest": 0.5384615384615384,
+      "functionalSimilarityNearest": 0.711,
+      "nearestCandidateId": "Candidate_001",
+      "inventorySignature": "1x1:4,1x2H:3,1x2V:1,1x3H:2,Static:7,Target:1",
+      "initialTargetBlockerCount": 5,
+      "distinctMovedPieces": 6,
+      "distinctNonTargetMovedPieces": 5,
+      "targetMoveCount": 1,
+      "nonTargetMovesBeforeFirstTargetMove": 9,
+      "dependencyDepth": 4,
+      "movedPieceClassHistogram": {
+        "1x1": 8,
+        "1x3H": 1
+      },
+      "puzzleSignature": {
+        "inventorySignature": "1x1:4,1x2H:3,1x2V:1,1x3H:2,Static:7,Target:1",
+        "initialTargetBlockerCount": 5,
+        "distinctMovedPieces": 6,
+        "distinctNonTargetMovedPieces": 5,
+        "targetMoveCount": 1,
+        "nonTargetMovesBeforeFirstTargetMove": 9,
+        "movedPieceClassHistogram": {
+          "1x1": 8,
+          "1x3H": 1
+        },
+        "optimalSolutionClassSequence": [
+          "1x1-down-1",
+          "1x1-left-1",
+          "1x1-down-2",
+          "1x1-right-1",
+          "1x3H-left-1",
+          "1x1-up-1",
+          "1x1-right-2",
+          "1x1-up-2",
+          "1x1-right-1",
+          "Target-exit"
+        ],
+        "directTargetBlockerClasses": [
+          "1x1",
+          "1x1",
+          "1x1",
+          "1x1",
+          "1x3H"
+        ],
+        "optimalGestures": 10,
+        "dependencyDepth": 4,
+        "dependencyEdges": 16,
+        "targetBlockerTypes": [
+          {
+            "class": "1x3H",
+            "orientation": "H",
+            "escapeLeft": true,
+            "escapeRight": true,
+            "escapeUp": false,
+            "escapeDown": false,
+            "initiallyMovable": true
+          },
+          {
+            "class": "1x1",
+            "orientation": "both",
+            "escapeLeft": false,
+            "escapeRight": false,
+            "escapeUp": false,
+            "escapeDown": false,
+            "initiallyMovable": true
+          },
+          {
+            "class": "1x1",
+            "orientation": "both",
+            "escapeLeft": false,
+            "escapeRight": false,
+            "escapeUp": false,
+            "escapeDown": false,
+            "initiallyMovable": true
+          },
+          {
+            "class": "1x1",
+            "orientation": "both",
+            "escapeLeft": false,
+            "escapeRight": false,
+            "escapeUp": false,
+            "escapeDown": false,
+            "initiallyMovable": true
+          },
+          {
+            "class": "1x1",
+            "orientation": "both",
+            "escapeLeft": false,
+            "escapeRight": false,
+            "escapeUp": false,
+            "escapeDown": true,
+            "initiallyMovable": true
+          }
+        ],
+        "targetStartRow": 6,
+        "sequenceDigest": "1x1-down-1|1x1-left-1|1x1-down-2|1x1-right-1|1x3H-left-1|1x1-up-1|1x1-right-2|1x1-up-2|1x1-right-1|Target-exit"
+      },
+      "replayVerified": true,
+      "levelFile": "Candidate_002.json",
+      "solutionFile": "Candidate_002.solution.json",
+      "signatureFile": "Candidate_002.signature.json"
+    },
+    {
+      "candidateId": "Candidate_003",
+      "profile": "StaticGate",
+      "archetype": "StaticGate",
+      "attemptSeed": 2674537769110015238,
+      "attempt": 63,
+      "pieceCount": 26,
+      "optimalGestures": 12,
+      "visitedStates": 71995,
+      "elapsedMs": 92,
+      "fingerprint": "[45 17 24 31 38 3 10 28 0 6 255 255 255 255 255 255 255 255]|won=false|walls=[7 16 18 19 22 23 25 30 32 36 37 39 41 44 50 53]",
+      "layoutSimilarityNearest": 0.5581395348837209,
+      "functionalSimilarityNearest": 0.706,
+      "nearestCandidateId": "Candidate_002",
+      "inventorySignature": "1x1:4,1x2H:2,1x2V:1,1x3H:1,1x3V:1,Static:16,Target:1",
+      "initialTargetBlockerCount": 6,
+      "distinctMovedPieces": 8,
+      "distinctNonTargetMovedPieces": 7,
+      "targetMoveCount": 1,
+      "nonTargetMovesBeforeFirstTargetMove": 11,
+      "dependencyDepth": 6,
+      "movedPieceClassHistogram": {
+        "1x1": 8,
+        "1x2H": 2,
+        "1x3V": 1
+      },
+      "puzzleSignature": {
+        "inventorySignature": "1x1:4,1x2H:2,1x2V:1,1x3H:1,1x3V:1,Static:16,Target:1",
+        "initialTargetBlockerCount": 6,
+        "distinctMovedPieces": 8,
+        "distinctNonTargetMovedPieces": 7,
+        "targetMoveCount": 1,
+        "nonTargetMovesBeforeFirstTargetMove": 11,
+        "movedPieceClassHistogram": {
+          "1x1": 8,
+          "1x2H": 2,
+          "1x3V": 1
+        },
+        "optimalSolutionClassSequence": [
+          "1x2H-left-2",
+          "1x1-up-1",
+          "1x3V-down-2",
+          "1x1-right-3+",
+          "1x1-up-2",
+          "1x1-right-2",
+          "1x1-up-3+",
+          "1x1-right-1",
+          "1x2H-right-2",
+          "1x1-up-3+",
+          "1x1-right-1",
+          "Target-exit"
+        ],
+        "directTargetBlockerClasses": [
+          "1x1",
+          "1x1",
+          "1x1",
+          "1x1",
+          "1x2H",
+          "1x2H"
+        ],
+        "optimalGestures": 12,
+        "dependencyDepth": 6,
+        "dependencyEdges": 36,
+        "targetBlockerTypes": [
+          {
+            "class": "1x2H",
+            "orientation": "H",
+            "escapeLeft": false,
+            "escapeRight": true,
+            "escapeUp": false,
+            "escapeDown": false,
+            "initiallyMovable": true
+          },
+          {
+            "class": "1x2H",
+            "orientation": "H",
+            "escapeLeft": true,
+            "escapeRight": true,
+            "escapeUp": false,
+            "escapeDown": false,
+            "initiallyMovable": true
+          },
+          {
+            "class": "1x1",
+            "orientation": "both",
+            "escapeLeft": false,
+            "escapeRight": false,
+            "escapeUp": false,
+            "escapeDown": false,
+            "initiallyMovable": true
+          },
+          {
+            "class": "1x1",
+            "orientation": "both",
+            "escapeLeft": false,
+            "escapeRight": false,
+            "escapeUp": false,
+            "escapeDown": false,
+            "initiallyMovable": true
+          },
+          {
+            "class": "1x1",
+            "orientation": "both",
+            "escapeLeft": false,
+            "escapeRight": false,
+            "escapeUp": false,
+            "escapeDown": false,
+            "initiallyMovable": true
+          },
+          {
+            "class": "1x1",
+            "orientation": "both",
+            "escapeLeft": false,
+            "escapeRight": false,
+            "escapeUp": false,
+            "escapeDown": false,
+            "initiallyMovable": true
+          }
+        ],
+        "targetStartRow": 6,
+        "sequenceDigest": "1x2H-left-2|1x1-up-1|1x3V-down-2|1x1-right-3+|1x1-up-2|1x1-right-2|1x1-up-3+|1x1-right-1|1x2H-right-2|1x1-up-3+|1x1-right-1|Target-exit"
+      },
+      "replayVerified": true,
+      "levelFile": "Candidate_003.json",
+      "solutionFile": "Candidate_003.solution.json",
+      "signatureFile": "Candidate_003.signature.json"
+    },
+    {
+      "candidateId": "Candidate_004",
+      "profile": "LongBlockChain",
+      "archetype": "LongBlockChain",
+      "attemptSeed": 1747914227905619700,
+      "attempt": 125,
+      "pieceCount": 20,
+      "optimalGestures": 11,
+      "visitedStates": 3337431,
+      "elapsedMs": 7216,
+      "fingerprint": "[31 10 17 24 39 2 4 53 45 49 1 22 14 26 255 255 255 255]|won=false|walls=[9 11 16 18 23 25]",
+      "layoutSimilarityNearest": 0.525,
+      "functionalSimilarityNearest": 0.694,
+      "nearestCandidateId": "Candidate_002",
+      "inventorySignature": "1x1:4,1x2H:3,1x2V:2,1x3H:2,1x3V:2,Static:6,Target:1",
+      "initialTargetBlockerCount": 4,
+      "distinctMovedPieces": 7,
+      "distinctNonTargetMovedPieces": 6,
+      "targetMoveCount": 2,
+      "nonTargetMovesBeforeFirstTargetMove": 1,
+      "dependencyDepth": 5,
+      "movedPieceClassHistogram": {
+        "1x1": 6,
+        "1x2H": 1,
+        "1x2V": 1,
+        "1x3H": 1
+      },
+      "puzzleSignature": {
+        "inventorySignature": "1x1:4,1x2H:3,1x2V:2,1x3H:2,1x3V:2,Static:6,Target:1",
+        "initialTargetBlockerCount": 4,
+        "distinctMovedPieces": 7,
+        "distinctNonTargetMovedPieces": 6,
+        "targetMoveCount": 2,
+        "nonTargetMovesBeforeFirstTargetMove": 1,
+        "movedPieceClassHistogram": {
+          "1x1": 6,
+          "1x2H": 1,
+          "1x2V": 1,
+          "1x3H": 1
+        },
+        "optimalSolutionClassSequence": [
+          "1x3H-left-3+",
+          "Target-down-1",
+          "1x1-down-1",
+          "1x1-left-1",
+          "1x1-down-2",
+          "1x1-right-1",
+          "1x2V-down-1",
+          "1x2H-left-2",
+          "1x1-up-1",
+          "1x1-left-1",
+          "Target-exit"
+        ],
+        "directTargetBlockerClasses": [
+          "1x1",
+          "1x1",
+          "1x1",
+          "1x2H"
+        ],
+        "optimalGestures": 11,
+        "dependencyDepth": 5,
+        "dependencyEdges": 15,
+        "targetBlockerTypes": [
+          {
+            "class": "1x2H",
+            "orientation": "H",
+            "escapeLeft": false,
+            "escapeRight": false,
+            "escapeUp": false,
+            "escapeDown": false,
+            "initiallyMovable": true
+          },
+          {
+            "class": "1x1",
+            "orientation": "both",
+            "escapeLeft": false,
+            "escapeRight": false,
+            "escapeUp": false,
+            "escapeDown": false,
+            "initiallyMovable": true
+          },
+          {
+            "class": "1x1",
+            "orientation": "both",
+            "escapeLeft": false,
+            "escapeRight": false,
+            "escapeUp": false,
+            "escapeDown": false,
+            "initiallyMovable": true
+          },
+          {
+            "class": "1x1",
+            "orientation": "both",
+            "escapeLeft": false,
+            "escapeRight": false,
+            "escapeUp": false,
+            "escapeDown": false,
+            "initiallyMovable": true
+          }
+        ],
+        "targetStartRow": 4,
+        "sequenceDigest": "1x3H-left-3+|Target-down-1|1x1-down-1|1x1-left-1|1x1-down-2|1x1-right-1|1x2V-down-1|1x2H-left-2|1x1-up-1|1x1-left-1|Target-exit"
+      },
+      "replayVerified": true,
+      "levelFile": "Candidate_004.json",
+      "solutionFile": "Candidate_004.solution.json",
+      "signatureFile": "Candidate_004.signature.json"
+    }
+  ]
+}

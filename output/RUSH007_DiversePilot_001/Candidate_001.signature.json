@@ -1,0 +1,63 @@
+{
+  "inventorySignature": "1x1:4,1x2H:2,1x2V:1,1x3H:1,1x3V:1,Static:15,Target:1",
+  "initialTargetBlockerCount": 3,
+  "distinctMovedPieces": 5,
+  "distinctNonTargetMovedPieces": 4,
+  "targetMoveCount": 1,
+  "nonTargetMovesBeforeFirstTargetMove": 10,
+  "movedPieceClassHistogram": {
+    "1x1": 10
+  },
+  "optimalSolutionClassSequence": [
+    "1x1-right-2",
+    "1x1-down-1",
+    "1x1-right-1",
+    "1x1-down-1",
+    "1x1-right-1",
+    "1x1-down-2",
+    "1x1-right-1",
+    "1x1-down-1",
+    "1x1-down-3+",
+    "1x1-right-1",
+    "Target-exit"
+  ],
+  "directTargetBlockerClasses": [
+    "1x1",
+    "1x1",
+    "1x1"
+  ],
+  "optimalGestures": 11,
+  "dependencyDepth": 5,
+  "dependencyEdges": 19,
+  "targetBlockerTypes": [
+    {
+      "class": "1x1",
+      "orientation": "both",
+      "escapeLeft": false,
+      "escapeRight": false,
+      "escapeUp": false,
+      "escapeDown": false,
+      "initiallyMovable": true
+    },
+    {
+      "class": "1x1",
+      "orientation": "both",
+      "escapeLeft": false,
+      "escapeRight": false,
+      "escapeUp": false,
+      "escapeDown": false,
+      "initiallyMovable": true
+    },
+    {
+      "class": "1x1",
+      "orientation": "both",
+      "escapeLeft": false,
+      "escapeRight": false,
+      "escapeUp": false,
+      "escapeDown": true,
+      "initiallyMovable": true
+    }
+  ],
+  "targetStartRow": 4,
+  "sequenceDigest": "1x1-right-2|1x1-down-1|1x1-right-1|1x1-down-1|1x1-right-1|1x1-down-2|1x1-right-1|1x1-down-1|1x1-down-3+|1x1-right-1|Target-exit"
+}
