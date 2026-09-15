@@ -1,0 +1,154 @@
+{
+  "schemaVersion": 1,
+  "levelId": "Candidate_006",
+  "width": 7,
+  "height": 8,
+  "coordinateSpace": "unity",
+  "exit": {
+    "side": "top",
+    "column": 3
+  },
+  "pieces": [
+    {
+      "id": "target",
+      "type": "target",
+      "x": 3,
+      "y": 1,
+      "width": 1,
+      "height": 2,
+      "movable": true
+    },
+    {
+      "id": "P01",
+      "type": "movable1x2",
+      "x": 1,
+      "y": 2,
+      "width": 1,
+      "height": 2,
+      "movable": true
+    },
+    {
+      "id": "P02",
+      "type": "movable1x3",
+      "x": 1,
+      "y": 4,
+      "width": 1,
+      "height": 3,
+      "movable": true
+    },
+    {
+      "id": "P03",
+      "type": "movable1x2",
+      "x": 2,
+      "y": 4,
+      "width": 1,
+      "height": 2,
+      "movable": true
+    },
+    {
+      "id": "P04",
+      "type": "movable1x2",
+      "x": 4,
+      "y": 3,
+      "width": 1,
+      "height": 2,
+      "movable": true
+    },
+    {
+      "id": "P05",
+      "type": "movable1x2",
+      "x": 5,
+      "y": 3,
+      "width": 1,
+      "height": 2,
+      "movable": true
+    },
+    {
+      "id": "P06",
+      "type": "movable1x3",
+      "x": 6,
+      "y": 1,
+      "width": 1,
+      "height": 3,
+      "movable": true
+    },
+    {
+      "id": "P07",
+      "type": "movable1x2",
+      "x": 1,
+      "y": 1,
+      "width": 2,
+      "height": 1,
+      "movable": true
+    },
+    {
+      "id": "P08",
+      "type": "movable1x2",
+      "x": 4,
+      "y": 2,
+      "width": 2,
+      "height": 1,
+      "movable": true
+    },
+    {
+      "id": "P09",
+      "type": "movable1x2",
+      "x": 2,
+      "y": 3,
+      "width": 2,
+      "height": 1,
+      "movable": true
+    },
+    {
+      "id": "P10",
+      "type": "movable1x3",
+      "x": 4,
+      "y": 5,
+      "width": 3,
+      "height": 1,
+      "movable": true
+    },
+    {
+      "id": "P11",
+      "type": "movable1x2",
+      "x": 2,
+      "y": 6,
+      "width": 2,
+      "height": 1,
+      "movable": true
+    },
+    {
+      "id": "P12",
+      "type": "movable1x3",
+      "x": 4,
+      "y": 6,
+      "width": 3,
+      "height": 1,
+      "movable": true
+    },
+    {
+      "id": "S1",
+      "type": "static1x1",
+      "x": 2,
+      "y": 2,
+      "width": 1,
+      "height": 1,
+      "movable": false
+    }
+  ],
+  "canonicalGestures": 16,
+  "source": "RushDatabase/rush1000.txt/rush1000:L0771/ShiftDown1",
+  "transplant": {
+    "sourceDataset": "rush1000.txt",
+    "sourcePuzzleId": "rush1000:L0771",
+    "sourceLine": 771,
+    "originalBoard": "IBBCCCIxKEEMAAKooMoJFFLNoJGGLNHHHoLN",
+    "originalOptimalMoves": 39,
+    "originalClusterSize": 478,
+    "transformRotation": "CW90",
+    "embeddingVariant": "ShiftDown1",
+    "offsetX": 1,
+    "offsetY": 1,
+    "cargoFlowOptimalGestures": 16
+  }
+}

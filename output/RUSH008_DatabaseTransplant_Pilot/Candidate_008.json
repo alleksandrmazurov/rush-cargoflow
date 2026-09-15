@@ -1,0 +1,163 @@
+{
+  "schemaVersion": 1,
+  "levelId": "Candidate_008",
+  "width": 7,
+  "height": 8,
+  "coordinateSpace": "unity",
+  "exit": {
+    "side": "top",
+    "column": 3
+  },
+  "pieces": [
+    {
+      "id": "target",
+      "type": "target",
+      "x": 3,
+      "y": 2,
+      "width": 1,
+      "height": 2,
+      "movable": true
+    },
+    {
+      "id": "P01",
+      "type": "movable1x2",
+      "x": 1,
+      "y": 3,
+      "width": 1,
+      "height": 2,
+      "movable": true
+    },
+    {
+      "id": "P02",
+      "type": "movable1x2",
+      "x": 1,
+      "y": 6,
+      "width": 1,
+      "height": 2,
+      "movable": true
+    },
+    {
+      "id": "P03",
+      "type": "movable1x2",
+      "x": 2,
+      "y": 6,
+      "width": 1,
+      "height": 2,
+      "movable": true
+    },
+    {
+      "id": "P04",
+      "type": "movable1x2",
+      "x": 4,
+      "y": 4,
+      "width": 1,
+      "height": 2,
+      "movable": true
+    },
+    {
+      "id": "P05",
+      "type": "movable1x2",
+      "x": 5,
+      "y": 3,
+      "width": 1,
+      "height": 2,
+      "movable": true
+    },
+    {
+      "id": "P06",
+      "type": "movable1x3",
+      "x": 6,
+      "y": 3,
+      "width": 1,
+      "height": 3,
+      "movable": true
+    },
+    {
+      "id": "P07",
+      "type": "movable1x2",
+      "x": 6,
+      "y": 6,
+      "width": 1,
+      "height": 2,
+      "movable": true
+    },
+    {
+      "id": "P08",
+      "type": "movable1x2",
+      "x": 1,
+      "y": 2,
+      "width": 2,
+      "height": 1,
+      "movable": true
+    },
+    {
+      "id": "P09",
+      "type": "movable1x3",
+      "x": 4,
+      "y": 2,
+      "width": 3,
+      "height": 1,
+      "movable": true
+    },
+    {
+      "id": "P10",
+      "type": "movable1x2",
+      "x": 2,
+      "y": 4,
+      "width": 2,
+      "height": 1,
+      "movable": true
+    },
+    {
+      "id": "P11",
+      "type": "movable1x2",
+      "x": 2,
+      "y": 5,
+      "width": 2,
+      "height": 1,
+      "movable": true
+    },
+    {
+      "id": "P12",
+      "type": "movable1x2",
+      "x": 3,
+      "y": 7,
+      "width": 2,
+      "height": 1,
+      "movable": true
+    },
+    {
+      "id": "S1",
+      "type": "static1x1",
+      "x": 1,
+      "y": 5,
+      "width": 1,
+      "height": 1,
+      "movable": false
+    },
+    {
+      "id": "S2",
+      "type": "static1x1",
+      "x": 4,
+      "y": 3,
+      "width": 1,
+      "height": 1,
+      "movable": false
+    }
+  ],
+  "canonicalGestures": 13,
+  "source": "RushDatabase/rush1000.txt/rush1000:L0775/FlushTop",
+  "transplant": {
+    "sourceDataset": "rush1000.txt",
+    "sourcePuzzleId": "rush1000:L0775",
+    "sourceLine": 775,
+    "originalBoard": "KBBxDDKoMNEEAAMNoOLxGGoOLHHoooLIIIJJ",
+    "originalOptimalMoves": 39,
+    "originalClusterSize": 375,
+    "transformRotation": "CW90",
+    "embeddingVariant": "FlushTop",
+    "offsetX": 1,
+    "offsetY": 0,
+    "cargoFlowOptimalGestures": 13
+  }
+}

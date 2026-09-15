@@ -25,8 +25,24 @@ type LevelJSON struct {
 	CoordinateSpace  string      `json:"coordinateSpace"`
 	Exit             ExitJSON    `json:"exit"`
 	Pieces           []PieceJSON `json:"pieces"`
-	CanonicalGestures *int       `json:"canonicalGestures,omitempty"`
-	Source           string      `json:"source,omitempty"`
+	CanonicalGestures *int            `json:"canonicalGestures,omitempty"`
+	Source            string          `json:"source,omitempty"`
+	Transplant        *TransplantJSON `json:"transplant,omitempty"`
+}
+
+// TransplantJSON records Rush-database provenance for RUSH-008 candidates.
+type TransplantJSON struct {
+	SourceDataset          string `json:"sourceDataset"`
+	SourcePuzzleId         string `json:"sourcePuzzleId"`
+	SourceLine             int    `json:"sourceLine"`
+	OriginalBoard          string `json:"originalBoard"`
+	OriginalOptimalMoves   int    `json:"originalOptimalMoves"`
+	OriginalClusterSize    int    `json:"originalClusterSize"`
+	TransformRotation      string `json:"transformRotation"`
+	EmbeddingVariant       string `json:"embeddingVariant"`
+	OffsetX                int    `json:"offsetX"`
+	OffsetY                int    `json:"offsetY"`
+	CargoFlowOptimalGestures *int `json:"cargoFlowOptimalGestures,omitempty"`
 }
 
 type ExitJSON struct {
