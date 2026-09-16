@@ -222,6 +222,9 @@ func (board *Board) cargoMoves(buf []Move) []Move {
 		return moves
 	}
 	for i, piece := range board.Pieces {
+		if board.ImmobilePieces != nil && i < len(board.ImmobilePieces) && board.ImmobilePieces[i] {
+			continue
+		}
 		switch piece.Kind {
 		case PieceTarget:
 			moves = board.appendAxisMoves(moves, i, piece, Vertical)

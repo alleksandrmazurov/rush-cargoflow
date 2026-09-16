@@ -25,9 +25,38 @@ type LevelJSON struct {
 	CoordinateSpace  string      `json:"coordinateSpace"`
 	Exit             ExitJSON    `json:"exit"`
 	Pieces           []PieceJSON `json:"pieces"`
-	CanonicalGestures *int            `json:"canonicalGestures,omitempty"`
-	Source            string          `json:"source,omitempty"`
-	Transplant        *TransplantJSON `json:"transplant,omitempty"`
+	CanonicalGestures *int             `json:"canonicalGestures,omitempty"`
+	Source            string           `json:"source,omitempty"`
+	Transplant        *TransplantJSON  `json:"transplant,omitempty"`
+	Enrichment        *EnrichmentJSON  `json:"enrichment,omitempty"`
+}
+
+// EnrichmentJSON records RUSH-010 / RUSH-010.1 movable-1x1 enrichment provenance.
+type EnrichmentJSON struct {
+	BaseCandidateId              string  `json:"baseCandidateId"`
+	BaseFamilyId                 string  `json:"baseFamilyId"`
+	BaseSourcePuzzleId           string  `json:"baseSourcePuzzleId"`
+	Added1x1Count                int     `json:"added1x1Count"`
+	Essential1x1Count            int     `json:"essential1x1Count"`
+	OneByOneMovesInOptimal       int     `json:"oneByOneMovesInOptimal"`
+	BaseOptimal                  int     `json:"baseOptimal"`
+	EnrichedOptimal              int     `json:"enrichedOptimal"`
+	OptimalDelta                 int     `json:"optimalDelta"`
+	EnrichmentImpact             float64 `json:"enrichmentImpact"`
+	PlacementCells               []int   `json:"placementCells"`
+	OneByOneRole                      string `json:"oneByOneRole,omitempty"`
+	OneByOneInitiallyInTargetCorridor bool   `json:"oneByOneInitiallyInTargetCorridor"`
+	RoleEvidenceSummary               string `json:"roleEvidenceSummary,omitempty"`
+	ReleasedCells                []int   `json:"releasedCells,omitempty"`
+	SubsequentPieceClass         string  `json:"subsequentPieceClass,omitempty"`
+	// RUSH-010.2 inventory diversity metadata (sequencer-ready).
+	InventoryClass       string `json:"inventoryClass,omitempty"`
+	InventorySignature   string `json:"inventorySignature,omitempty"`
+	Relevant1x1Count     int    `json:"relevant1x1Count,omitempty"`
+	Corridor1x1Count     int    `json:"corridor1x1Count,omitempty"`
+	DistinctRowsUsed     int    `json:"distinctRowsUsed,omitempty"`
+	DistinctColumnsUsed  int    `json:"distinctColumnsUsed,omitempty"`
+	BoardRegionsUsed     int    `json:"boardRegionsUsed,omitempty"`
 }
 
 // TransplantJSON records Rush-database provenance for RUSH-008 candidates.

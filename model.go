@@ -99,9 +99,12 @@ type Board struct {
 	Rules    Ruleset
 	ExitCol  int
 	Labels   []string
-	occupied []bool
-	memoKey  MemoKey
-	won      bool
+	// ImmobilePieces, when non-nil and ImmobilePieces[i], suppresses moves for piece i
+	// (piece still occupies space). Used by RUSH-010 necessity tests.
+	ImmobilePieces []bool
+	occupied       []bool
+	memoKey        MemoKey
+	won            bool
 }
 
 func NewEmptyBoard(w, h int) *Board {
@@ -260,17 +263,23 @@ func (board *Board) Copy() *Board {
 	copy(pieces, board.Pieces)
 	copy(walls, board.Walls)
 	copy(occupied, board.occupied)
+	var immobile []bool
+	if board.ImmobilePieces != nil {
+		immobile = make([]bool, len(board.ImmobilePieces))
+		copy(immobile, board.ImmobilePieces)
+	}
 	return &Board{
-		Width:    board.Width,
-		Height:   board.Height,
-		Pieces:   pieces,
-		Walls:    walls,
-		Rules:    board.Rules,
-		ExitCol:  board.ExitCol,
-		Labels:   append([]string(nil), board.Labels...),
-		occupied: occupied,
-		memoKey:  board.memoKey,
-		won:      board.won,
+		Width:          board.Width,
+		Height:         board.Height,
+		Pieces:         pieces,
+		Walls:          walls,
+		Rules:          board.Rules,
+		ExitCol:        board.ExitCol,
+		Labels:         append([]string(nil), board.Labels...),
+		ImmobilePieces: immobile,
+		occupied:       occupied,
+		memoKey:        board.memoKey,
+		won:            board.won,
 	}
 }
 

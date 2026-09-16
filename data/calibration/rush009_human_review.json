@@ -1,0 +1,13 @@
+{
+  "corpusId": "rush009_human_review",
+  "note": "Subjective expert human play of RUSH-009 curated shortlist — calibration only, not universal ground truth.",
+  "batchDir": "output/RUSH009_CuratedShortlist_001",
+  "entries": [
+    {"candidateId": "Candidate_002", "humanMoves": 7, "humanDifficulty": "Easy", "familyId": "F143"},
+    {"candidateId": "Candidate_010", "humanMoves": 6, "humanDifficulty": "Easy", "familyId": "F065"},
+    {"candidateId": "Candidate_004", "humanMoves": 14, "humanDifficulty": "Easy", "familyId": "F095"},
+    {"candidateId": "Candidate_006", "humanMoves": 12, "humanDifficulty": "Easy", "familyId": "F015"},
+    {"candidateId": "Candidate_007", "humanMoves": 16, "humanDifficulty": "Medium", "familyId": "F087"},
+    {"candidateId": "Candidate_013", "humanMoves": 25, "humanDifficulty": "Hard", "familyId": "F050"}
+  ]
+}

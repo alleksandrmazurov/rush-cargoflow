@@ -1,0 +1,13 @@
+{
+  "corpusId": "rush010_human_review",
+  "note": "Subjective expert human play of RUSH-010 1x1 enrichment — calibration only.",
+  "batchDir": "output/RUSH010_OneByOneEnrichment_001",
+  "entries": [
+    {"candidateId": "Candidate_007", "humanDifficulty": "Easy", "oneByOneFeltNatural": true, "notes": "1x1 natural"},
+    {"candidateId": "Candidate_006", "humanDifficulty": "Easy", "oneByOneFeltNatural": true},
+    {"candidateId": "Candidate_003", "humanDifficulty": "Easy", "oneByOneFeltNatural": true},
+    {"candidateId": "Candidate_002", "humanDifficulty": "Medium", "oneByOneFeltNatural": true},
+    {"candidateId": "Candidate_001", "humanDifficulty": "Hard", "oneByOneFeltNatural": true}
+  ],
+  "structuralObservation": "In 4 of 5 reviewed levels, movable 1x1 started on Target exit corridor — motivates RUSH-010.1 role diversity."
+}
