@@ -16,24 +16,54 @@ const (
 	EmbedFlushTop    EmbeddingVariant = "FlushTop"    // offsetY = 0
 	EmbedShiftDown1  EmbeddingVariant = "ShiftDown1"  // offsetY = 1
 	EmbedFlushBottom EmbeddingVariant = "FlushBottom" // offsetY = 2
+	// MirrorH variants reflect Rush horizontally before CW90 (Target stays exit-aligned).
+	EmbedFlushTopMirrorH    EmbeddingVariant = "FlushTopMirrorH"
+	EmbedShiftDown1MirrorH  EmbeddingVariant = "ShiftDown1MirrorH"
+	EmbedFlushBottomMirrorH EmbeddingVariant = "FlushBottomMirrorH"
 )
 
-// DefaultEmbeddingVariants returns the POC embedding set.
+// DefaultEmbeddingVariants returns the classic POC embedding set.
 func DefaultEmbeddingVariants() []EmbeddingVariant {
 	return []EmbeddingVariant{EmbedFlushTop, EmbedShiftDown1, EmbedFlushBottom}
 }
 
+// BoardDiversityEmbeddingVariants returns classic + mirrorH embeddings for RUSH-010.3.
+func BoardDiversityEmbeddingVariants() []EmbeddingVariant {
+	return []EmbeddingVariant{
+		EmbedFlushTop, EmbedShiftDown1, EmbedFlushBottom,
+		EmbedFlushTopMirrorH, EmbedShiftDown1MirrorH, EmbedFlushBottomMirrorH,
+	}
+}
+
 func embeddingOffsetY(v EmbeddingVariant) (int, error) {
 	switch v {
-	case EmbedFlushTop:
+	case EmbedFlushTop, EmbedFlushTopMirrorH:
 		return 0, nil
-	case EmbedShiftDown1:
+	case EmbedShiftDown1, EmbedShiftDown1MirrorH:
 		return 1, nil
-	case EmbedFlushBottom:
+	case EmbedFlushBottom, EmbedFlushBottomMirrorH:
 		return 2, nil
 	default:
 		return 0, fmt.Errorf("unknown embedding %q", v)
 	}
+}
+
+func embeddingMirrorH(v EmbeddingVariant) bool {
+	switch v {
+	case EmbedFlushTopMirrorH, EmbedShiftDown1MirrorH, EmbedFlushBottomMirrorH:
+		return true
+	default:
+		return false
+	}
+}
+
+// TransformVersionForEmbedding returns the cache transform version for an embedding.
+// Classic FlushTop/ShiftDown1/FlushBottom keep cw90-embed-v1 for cache reuse.
+func TransformVersionForEmbedding(v EmbeddingVariant) string {
+	if embeddingMirrorH(v) {
+		return TransformVersionCW90MirrorH
+	}
+	return TransformVersionCW90
 }
 
 // TransplantResult is one geometric conversion before Cargo Flow solving.
@@ -104,16 +134,34 @@ func TransformRushRecordToCargoFlow(rec RushDBRecord, embed EmbeddingVariant) (*
 	}
 	labelCells := map[string][][2]int{} // label -> list of (r,c)
 	wallCells := [][2]int{}
+	mirrorH := embeddingMirrorH(embed)
 	for r := 0; r < RushDBHeight; r++ {
 		for c := 0; c < RushDBWidth; c++ {
 			ch := rows[r][c]
+			srcC := c
+			if mirrorH {
+				srcC = RushDBWidth - 1 - c
+			}
 			switch ch {
 			case 'o', '.':
 			case 'x':
-				wallCells = append(wallCells, [2]int{r, c})
+				wallCells = append(wallCells, [2]int{r, srcC})
 			default:
 				lab := string(ch)
-				labelCells[lab] = append(labelCells[lab], [2]int{r, c})
+				labelCells[lab] = append(labelCells[lab], [2]int{r, srcC})
+			}
+		}
+	}
+
+	// Primary row is unchanged by horizontal mirror; recompute from mirrored cells if needed.
+	if mirrorH {
+		if cells, ok := labelCells["A"]; ok && len(cells) > 0 {
+			primRow = cells[0][0]
+			primColAfter = primRow
+			offX = CargoFlowExitCol - primColAfter
+			if offX < 0 || offX > CargoFlowWidth-RushDBWidth {
+				return nil, fmt.Errorf("mirrored primary col after rot=%d cannot align to exit col %d (offX=%d)",
+					primColAfter, CargoFlowExitCol, offX)
 			}
 		}
 	}

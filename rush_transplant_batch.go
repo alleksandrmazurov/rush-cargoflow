@@ -332,6 +332,12 @@ func embeddingRank(v EmbeddingVariant) int {
 		return 1
 	case EmbedFlushBottom:
 		return 2
+	case EmbedFlushTopMirrorH:
+		return 3
+	case EmbedShiftDown1MirrorH:
+		return 4
+	case EmbedFlushBottomMirrorH:
+		return 5
 	default:
 		return 9
 	}

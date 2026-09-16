@@ -13,10 +13,11 @@ import (
 )
 
 const (
-	CuratorVersion       = "curator-poc-1"
-	TransformVersionCW90 = "cw90-embed-v1"
-	CargoRulesVersionCF  = "cf-7x8-top3-v1"
-	SolverVersionBFS     = "cargo-bfs-budget-v1"
+	CuratorVersion              = "curator-poc-1"
+	TransformVersionCW90        = "cw90-embed-v1"
+	TransformVersionCW90MirrorH = "cw90-embed-mirrorh-v1"
+	CargoRulesVersionCF         = "cf-7x8-top3-v1"
+	SolverVersionBFS            = "cargo-bfs-budget-v1"
 )
 
 // SourceFeatureVector is cheap pre-transform metadata (no Cargo Flow solve).

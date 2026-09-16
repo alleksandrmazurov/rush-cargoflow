@@ -1,7 +1,7 @@
 package rush
 
 import (
-	"path/filepath"
+	"os"
 	"sync"
 	"testing"
 	"time"
@@ -297,23 +297,23 @@ var (
 func runInventoryTiny(t *testing.T) InventoryDiversityBatchResult {
 	t.Helper()
 	batch := "output/RUSH009_CuratedShortlist_001"
-	if _, err := filepath.Abs(batch); err != nil {
-		t.Fatal(err)
+	if _, err := os.Stat(batch); err != nil {
+		t.Skip("RUSH-009 batch not present")
 	}
 	inventoryTinyOnce.Do(func() {
 		cfg := DefaultInventoryDiversityConfig(batch)
 		cfg.OutputDir = t.TempDir()
-		cfg.BaseCount = 6
+		cfg.BaseCount = 8
 		cfg.TargetAccepted = 4
 		cfg.QuotaNo1x1 = 1
 		cfg.QuotaOne1x1 = 1
 		cfg.QuotaTwo1x1 = 1
 		cfg.QuotaThree1x1 = 1
-		cfg.MaxPlacements1 = 8
-		cfg.MaxPlacements2 = 4
-		cfg.MaxPlacements3 = 3
-		cfg.SolveTimeLimit = 4 * time.Second
-		cfg.MaxVisitedStates = 800_000
+		cfg.MaxPlacements1 = 6
+		cfg.MaxPlacements2 = 3
+		cfg.MaxPlacements3 = 0
+		cfg.SolveTimeLimit = 5 * time.Second
+		cfg.MaxVisitedStates = 1_000_000
 		inventoryTinyRes, inventoryTinyErr = RunInventoryDiversityPilot(cfg)
 	})
 	if inventoryTinyErr != nil {

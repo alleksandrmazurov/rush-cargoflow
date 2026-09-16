@@ -29,6 +29,7 @@ type LevelJSON struct {
 	Source            string           `json:"source,omitempty"`
 	Transplant        *TransplantJSON  `json:"transplant,omitempty"`
 	Enrichment        *EnrichmentJSON  `json:"enrichment,omitempty"`
+	BoardSpace        *BoardSpaceJSON  `json:"boardSpace,omitempty"`
 }
 
 // EnrichmentJSON records RUSH-010 / RUSH-010.1 movable-1x1 enrichment provenance.
