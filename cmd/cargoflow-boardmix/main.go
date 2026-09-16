@@ -102,12 +102,16 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("\nPool: %d  Final accepted: %d\n", len(res.Pool), len(res.Accepted))
+	fmt.Printf("\nPool: %d (unique families %d)  Final accepted: %d / target %d\n",
+		len(res.Pool), res.SelectReport.PoolUniqueFamilies, len(res.Accepted), res.SelectReport.FinalTarget)
 	fmt.Printf("Attempts: %d  Exact: %d  CacheHits: %d\n",
 		res.Stats.Attempts, res.Stats.ExactSolves, res.Stats.CacheHits)
 	fmt.Printf("Wall: %s\n", time.Since(start).Round(time.Second))
-	fmt.Println("Pool shape distribution:")
-	b, _ := json.MarshalIndent(res.SelectReport.PoolShapeDist, "  ", "  ")
+	fmt.Println("Pool inventory distribution:")
+	b, _ := json.MarshalIndent(res.SelectReport.PoolInventoryDist, "  ", "  ")
+	fmt.Println(" ", string(b))
+	fmt.Println("Pool shape × inventory:")
+	b, _ = json.MarshalIndent(res.SelectReport.PoolShapeInventoryCross, "  ", "  ")
 	fmt.Println(" ", string(b))
 	fmt.Println("Final shape distribution:")
 	b, _ = json.MarshalIndent(res.SelectReport.FinalShapeDist, "  ", "  ")
@@ -115,9 +119,22 @@ func main() {
 	fmt.Println("Final inventory distribution:")
 	b, _ = json.MarshalIndent(res.SelectReport.FinalInventoryDist, "  ", "  ")
 	fmt.Println(" ", string(b))
-	fmt.Printf("OuterZoneRelevant final: %d  DistinctShapes: %d  DiversityUnmet: %v\n",
+	fmt.Printf("OuterZoneRelevant final: %d  DistinctShapes: %d  DiversityUnmet: %v  Missing: %d\n",
 		res.SelectReport.FinalOuterZoneRelevant, res.SelectReport.DistinctBoardShapes,
-		res.SelectReport.DiversityTargetUnmet)
+		res.SelectReport.DiversityTargetUnmet, res.SelectReport.MissingCount)
+	if len(res.SelectReport.WhyFinalShort) > 0 {
+		fmt.Println("Why final short:")
+		for _, w := range res.SelectReport.WhyFinalShort {
+			fmt.Printf("  - %s\n", w)
+		}
+	}
+	if len(res.SelectReport.UnmetRequirements) > 0 {
+		fmt.Println("Unmet requirements:")
+		for _, u := range res.SelectReport.UnmetRequirements {
+			fmt.Printf("  - %s\n", u)
+		}
+	}
+	fmt.Printf("Expanded/FullField diag: %s\n", res.SelectReport.ExpandedFullFieldDiag.Summary)
 	fmt.Printf("\nWrote %s\n", cfg.OutputDir)
 	fmt.Printf("Checkpoint: %s\n", cfg.CheckpointPath)
 	if len(res.Accepted) == 0 {

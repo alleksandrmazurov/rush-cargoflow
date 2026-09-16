@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-const BoardMixVersion = "boardmix-v1.1"
+const BoardMixVersion = "boardmix-v1.2"
 
 // BoardMixConfig drives RUSH-010.3 / 010.3.1 board-space diversity generation.
 type BoardMixConfig struct {
@@ -754,17 +754,30 @@ func WriteBoardMixBatch(dir string, res BoardMixResult) error {
 		"rootCauseRUSH01031": "Previous pilot accepted first N valids (underTarget) with inventoryQuotas={No1x1:12} and no pool→select stage; generation produced only clean No1x1 transforms.",
 		"performance":      res.Stats,
 		"poolDistribution": map[string]interface{}{
-			"size":               res.SelectReport.PoolSize,
-			"boardShapeClass":    res.SelectReport.PoolShapeDist,
-			"inventoryClass":     res.SelectReport.PoolInventoryDist,
-			"outerZoneRelevant":  res.SelectReport.PoolOuterZoneRelevant,
+			"size":                 res.SelectReport.PoolSize,
+			"uniqueFamilies":       res.SelectReport.PoolUniqueFamilies,
+			"boardShapeClass":      res.SelectReport.PoolShapeDist,
+			"inventoryClass":       res.SelectReport.PoolInventoryDist,
+			"shapeInventoryCross":  res.SelectReport.PoolShapeInventoryCross,
+			"difficultyBands":      res.SelectReport.PoolDifficultyBands,
+			"outerZoneRelevant":    res.SelectReport.PoolOuterZoneRelevant,
+			"crossAvailability":    res.SelectReport.PoolCrossAvailability,
 		},
 		"finalDistribution": map[string]interface{}{
-			"boardShapeClass":   res.SelectReport.FinalShapeDist,
-			"inventoryClass":    res.SelectReport.FinalInventoryDist,
-			"outerZoneRelevant": res.SelectReport.FinalOuterZoneRelevant,
-			"distinctShapes":    res.SelectReport.DistinctBoardShapes,
+			"finalTarget":         res.SelectReport.FinalTarget,
+			"finalAccepted":       res.SelectReport.FinalAccepted,
+			"missingCount":        res.SelectReport.MissingCount,
+			"boardShapeClass":     res.SelectReport.FinalShapeDist,
+			"inventoryClass":      res.SelectReport.FinalInventoryDist,
+			"outerZoneRelevant":   res.SelectReport.FinalOuterZoneRelevant,
+			"distinctShapes":      res.SelectReport.DistinctBoardShapes,
 		},
+		"unmetRequirements":     res.SelectReport.UnmetRequirements,
+		"whyFinalShort":         res.SelectReport.WhyFinalShort,
+		"quotaRelaxations":      res.SelectReport.QuotaRelaxations,
+		"hardConstraints":       res.SelectReport.HardConstraints,
+		"softConstraints":       res.SelectReport.SoftConstraints,
+		"expandedFullFieldDiag": res.SelectReport.ExpandedFullFieldDiag,
 		"selectReport":          res.SelectReport,
 		"shapeDistribution":     res.ShapeDist,
 		"inventoryDistribution": res.InvDist,
