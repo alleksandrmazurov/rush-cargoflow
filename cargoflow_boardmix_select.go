@@ -506,14 +506,15 @@ func DiagnoseExpandedFullFieldAvailability(poolShapeDist map[string]int) BoardSh
 	hasCompact := poolShapeDist[string(ShapeCompact6x6)] > 0
 	switch {
 	case !hasExp && !hasFull && !hasCompact:
-		d.LikelyRootCause = "C+A: classifier maps typical flush/shifted 6x6 embeds to ShiftedCore (offsetX≠0 or offsetY≥1); Expanded/FullField transforms are not produced by current embed+light-augment generation (not merely rejected by exact solver)."
-		d.Summary = "Pool lacks Compact6x6/Expanded/FullField because generation is still 6x6-core-centric and classification treats offsetX=1 / offsetY≥1 cores as ShiftedCore; outer augment more often yields Tall/Wide than Expanded/FullField."
+		d.LikelyRootCause = "A: pre-native pipeline was 6x6-core-centric (CW90 embed + sparse outer1x1). RUSH-010.4 native structural templates (SideGate/OuterParking/LongPiece/…) are required to produce Expanded/FullField with essential outer interaction."
+		d.Summary = "Without native augmentation, pool lacks Compact6x6/Expanded/FullField; enable tryNativeAugment to generate interacting pieces in free 7x8 space."
 	case !hasExp && !hasFull:
-		d.LikelyRootCause = "A+C: no FullField/Expanded instances generated; Tall/Wide cover most outer-axis growth."
-		d.Summary = "Expanded/FullField absent from pool; outer usage classified as Tall/Wide instead."
+		d.LikelyRootCause = "A+C: Tall/Wide cover single-axis outer growth; Expanded/FullField need both-axis native templates + essential outer."
+		d.Summary = "Expanded/FullField absent; prefer DoubleCorridor/CrossDependency/SideGate native templates."
 	default:
 		d.LikelyRootCause = "partial availability"
 		d.Summary = "Some rare shapes present in pool."
 	}
+	d.Native7x8Limitation = "Rush-derived core remains the logical seed; native augmentation must add interacting Cargo pieces so final geometry is a true 7x8 structure, not a shifted 6x6 block."
 	return d
 }

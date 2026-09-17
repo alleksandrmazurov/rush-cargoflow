@@ -58,6 +58,13 @@ type EnrichmentJSON struct {
 	DistinctRowsUsed     int    `json:"distinctRowsUsed,omitempty"`
 	DistinctColumnsUsed  int    `json:"distinctColumnsUsed,omitempty"`
 	BoardRegionsUsed     int    `json:"boardRegionsUsed,omitempty"`
+	// RUSH-010.4 native structural augmentation metadata.
+	AugmentationClass        string `json:"augmentationClass,omitempty"`
+	NativeVariantFingerprint string `json:"nativeVariantFingerprint,omitempty"`
+	Added1x2Count            int    `json:"added1x2Count,omitempty"`
+	Added1x3Count            int    `json:"added1x3Count,omitempty"`
+	AddedStaticCount         int    `json:"addedStaticCount,omitempty"`
+	OuterZoneEssential       bool   `json:"outerZoneEssential,omitempty"`
 }
 
 // TransplantJSON records Rush-database provenance for RUSH-008 candidates.

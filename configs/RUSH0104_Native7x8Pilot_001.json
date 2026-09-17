@@ -1,0 +1,42 @@
+{
+  "batchDir": "output/RUSH009_CuratedShortlist_001",
+  "outputDir": "output/RUSH0104_Native7x8Pilot_001",
+  "cachePath": "data/cache/curator/solve_cache.jsonl",
+  "checkpointPath": "output/RUSH0104_Native7x8Pilot_001/checkpoint.json",
+  "databasePath": "data/external/rush/rush.txt",
+  "targetAccepted": 12,
+  "baseCount": 32,
+  "seed": 20260917,
+  "workers": 2,
+  "checkpointEvery": 1,
+  "resume": true,
+  "solveTimeLimitMs": 8000,
+  "maxVisitedStates": 2000000,
+  "tryOuterAugment": true,
+  "tryNativeAugment": true,
+  "tryInventoryEnrichment": true,
+  "maxNativeAcceptedPerEmbed": 2,
+  "maxNativeProposalsPerEmbed": 10,
+  "progressEvery": 1,
+  "maxPoolSize": 48,
+  "maxAttempts": 320,
+  "minDistinctBoardShapes": 4,
+  "maxBoardShapeFraction": 0.4,
+  "minOuterZoneRelevant": 8,
+  "maxInventoryClassFraction": 0.4,
+  "uniqueFamily": true,
+  "embeddings": ["FlushTop", "ShiftDown1", "FlushBottom", "FlushTopMirrorH", "ShiftDown1MirrorH"],
+  "shapeQuotas": {
+    "ShiftedCore": 3,
+    "Expanded": 3,
+    "Tall": 2,
+    "Wide": 2,
+    "FullField": 2
+  },
+  "inventoryQuotas": {
+    "No1x1": 3,
+    "One1x1": 3,
+    "Two1x1": 3,
+    "Three1x1": 3
+  }
+}

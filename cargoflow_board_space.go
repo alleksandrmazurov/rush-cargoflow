@@ -193,9 +193,10 @@ func ClassifyBoardShape(m BoardUtilizationMetrics, offX, offY int) BoardShapeCla
 	bboxW, bboxH := m.OccupiedBoundingBoxWidth, m.OccupiedBoundingBoxHeight
 	shifted := offY >= 1 || offX != 0
 	strongOuter := m.OuterZoneRelevant && (m.OuterRowUsage+m.OuterColumnUsage >= 2 || m.PiecesOutsideOriginal6x6Core >= 1)
+	bothAxes := m.OuterRowUsage > 0 && m.OuterColumnUsage > 0
 	fullish := bboxW >= CargoFlowWidth && bboxH >= CargoFlowHeight-1 && m.BoardUtilizationRatio >= 0.35
 
-	if fullish && (strongOuter || m.PiecesOutsideOriginal6x6Core > 0) {
+	if fullish && m.OuterZoneRelevant && (strongOuter || m.PiecesOutsideOriginal6x6Core > 0) {
 		return ShapeFullField
 	}
 	if bboxW >= CargoFlowWidth && bboxH <= 6 && (m.OuterColumnUsage > 0 || m.OccupiedColumns >= 7) {
@@ -204,7 +205,21 @@ func ClassifyBoardShape(m BoardUtilizationMetrics, offX, offY int) BoardShapeCla
 	if bboxH >= 7 && bboxW <= 6 {
 		return ShapeTall
 	}
+	// Expanded: substantial use of BOTH extra dimensions (not just a single-axis stretch).
+	if bothAxes && m.OuterZoneRelevant && (bboxW >= 7 && bboxH >= 7 || m.PiecesOutsideOriginal6x6Core >= 2 || strongOuter) {
+		return ShapeExpanded
+	}
 	if strongOuter || m.PiecesOutsideOriginal6x6Core > 0 || (m.OuterRowUsage+m.OuterColumnUsage) >= 2 {
+		// Single-axis outer without bothAxes already handled as Tall/Wide; residual → Expanded only if both axes.
+		if bothAxes {
+			return ShapeExpanded
+		}
+		if bboxH >= 7 {
+			return ShapeTall
+		}
+		if bboxW >= 7 {
+			return ShapeWide
+		}
 		return ShapeExpanded
 	}
 	if shifted && bboxW <= 6 && bboxH <= 6 && m.PiecesOutsideOriginal6x6Core == 0 {

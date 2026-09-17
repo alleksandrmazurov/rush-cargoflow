@@ -15,7 +15,7 @@ import (
 )
 
 func main() {
-	configPath := flag.String("config", "configs/RUSH01031_DiversityQuotaPilot_001.json", "boardmix config JSON")
+	configPath := flag.String("config", "configs/RUSH0104_Native7x8Pilot_001.json", "boardmix config JSON")
 	output := flag.String("output", "", "override output directory")
 	resume := flag.Bool("resume", true, "resume from checkpoint if present")
 	smoke := flag.Bool("smoke", false, "tiny smoke: few bases, short budget (~30-60s)")
@@ -46,16 +46,19 @@ func main() {
 	}
 
 	if *smoke {
-		cfg.OutputDir = "output/RUSH01031_BoardMixSmoke"
+		cfg.OutputDir = "output/RUSH0104_NativeSmoke"
 		cfg.CheckpointPath = filepath.Join(cfg.OutputDir, "checkpoint.json")
 		cfg.TargetAccepted = 4
 		cfg.BaseCount = 4
-		cfg.MaxPoolSize = 16
-		cfg.MaxAttempts = 24
+		cfg.MaxPoolSize = 12
+		cfg.MaxAttempts = 20
 		cfg.TryOuterAugment = true
-		cfg.TryInventoryEnrichment = false // keep smoke fast
-		cfg.SolveTimeLimitMs = 3000
-		cfg.MaxVisitedStates = 500_000
+		cfg.TryNativeAugment = true
+		cfg.TryInventoryEnrichment = false
+		cfg.MaxNativeAcceptedPerEmbed = 1
+		cfg.MaxNativeProposalsPerEmbed = 6
+		cfg.SolveTimeLimitMs = 2500
+		cfg.MaxVisitedStates = 400_000
 		cfg.MinDistinctBoardShapes = 2
 		cfg.MinOuterZoneRelevant = 1
 		cfg.MaxBoardShapeFraction = 0.75
@@ -63,21 +66,20 @@ func main() {
 		cfg.Embeddings = []string{
 			string(rush.EmbedFlushTop),
 			string(rush.EmbedShiftDown1),
-			string(rush.EmbedFlushTopMirrorH),
 		}
 		cfg.ShapeQuotas = map[string]int{
-			string(rush.ShapeCompact6x6):  1,
 			string(rush.ShapeShiftedCore): 1,
 			string(rush.ShapeExpanded):    1,
 			string(rush.ShapeTall):        1,
+			string(rush.ShapeWide):        1,
 		}
 		cfg.InventoryQuotas = map[string]int{string(rush.InvNo1x1): 4}
 		cfg.CheckpointEvery = 1
 		cfg.ProgressEvery = 1
 		cfg.Workers = 2
-		fmt.Println("Cargo Flow Board Mix SMOKE (RUSH-010.3.1)")
+		fmt.Println("Cargo Flow Native 7x8 SMOKE (RUSH-010.4)")
 	} else {
-		fmt.Println("Cargo Flow Board Space Diversity Quota Fix (RUSH-010.3.1)")
+		fmt.Println("Cargo Flow Native 7x8 Structural Augmentation (RUSH-010.4)")
 		fmt.Println("Pool → diversity select. Ctrl+C safe; --resume continues.")
 	}
 
@@ -135,6 +137,13 @@ func main() {
 		}
 	}
 	fmt.Printf("Expanded/FullField diag: %s\n", res.SelectReport.ExpandedFullFieldDiag.Summary)
+	if len(res.Stats.AcceptedByAugmentationClass) > 0 {
+		fmt.Println("Final augmentation classes:")
+		b, _ = json.MarshalIndent(res.Stats.AcceptedByAugmentationClass, "  ", "  ")
+		fmt.Println(" ", string(b))
+	}
+	fmt.Printf("Native stats: baseFamilies=%d embeddings=%d augmentationsProposed=%d restrictedSolves=%d\n",
+		res.Stats.BaseFamiliesTried, res.Stats.EmbeddingsTried, res.Stats.AugmentationsProposed, res.Stats.RestrictedSolves)
 	fmt.Printf("\nWrote %s\n", cfg.OutputDir)
 	fmt.Printf("Checkpoint: %s\n", cfg.CheckpointPath)
 	if len(res.Accepted) == 0 {
