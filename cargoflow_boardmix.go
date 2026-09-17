@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-const BoardMixVersion = "boardmix-v1.4.2"
+const BoardMixVersion = "boardmix-v1.4.3"
 
 // BoardMixConfig drives RUSH-010.3 / 010.4 / 010.4.1 board-space diversity generation.
 type BoardMixConfig struct {
