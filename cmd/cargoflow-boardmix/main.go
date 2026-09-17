@@ -20,10 +20,40 @@ func main() {
 	resume := flag.Bool("resume", true, "resume from checkpoint if present")
 	smoke := flag.Bool("smoke", false, "tiny smoke: few bases, short budget (~30-60s)")
 	buildInfo := flag.Bool("version", false, "print version and exit")
+	reexport := flag.String("reexport-existing", "", "re-export Unity batch from existing dir (no regeneration)")
+	validate := flag.String("validate-batch", "", "validate Unity BatchManifest/Candidates/Solutions contract")
 	flag.Parse()
 
 	if *buildInfo {
 		fmt.Println(rush.BoardMixVersion)
+		return
+	}
+
+	if *validate != "" {
+		rep, err := rush.ValidateUnityBatchReport(*validate)
+		if err != nil {
+			log.Fatal(err)
+		}
+		b, _ := json.MarshalIndent(rep, "", "  ")
+		fmt.Println(string(b))
+		if !rep.OK {
+			os.Exit(1)
+		}
+		return
+	}
+
+	if *reexport != "" {
+		fmt.Printf("Re-exporting Unity batch (no generation): %s\n", *reexport)
+		rep, err := rush.ReexportBoardMixBatchFromDir(*reexport)
+		if err != nil {
+			log.Fatal(err)
+		}
+		b, _ := json.MarshalIndent(rep, "", "  ")
+		fmt.Println(string(b))
+		if !rep.OK {
+			os.Exit(1)
+		}
+		fmt.Printf("OK — select this folder in Unity Import Rush Batch:\n  %s\n", filepath.Clean(*reexport))
 		return
 	}
 
@@ -80,10 +110,10 @@ func main() {
 		cfg.FamilyFirstExploration = true
 		cfg.PerFamilyPoolCap = 2
 		cfg.MinUniqueFamiliesInPool = 3
-		fmt.Println("Cargo Flow Native Family Coverage SMOKE (RUSH-010.4.1)")
+		fmt.Println("Cargo Flow Native SMOKE (RUSH-010.4.2)")
 	} else {
-		fmt.Println("Cargo Flow Native Family Coverage (RUSH-010.4.1)")
-		fmt.Println("Family-first pool → diversity select. Ctrl+C safe; --resume continues.")
+		fmt.Println("Cargo Flow Boardmix (RUSH-010.4.2 Unity export contract)")
+		fmt.Println("Ctrl+C safe; --resume continues. Use -reexport-existing / -validate-batch for export fixes.")
 	}
 
 	fmt.Printf("config=%s output=%s resume=%v workers=%d target=%d maxPool=%d\n",
@@ -112,56 +142,9 @@ func main() {
 	fmt.Printf("Attempts: %d  Exact: %d  CacheHits: %d\n",
 		res.Stats.Attempts, res.Stats.ExactSolves, res.Stats.CacheHits)
 	fmt.Printf("Wall: %s\n", time.Since(start).Round(time.Second))
-	fmt.Println("Pool inventory distribution:")
-	b, _ := json.MarshalIndent(res.SelectReport.PoolInventoryDist, "  ", "  ")
-	fmt.Println(" ", string(b))
-	fmt.Println("Pool shape × inventory:")
-	b, _ = json.MarshalIndent(res.SelectReport.PoolShapeInventoryCross, "  ", "  ")
-	fmt.Println(" ", string(b))
-	fmt.Println("Final shape distribution:")
-	b, _ = json.MarshalIndent(res.SelectReport.FinalShapeDist, "  ", "  ")
-	fmt.Println(" ", string(b))
-	fmt.Println("Final inventory distribution:")
-	b, _ = json.MarshalIndent(res.SelectReport.FinalInventoryDist, "  ", "  ")
-	fmt.Println(" ", string(b))
-	fmt.Printf("OuterZoneRelevant final: %d  DistinctShapes: %d  DiversityUnmet: %v  Missing: %d\n",
-		res.SelectReport.FinalOuterZoneRelevant, res.SelectReport.DistinctBoardShapes,
+	fmt.Printf("DiversityUnmet: %v  Missing: %d\n",
 		res.SelectReport.DiversityTargetUnmet, res.SelectReport.MissingCount)
-	if len(res.SelectReport.WhyFinalShort) > 0 {
-		fmt.Println("Why final short:")
-		for _, w := range res.SelectReport.WhyFinalShort {
-			fmt.Printf("  - %s\n", w)
-		}
-	}
-	if len(res.SelectReport.UnmetRequirements) > 0 {
-		fmt.Println("Unmet requirements:")
-		for _, u := range res.SelectReport.UnmetRequirements {
-			fmt.Printf("  - %s\n", u)
-		}
-	}
-	fmt.Printf("Expanded/FullField diag: %s\n", res.SelectReport.ExpandedFullFieldDiag.Summary)
-	if len(res.Stats.AcceptedByAugmentationClass) > 0 {
-		fmt.Println("Final augmentation classes:")
-		b, _ = json.MarshalIndent(res.Stats.AcceptedByAugmentationClass, "  ", "  ")
-		fmt.Println(" ", string(b))
-	}
-	fmt.Printf("Native stats: baseFamilies=%d embeddings=%d augmentationsProposed=%d restrictedSolves=%d\n",
-		res.Stats.BaseFamiliesTried, res.Stats.EmbeddingsTried, res.Stats.AugmentationsProposed, res.Stats.RestrictedSolves)
-	fmt.Printf("Family coverage: requested=%d distinct=%d poolUnique=%d earlyStop=%v\n",
-		res.FamilyCoverage.RequestedBaseCandidates, res.FamilyCoverage.DistinctRequestedBaseFamilyIds,
+	fmt.Printf("Family coverage: poolUnique=%d earlyStop=%v\n",
 		res.FamilyCoverage.PoolUniqueFamilyIds, res.FamilyCoverage.EarlyStopBeforeAllFamilies)
-	fmt.Printf("Family root cause: %s\n", res.FamilyCoverage.RootCauseSummary)
-	if res.FamilyCoverage.ExpandedZeroExplanation != "" {
-		fmt.Printf("Expanded=0: %s\n", res.FamilyCoverage.ExpandedZeroExplanation)
-	}
-	if len(res.FamilyCoverage.PoolAugmentationClass) > 0 {
-		fmt.Println("Pool augmentation classes:")
-		b, _ = json.MarshalIndent(res.FamilyCoverage.PoolAugmentationClass, "  ", "  ")
-		fmt.Println(" ", string(b))
-	}
-	fmt.Printf("\nWrote %s\n", cfg.OutputDir)
-	fmt.Printf("Checkpoint: %s\n", cfg.CheckpointPath)
-	if len(res.Accepted) == 0 {
-		os.Exit(1)
-	}
+	fmt.Printf("Unity batch OK. Import folder:\n  %s\n", cfg.OutputDir)
 }

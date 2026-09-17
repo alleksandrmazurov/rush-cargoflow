@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-const BoardMixVersion = "boardmix-v1.4"
+const BoardMixVersion = "boardmix-v1.4.2"
 
 // BoardMixConfig drives RUSH-010.3 / 010.4 / 010.4.1 board-space diversity generation.
 type BoardMixConfig struct {
@@ -996,90 +996,7 @@ func finalizeBoardMixCandidate(c *BoardMixAccepted, id string) {
 	}
 }
 
-// WriteBoardMixBatch writes Unity-compatible outputs + reports.
-func WriteBoardMixBatch(dir string, res BoardMixResult) error {
-	if err := os.MkdirAll(dir, 0o755); err != nil {
-		return err
-	}
-	candDir := filepath.Join(dir, "Candidates")
-	solDir := filepath.Join(dir, "Solutions")
-	_ = os.MkdirAll(candDir, 0o755)
-	_ = os.MkdirAll(solDir, 0o755)
-	for _, c := range res.Accepted {
-		if c.Level == nil {
-			continue
-		}
-		if err := WriteJSONFile(filepath.Join(candDir, c.CandidateID+".json"), c.Level); err != nil {
-			return err
-		}
-		if err := WriteJSONFile(filepath.Join(solDir, c.CandidateID+".solution.json"), c.SolutionDoc); err != nil {
-			return err
-		}
-		_ = os.WriteFile(filepath.Join(candDir, c.CandidateID+".ascii.txt"), []byte(c.ASCIIPreview), 0o644)
-	}
-	augDist := map[string]int{}
-	for _, c := range res.Pool {
-		k := string(c.AugmentationClass)
-		if k == "" {
-			k = string(AugNone)
-		}
-		augDist[k]++
-	}
-	report := map[string]interface{}{
-		"generatorVersion": BoardMixVersion,
-		"pipeline":         "CargoFlowNative7x8BoardMix",
-		"rootCauseRUSH0104": "6x6-core-centric embeds produced ShiftedCore/Tall/Wide but almost never Expanded/FullField; native structural augmentation adds interacting Cargo pieces in free 7x8 space.",
-		"performance":      res.Stats,
-		"poolDistribution": map[string]interface{}{
-			"size":                 res.SelectReport.PoolSize,
-			"uniqueFamilies":       res.SelectReport.PoolUniqueFamilies,
-			"boardShapeClass":      res.SelectReport.PoolShapeDist,
-			"inventoryClass":       res.SelectReport.PoolInventoryDist,
-			"shapeInventoryCross":  res.SelectReport.PoolShapeInventoryCross,
-			"difficultyBands":      res.SelectReport.PoolDifficultyBands,
-			"outerZoneRelevant":    res.SelectReport.PoolOuterZoneRelevant,
-			"crossAvailability":    res.SelectReport.PoolCrossAvailability,
-			"augmentationClass":    augDist,
-		},
-		"finalDistribution": map[string]interface{}{
-			"finalTarget":         res.SelectReport.FinalTarget,
-			"finalAccepted":       res.SelectReport.FinalAccepted,
-			"missingCount":        res.SelectReport.MissingCount,
-			"boardShapeClass":     res.SelectReport.FinalShapeDist,
-			"inventoryClass":      res.SelectReport.FinalInventoryDist,
-			"outerZoneRelevant":   res.SelectReport.FinalOuterZoneRelevant,
-			"distinctShapes":      res.SelectReport.DistinctBoardShapes,
-		},
-		"familyCoverage":        res.FamilyCoverage,
-		"unmetRequirements":     res.SelectReport.UnmetRequirements,
-		"whyFinalShort":         res.SelectReport.WhyFinalShort,
-		"quotaRelaxations":      res.SelectReport.QuotaRelaxations,
-		"hardConstraints":       res.SelectReport.HardConstraints,
-		"softConstraints":       res.SelectReport.SoftConstraints,
-		"expandedFullFieldDiag": res.SelectReport.ExpandedFullFieldDiag,
-		"selectReport":          res.SelectReport,
-		"shapeDistribution":     res.ShapeDist,
-		"inventoryDistribution": res.InvDist,
-		"rejected":              res.Rejected,
-		"accepted":              res.Accepted,
-		"totalWallMs":           res.TotalWall.Milliseconds(),
-		"diversityTargetUnmet":  res.SelectReport.DiversityTargetUnmet,
-		"whyLooks6x6":           "Rush Hour sources are 6x6; classic CW90+FlushTop/ShiftDown1 embeddings place that block inside 7x8, leaving outer rows/columns empty unless shifted/augmented.",
-		"limitations": []string{
-			"BoardShapeClass is not a difficulty label.",
-			"Compact6x6 remains valid; full 7x8 is not mandatory.",
-			"InventoryClass is independent of BoardShapeClass.",
-		},
-	}
-	if err := WriteJSONFile(filepath.Join(dir, "BoardDiversityReport.json"), report); err != nil {
-		return err
-	}
-	return WriteJSONFile(filepath.Join(dir, "BatchManifest.json"), map[string]interface{}{
-		"generatorVersion": BoardMixVersion,
-		"candidateCount":   len(res.Accepted),
-		"candidates":       res.Accepted,
-	})
-}
+// WriteBoardMixBatch is implemented in cargoflow_boardmix_export.go (Unity BatchManifest contract).
 
 func SaveBoardMixCheckpoint(path string, cp BoardMixCheckpoint) error {
 	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
