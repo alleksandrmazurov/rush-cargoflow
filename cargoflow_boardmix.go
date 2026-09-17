@@ -11,39 +11,43 @@ import (
 	"time"
 )
 
-const BoardMixVersion = "boardmix-v1.3"
+const BoardMixVersion = "boardmix-v1.4"
 
-// BoardMixConfig drives RUSH-010.3 / 010.3.1 / 010.4 board-space diversity generation.
+// BoardMixConfig drives RUSH-010.3 / 010.4 / 010.4.1 board-space diversity generation.
 type BoardMixConfig struct {
-	BatchDir                  string         `json:"batchDir"`
-	OutputDir                 string         `json:"outputDir"`
-	CachePath                 string         `json:"cachePath"`
-	CheckpointPath            string         `json:"checkpointPath"`
-	DatabasePath              string         `json:"databasePath"`
-	TargetAccepted            int            `json:"targetAccepted"`
-	BaseCount                 int            `json:"baseCount"`
-	Seed                      int64          `json:"seed"`
-	Workers                   int            `json:"workers"`
-	CheckpointEvery           int            `json:"checkpointEvery"`
-	Resume                    bool           `json:"resume"`
-	SolveTimeLimitMs          int            `json:"solveTimeLimitMs"`
-	MaxVisitedStates          int            `json:"maxVisitedStates"`
-	TryOuterAugment           bool           `json:"tryOuterAugment"`
-	TryNativeAugment          bool           `json:"tryNativeAugment"`
-	TryInventoryEnrichment    bool           `json:"tryInventoryEnrichment"`
-	MaxNativeAcceptedPerEmbed int            `json:"maxNativeAcceptedPerEmbed"`
-	MaxNativeProposalsPerEmbed int           `json:"maxNativeProposalsPerEmbed"`
-	Embeddings                []string       `json:"embeddings"`
-	ShapeQuotas               map[string]int `json:"shapeQuotas"`
-	InventoryQuotas           map[string]int `json:"inventoryQuotas"`
-	ProgressEvery             int            `json:"progressEvery"`
-	MaxPoolSize               int            `json:"maxPoolSize"`
-	MaxAttempts               int            `json:"maxAttempts"`
-	MinDistinctBoardShapes    int            `json:"minDistinctBoardShapes"`
-	MaxBoardShapeFraction     float64        `json:"maxBoardShapeFraction"`
-	MinOuterZoneRelevant      int            `json:"minOuterZoneRelevant"`
-	MaxInventoryClassFraction float64        `json:"maxInventoryClassFraction"`
-	UniqueFamily              bool           `json:"uniqueFamily"`
+	BatchDir                   string         `json:"batchDir"`
+	OutputDir                  string         `json:"outputDir"`
+	CachePath                  string         `json:"cachePath"`
+	CheckpointPath             string         `json:"checkpointPath"`
+	DatabasePath               string         `json:"databasePath"`
+	TargetAccepted             int            `json:"targetAccepted"`
+	BaseCount                  int            `json:"baseCount"`
+	Seed                       int64          `json:"seed"`
+	Workers                    int            `json:"workers"`
+	CheckpointEvery            int            `json:"checkpointEvery"`
+	Resume                     bool           `json:"resume"`
+	SolveTimeLimitMs           int            `json:"solveTimeLimitMs"`
+	MaxVisitedStates           int            `json:"maxVisitedStates"`
+	TryOuterAugment            bool           `json:"tryOuterAugment"`
+	TryNativeAugment           bool           `json:"tryNativeAugment"`
+	TryInventoryEnrichment     bool           `json:"tryInventoryEnrichment"`
+	MaxNativeAcceptedPerEmbed  int            `json:"maxNativeAcceptedPerEmbed"`
+	MaxNativeProposalsPerEmbed int            `json:"maxNativeProposalsPerEmbed"`
+	FamilyFirstExploration     bool           `json:"familyFirstExploration"`
+	PerFamilyPoolCap           int            `json:"perFamilyPoolCap"`
+	MinUniqueFamiliesInPool    int            `json:"minUniqueFamiliesInPool"`
+	MinDistinctInventoryClasses int           `json:"minDistinctInventoryClasses"`
+	Embeddings                 []string       `json:"embeddings"`
+	ShapeQuotas                map[string]int `json:"shapeQuotas"`
+	InventoryQuotas            map[string]int `json:"inventoryQuotas"`
+	ProgressEvery              int            `json:"progressEvery"`
+	MaxPoolSize                int            `json:"maxPoolSize"`
+	MaxAttempts                int            `json:"maxAttempts"`
+	MinDistinctBoardShapes     int            `json:"minDistinctBoardShapes"`
+	MaxBoardShapeFraction      float64        `json:"maxBoardShapeFraction"`
+	MinOuterZoneRelevant       int            `json:"minOuterZoneRelevant"`
+	MaxInventoryClassFraction  float64        `json:"maxInventoryClassFraction"`
+	UniqueFamily               bool           `json:"uniqueFamily"`
 }
 
 // DefaultBoardMixConfig returns sane long-run defaults (manual pilot).
@@ -61,33 +65,36 @@ func DefaultBoardMixConfig() BoardMixConfig {
 		Resume:                 true,
 		SolveTimeLimitMs:       8000,
 		MaxVisitedStates:       2_000_000,
-		TryOuterAugment:        true,
-		TryNativeAugment:       true,
-		TryInventoryEnrichment: true,
+		TryOuterAugment:            true,
+		TryNativeAugment:           true,
+		TryInventoryEnrichment:     true,
 		MaxNativeAcceptedPerEmbed:  2,
 		MaxNativeProposalsPerEmbed: 10,
+		FamilyFirstExploration:     true,
+		PerFamilyPoolCap:           4,
+		MinUniqueFamiliesInPool:    12,
+		MinDistinctInventoryClasses: 3,
 		Embeddings: []string{
 			string(EmbedFlushTop), string(EmbedShiftDown1), string(EmbedFlushBottom),
 			string(EmbedFlushTopMirrorH), string(EmbedShiftDown1MirrorH),
 		},
 		ShapeQuotas: map[string]int{
-			string(ShapeCompact6x6):  3,
 			string(ShapeShiftedCore): 3,
-			string(ShapeExpanded):    3,
-			string(ShapeTall):        1,
-			string(ShapeWide):        1,
-			string(ShapeFullField):   1,
+			string(ShapeExpanded):    2,
+			string(ShapeTall):        2,
+			string(ShapeWide):        2,
+			string(ShapeFullField):   2,
 		},
 		InventoryQuotas: map[string]int{
 			string(InvNo1x1): 3, string(InvOne1x1): 3,
-			string(InvTwo1x1): 3, string(InvThree1x1): 3,
+			string(InvTwo1x1): 3, // Three1x1 is soft/rare — not a hard pilot quota
 		},
 		ProgressEvery:             1,
 		MaxPoolSize:               80,
 		MaxAttempts:               200,
 		MinDistinctBoardShapes:    3,
 		MaxBoardShapeFraction:     0.40,
-		MinOuterZoneRelevant:      4,
+		MinOuterZoneRelevant:      8,
 		MaxInventoryClassFraction: 0.40,
 		UniqueFamily:              true,
 	}
@@ -142,6 +149,18 @@ func LoadBoardMixConfigJSON(path string) (BoardMixConfig, error) {
 	}
 	if cfg.MaxNativeProposalsPerEmbed <= 0 {
 		cfg.MaxNativeProposalsPerEmbed = 10
+	}
+	if cfg.PerFamilyPoolCap <= 0 {
+		cfg.PerFamilyPoolCap = 4
+	}
+	if cfg.MinUniqueFamiliesInPool <= 0 {
+		cfg.MinUniqueFamiliesInPool = 12
+	}
+	if cfg.MinDistinctInventoryClasses <= 0 {
+		cfg.MinDistinctInventoryClasses = 3
+	}
+	if cfg.TryNativeAugment {
+		cfg.FamilyFirstExploration = true
 	}
 	return cfg, nil
 }
@@ -202,16 +221,17 @@ type BoardMixAccepted struct {
 
 // BoardMixResult is the final run summary.
 type BoardMixResult struct {
-	Config       BoardMixConfig
-	Accepted     []BoardMixAccepted
-	Pool         []BoardMixAccepted
-	Rejected     map[string]int
-	Stats        BoardMixStats
-	ShapeDist    map[string]int
-	InvDist      map[string]int
-	SelectReport BoardMixSelectReport
-	TotalWall    time.Duration
-	RootCauseNote string
+	Config         BoardMixConfig
+	Accepted       []BoardMixAccepted
+	Pool           []BoardMixAccepted
+	Rejected       map[string]int
+	Stats          BoardMixStats
+	ShapeDist      map[string]int
+	InvDist        map[string]int
+	SelectReport   BoardMixSelectReport
+	FamilyCoverage FamilyCoverageReport
+	TotalWall      time.Duration
+	RootCauseNote  string
 }
 
 type boardMixAttemptKey struct {
@@ -291,7 +311,7 @@ func RunBoardMixPilot(cfg BoardMixConfig, cancel <-chan struct{}) (BoardMixResul
 		Rejected:      map[string]int{},
 		ShapeDist:     map[string]int{},
 		InvDist:       map[string]int{},
-		RootCauseNote: "RUSH-010.4: native 7x8 structural augmentation + pool→diversity-select.",
+		RootCauseNote: "RUSH-010.4.1: family-first native coverage + pool→diversity-select.",
 	}
 	out.Stats.AcceptedByShape = map[string]int{}
 	out.Stats.AcceptedByAugmentationClass = map[string]int{}
@@ -380,27 +400,23 @@ func RunBoardMixPilot(cfg BoardMixConfig, cancel <-chan struct{}) (BoardMixResul
 		budget.MaxVisited = 2_000_000
 	}
 
-	type job struct {
-		base    EnrichmentBase
-		embed   EmbeddingVariant
-		mode    string // plain | outer1 | native
-	}
-	jobs := []job{}
+	type job = boardMixJob
+	jobs := buildBoardMixJobs(bases, embeds, cfg)
 	famTried := map[string]bool{}
 	for _, base := range bases {
 		famTried[base.FamilyID] = true
-		for _, emb := range embeds {
-			jobs = append(jobs, job{base: base, embed: emb, mode: "plain"})
-			if cfg.TryOuterAugment {
-				jobs = append(jobs, job{base: base, embed: emb, mode: "outer1"})
-			}
-			if cfg.TryNativeAugment {
-				jobs = append(jobs, job{base: base, embed: emb, mode: "native"})
-			}
-		}
 	}
 	out.Stats.BaseFamiliesTried = len(famTried)
 	out.Stats.EmbeddingsTried = len(embeds)
+	funnelMap := initFamilyFunnel(bases)
+	requestedFamilies := len(famTried)
+	coveragePassPending := 0
+	for _, j := range jobs {
+		if j.pass == 1 {
+			coveragePassPending++
+		}
+	}
+	earlyStopFlag := false
 
 	var mu sync.Mutex
 	var attempts int32
@@ -429,10 +445,30 @@ func RunBoardMixPilot(cfg BoardMixConfig, cancel <-chan struct{}) (BoardMixResul
 					}
 				}
 				mu.Lock()
-				if stop || len(pool) >= cfg.MaxPoolSize || int(attempts) >= cfg.MaxAttempts {
+				if stop || int(attempts) >= cfg.MaxAttempts {
 					stop = true
+					earlyStopFlag = true
 					mu.Unlock()
 					return
+				}
+				// Soft pool full: stop only if family coverage target met.
+				if len(pool) >= cfg.MaxPoolSize {
+					u := uniqueFamilyCount(pool)
+					minU := cfg.MinUniqueFamiliesInPool
+					if minU <= 0 {
+						minU = 12
+					}
+					if u >= minU || u >= requestedFamilies || coveragePassPending <= 0 {
+						stop = true
+						earlyStopFlag = u < requestedFamilies
+						mu.Unlock()
+						return
+					}
+					// Pool full but coverage incomplete — skip deepen jobs; still allow pass-1.
+					if j.pass > 1 {
+						mu.Unlock()
+						continue
+					}
 				}
 				mu.Unlock()
 
@@ -448,9 +484,11 @@ func RunBoardMixPilot(cfg BoardMixConfig, cancel <-chan struct{}) (BoardMixResul
 				var cands []*BoardMixAccepted
 				var reason string
 				var cached bool
+				augProposed := 0
 				switch j.mode {
 				case "native":
 					cands, reason, cached = evaluateNativeBoardMixJob(j.base, j.embed, budget, cache, dbHash, cfg)
+					augProposed = len(cands)
 					mu.Lock()
 					out.Stats.AugmentationsProposed += len(cands)
 					mu.Unlock()
@@ -463,14 +501,28 @@ func RunBoardMixPilot(cfg BoardMixConfig, cancel <-chan struct{}) (BoardMixResul
 						} else {
 							cand.AugmentationClass = AugNone
 						}
+						// Metadata invariant: FamilyID must match source base.
+						cand.FamilyID = j.base.FamilyID
+						cand.BaseCandidateID = j.base.CandidateID
 						cands = []*BoardMixAccepted{cand}
+					}
+				}
+				// Ensure native candidates keep source family.
+				for _, c := range cands {
+					if c != nil {
+						c.FamilyID = j.base.FamilyID
+						c.BaseCandidateID = j.base.CandidateID
 					}
 				}
 				n := int(atomic.AddInt32(&attempts, 1))
 				mu.Lock()
+				if j.pass == 1 {
+					coveragePassPending--
+				}
 				completed[key] = true
 				cp.CompletedAttemptKeys = append(cp.CompletedAttemptKeys, key)
 				out.Stats.Attempts++
+				exact := !cached
 				if cached {
 					out.Stats.CacheHits++
 				} else {
@@ -479,11 +531,22 @@ func RunBoardMixPilot(cfg BoardMixConfig, cancel <-chan struct{}) (BoardMixResul
 				if reason != "" && len(cands) == 0 {
 					out.Rejected[reason]++
 				}
-				cp.Rejected = copyIntMap(out.Rejected)
-				cp.Stats = out.Stats
-				cp.Stats.ElapsedMs = time.Since(start).Milliseconds()
-				cp.Stats.LastProgressAt = time.Now()
-				cp.UpdatedAt = time.Now()
+
+				acceptedNow := 0
+				filtered := []*BoardMixAccepted{}
+				for _, c := range cands {
+					if c == nil {
+						continue
+					}
+					if !shouldAcceptFamilyVariant(pool, c.FamilyID, requestedFamilies, cfg.PerFamilyPoolCap) {
+						out.Rejected["PerFamilyCap"]++
+						noteFamilyAttempt(funnelMap, j.base.FamilyID, "PerFamilyCap", exact, 0, 0)
+						continue
+					}
+					filtered = append(filtered, c)
+				}
+				cands = filtered
+
 				doEnrich := cfg.TryInventoryEnrichment
 				plainList := append([]*BoardMixAccepted{}, cands...)
 				mu.Unlock()
@@ -492,6 +555,12 @@ func RunBoardMixPilot(cfg BoardMixConfig, cancel <-chan struct{}) (BoardMixResul
 				if doEnrich {
 					for _, plain := range plainList {
 						if plain == nil || plain.Board == nil {
+							continue
+						}
+						mu.Lock()
+						allowEnrich := shouldAcceptFamilyVariant(pool, plain.FamilyID, requestedFamilies, cfg.PerFamilyPoolCap)
+						mu.Unlock()
+						if !allowEnrich {
 							continue
 						}
 						tmp := BoardMixResult{Rejected: map[string]int{}, Stats: BoardMixStats{}}
@@ -508,30 +577,65 @@ func RunBoardMixPilot(cfg BoardMixConfig, cancel <-chan struct{}) (BoardMixResul
 
 				mu.Lock()
 				for _, plain := range plainList {
-					if plain != nil {
-						pool = append(pool, *plain)
+					if plain == nil {
+						continue
 					}
+					if !shouldAcceptFamilyVariant(pool, plain.FamilyID, requestedFamilies, cfg.PerFamilyPoolCap) {
+						out.Rejected["PerFamilyCap"]++
+						continue
+					}
+					pool = append(pool, *plain)
+					acceptedNow++
 				}
-				pool = append(pool, enriched...)
+				for _, e := range enriched {
+					e.FamilyID = j.base.FamilyID
+					e.BaseCandidateID = j.base.CandidateID
+					if !shouldAcceptFamilyVariant(pool, e.FamilyID, requestedFamilies, cfg.PerFamilyPoolCap) {
+						out.Rejected["PerFamilyCap"]++
+						continue
+					}
+					pool = append(pool, e)
+					acceptedNow++
+				}
+				noteFamilyAttempt(funnelMap, j.base.FamilyID, reason, exact, augProposed, acceptedNow)
 				cp.Pool = append([]BoardMixAccepted{}, pool...)
 				cp.Rejected = copyIntMap(out.Rejected)
+				cp.Stats = out.Stats
+				cp.Stats.ElapsedMs = time.Since(start).Milliseconds()
+				cp.Stats.LastProgressAt = time.Now()
+				cp.UpdatedAt = time.Now()
 				if cfg.CheckpointEvery > 0 && n%cfg.CheckpointEvery == 0 {
 					_ = SaveBoardMixCheckpoint(cfg.CheckpointPath, cp)
 					_ = writeBoardMixProgress(cfg.OutputDir, cp, len(jobs))
 				}
 				if cfg.ProgressEvery > 0 && n%cfg.ProgressEvery == 0 {
-					fmt.Printf("[%d/%d] Pool: %d  Solved: %d  Cached: %d  Rejected: %d  Elapsed: %s\n",
-						n, len(jobs), len(pool), out.Stats.ExactSolves, out.Stats.CacheHits,
+					fmt.Printf("[%d/%d] Pool: %d families=%d Solved: %d Cached: %d Rejected: %d Elapsed: %s\n",
+						n, len(jobs), len(pool), uniqueFamilyCount(pool), out.Stats.ExactSolves, out.Stats.CacheHits,
 						sumIntMap(out.Rejected), time.Since(start).Round(time.Second))
 				}
-				if len(pool) >= cfg.MaxPoolSize || n >= cfg.MaxAttempts {
+				if int(attempts) >= cfg.MaxAttempts {
 					stop = true
+					earlyStopFlag = true
+				}
+				if len(pool) >= cfg.MaxPoolSize {
+					u := uniqueFamilyCount(pool)
+					minU := cfg.MinUniqueFamiliesInPool
+					if minU <= 0 {
+						minU = 12
+					}
+					if u >= minU || u >= requestedFamilies {
+						stop = true
+						earlyStopFlag = u < requestedFamilies
+					}
 				}
 				mu.Unlock()
 			}
 		}()
 	}
 	wg.Wait()
+
+	funnelList := finalizeFamilyFunnel(funnelMap, pool)
+	out.FamilyCoverage = buildFamilyCoverageReport(cfg, bases, pool, funnelList, earlyStopFlag)
 
 	// Diversity-aware final selection (does NOT take first N valids).
 	selected, selRep := SelectBoardMixShortlist(pool, cfg)
@@ -946,6 +1050,7 @@ func WriteBoardMixBatch(dir string, res BoardMixResult) error {
 			"outerZoneRelevant":   res.SelectReport.FinalOuterZoneRelevant,
 			"distinctShapes":      res.SelectReport.DistinctBoardShapes,
 		},
+		"familyCoverage":        res.FamilyCoverage,
 		"unmetRequirements":     res.SelectReport.UnmetRequirements,
 		"whyFinalShort":         res.SelectReport.WhyFinalShort,
 		"quotaRelaxations":      res.SelectReport.QuotaRelaxations,

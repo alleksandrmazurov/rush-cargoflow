@@ -61,13 +61,15 @@ func SelectBoardMixShortlist(pool []BoardMixAccepted, cfg BoardMixConfig) ([]Boa
 		HardConstraints: []string{
 			"UniqueFamily (one final slot per FamilyId)",
 			"MinDistinctBoardShapes if pool supports it",
+			"MinDistinctInventoryClasses if pool supports it",
 			"FinalAccepted == FinalTarget for DiversityUnmet=false",
 		},
 		SoftConstraints: []string{
-			"InventoryTargets 3/3/3/3 (preferred, relaxable)",
+			"InventoryTargets preferred (Three1x1 is rare/soft, not hard 3/12)",
 			"MaxBoardShapeFraction 0.40→0.50→0.60 (staged)",
 			"MaxInventoryClassFraction (relaxable)",
 			"Exact shape quota counts (relaxable)",
+			"Compact6x6 not required from native generator",
 		},
 	}
 
@@ -133,8 +135,12 @@ func SelectBoardMixShortlist(pool []BoardMixAccepted, cfg BoardMixConfig) ([]Boa
 	if len(invNeed) == 0 {
 		invNeed = map[string]int{
 			string(InvNo1x1): 3, string(InvOne1x1): 3,
-			string(InvTwo1x1): 3, string(InvThree1x1): 3,
+			string(InvTwo1x1): 3, // Three1x1 intentionally omitted as hard preferred quota
 		}
+	}
+	minInvClasses := cfg.MinDistinctInventoryClasses
+	if minInvClasses <= 0 {
+		minInvClasses = 3
 	}
 
 	idx := make([]int, len(pool))
@@ -389,16 +395,33 @@ func SelectBoardMixShortlist(pool []BoardMixAccepted, cfg BoardMixConfig) ([]Boa
 		got := rep.FinalInventoryDist[inv]
 		avail := rep.PoolInventoryDist[inv]
 		if got < want {
-			rep.UnmetRequirements = append(rep.UnmetRequirements,
-				fmt.Sprintf("Inventory %s: need %d, got %d, poolAvailable %d", inv, want, got, avail))
+			msg := fmt.Sprintf("Inventory %s: need %d, got %d, poolAvailable %d", inv, want, got, avail)
+			if inv == string(InvThree1x1) {
+				msg += " (soft/rare — not a hard pilot quota)"
+			}
+			rep.UnmetRequirements = append(rep.UnmetRequirements, msg)
+		}
+	}
+	invClassCount := countPositiveKeys(rep.FinalInventoryDist)
+	if invClassCount < minInvClasses {
+		poolInvClasses := countPositiveKeys(rep.PoolInventoryDist)
+		rep.UnmetRequirements = append(rep.UnmetRequirements,
+			fmt.Sprintf("MinDistinctInventoryClasses: need %d, got %d (pool had %d)", minInvClasses, invClassCount, poolInvClasses))
+		if poolInvClasses >= minInvClasses && rep.FinalAccepted >= rep.FinalTarget {
+			rep.DiversityTargetUnmet = true
+		} else if poolInvClasses >= minInvClasses && invClassCount < minInvClasses {
+			rep.DiversityTargetUnmet = true
 		}
 	}
 	for shape, want := range cfg.ShapeQuotas {
 		got := rep.FinalShapeDist[shape]
 		avail := rep.PoolShapeDist[shape]
 		if want > 0 && avail == 0 {
-			rep.UnmetRequirements = append(rep.UnmetRequirements,
-				fmt.Sprintf("BoardShape %s: need %d, poolAvailable 0", shape, want))
+			msg := fmt.Sprintf("BoardShape %s: need %d, poolAvailable 0", shape, want)
+			if shape == string(ShapeCompact6x6) {
+				msg += " (Compact not required from native generator)"
+			}
+			rep.UnmetRequirements = append(rep.UnmetRequirements, msg)
 		} else if got < want && avail > 0 {
 			rep.UnmetRequirements = append(rep.UnmetRequirements,
 				fmt.Sprintf("BoardShape %s: need %d, got %d, poolAvailable %d", shape, want, got, avail))

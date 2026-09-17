@@ -15,7 +15,7 @@ import (
 )
 
 func main() {
-	configPath := flag.String("config", "configs/RUSH0104_Native7x8Pilot_001.json", "boardmix config JSON")
+	configPath := flag.String("config", "configs/RUSH01041_NativeFamilyCoveragePilot_001.json", "boardmix config JSON")
 	output := flag.String("output", "", "override output directory")
 	resume := flag.Bool("resume", true, "resume from checkpoint if present")
 	smoke := flag.Bool("smoke", false, "tiny smoke: few bases, short budget (~30-60s)")
@@ -77,10 +77,13 @@ func main() {
 		cfg.CheckpointEvery = 1
 		cfg.ProgressEvery = 1
 		cfg.Workers = 2
-		fmt.Println("Cargo Flow Native 7x8 SMOKE (RUSH-010.4)")
+		cfg.FamilyFirstExploration = true
+		cfg.PerFamilyPoolCap = 2
+		cfg.MinUniqueFamiliesInPool = 3
+		fmt.Println("Cargo Flow Native Family Coverage SMOKE (RUSH-010.4.1)")
 	} else {
-		fmt.Println("Cargo Flow Native 7x8 Structural Augmentation (RUSH-010.4)")
-		fmt.Println("Pool → diversity select. Ctrl+C safe; --resume continues.")
+		fmt.Println("Cargo Flow Native Family Coverage (RUSH-010.4.1)")
+		fmt.Println("Family-first pool → diversity select. Ctrl+C safe; --resume continues.")
 	}
 
 	fmt.Printf("config=%s output=%s resume=%v workers=%d target=%d maxPool=%d\n",
@@ -144,6 +147,18 @@ func main() {
 	}
 	fmt.Printf("Native stats: baseFamilies=%d embeddings=%d augmentationsProposed=%d restrictedSolves=%d\n",
 		res.Stats.BaseFamiliesTried, res.Stats.EmbeddingsTried, res.Stats.AugmentationsProposed, res.Stats.RestrictedSolves)
+	fmt.Printf("Family coverage: requested=%d distinct=%d poolUnique=%d earlyStop=%v\n",
+		res.FamilyCoverage.RequestedBaseCandidates, res.FamilyCoverage.DistinctRequestedBaseFamilyIds,
+		res.FamilyCoverage.PoolUniqueFamilyIds, res.FamilyCoverage.EarlyStopBeforeAllFamilies)
+	fmt.Printf("Family root cause: %s\n", res.FamilyCoverage.RootCauseSummary)
+	if res.FamilyCoverage.ExpandedZeroExplanation != "" {
+		fmt.Printf("Expanded=0: %s\n", res.FamilyCoverage.ExpandedZeroExplanation)
+	}
+	if len(res.FamilyCoverage.PoolAugmentationClass) > 0 {
+		fmt.Println("Pool augmentation classes:")
+		b, _ = json.MarshalIndent(res.FamilyCoverage.PoolAugmentationClass, "  ", "  ")
+		fmt.Println(" ", string(b))
+	}
 	fmt.Printf("\nWrote %s\n", cfg.OutputDir)
 	fmt.Printf("Checkpoint: %s\n", cfg.CheckpointPath)
 	if len(res.Accepted) == 0 {
