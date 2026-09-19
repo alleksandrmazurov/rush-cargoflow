@@ -1,0 +1,42 @@
+{
+  "corpusId": "rush01071_human_review",
+  "note": "Subjective expert spot-check of four RUSH-010.7.1 Deep Target pilot levels. Applies only to the listed candidates and is not evidence for the other eight levels.",
+  "batchDir": "output/RUSH01071_DeepTargetPilot_001",
+  "reviewedCandidateIds": [
+    "Candidate_001",
+    "Candidate_004",
+    "Candidate_006",
+    "Candidate_008"
+  ],
+  "entries": [
+    {
+      "candidateId": "Candidate_001",
+      "completedByHuman": true,
+      "scope": "included in four-level spot-check"
+    },
+    {
+      "candidateId": "Candidate_004",
+      "completedByHuman": true,
+      "scope": "included in four-level spot-check"
+    },
+    {
+      "candidateId": "Candidate_006",
+      "completedByHuman": true,
+      "scope": "included in four-level spot-check"
+    },
+    {
+      "candidateId": "Candidate_008",
+      "completedByHuman": true,
+      "scope": "included in four-level spot-check"
+    }
+  ],
+  "sharedObservationForReviewedSubset": {
+    "gameplayQualityNoticeablyImproved": true,
+    "requiresPlanning": true,
+    "movesAlmostAllBlocks": true,
+    "someBlocksMovedRepeatedly": true,
+    "sixBySixInsideSevenByEightStillVisible": true,
+    "sixBySixPatternCurrentlyBlocking": false
+  },
+  "scopeWarning": "Do not extrapolate this observation to Candidate_002, Candidate_003, Candidate_005, Candidate_007, or Candidate_009 through Candidate_012 without human play."
+}

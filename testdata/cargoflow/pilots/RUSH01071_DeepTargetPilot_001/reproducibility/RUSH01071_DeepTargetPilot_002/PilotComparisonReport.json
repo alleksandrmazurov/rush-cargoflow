@@ -1,0 +1,191 @@
+{
+  "schemaVersion": 1,
+  "controlDir": "testdata\\cargoflow\\pilots\\RUSH01071_DeepTargetPilot_001",
+  "secondDir": "output\\RUSH01071_DeepTargetPilot_002",
+  "control": {
+    "accepted": 12,
+    "optimalGestures": {
+      "10": 1,
+      "11": 1,
+      "12": 1,
+      "22": 1,
+      "28": 1,
+      "3": 2,
+      "40": 1,
+      "7": 1,
+      "8": 1,
+      "9": 2
+    },
+    "targetTopRows": {
+      "2": 1,
+      "4": 2,
+      "5": 4,
+      "6": 5
+    },
+    "boardShapes": {
+      "ShiftedCore": 9,
+      "Tall": 2,
+      "Wide": 1
+    },
+    "inventoryClasses": {
+      "No1x1": 7,
+      "One1x1": 3,
+      "Two1x1": 2
+    },
+    "causalTemplates": {
+      "CrossRegionLongGate": 3,
+      "Lower1x1SpaceMaker": 3,
+      "LowerParkingUnlock": 2
+    },
+    "causalExpanded": 8,
+    "replayVerified": 12,
+    "validCausalProofs": 8,
+    "targetRow5Plus": 9,
+    "targetRow6": 5,
+    "diversityTargetUnmet": false,
+    "unityBatchValidation": {
+      "ok": true,
+      "dir": "testdata\\cargoflow\\pilots\\RUSH01071_DeepTargetPilot_001",
+      "accepted": 12,
+      "levelJsonCount": 12,
+      "solutionJsonCount": 12
+    },
+    "acceptanceCriteriaPass": true
+  },
+  "second": {
+    "accepted": 12,
+    "optimalGestures": {
+      "10": 1,
+      "11": 1,
+      "12": 1,
+      "22": 1,
+      "28": 1,
+      "3": 2,
+      "40": 1,
+      "7": 1,
+      "8": 1,
+      "9": 2
+    },
+    "targetTopRows": {
+      "2": 1,
+      "4": 2,
+      "5": 4,
+      "6": 5
+    },
+    "boardShapes": {
+      "ShiftedCore": 9,
+      "Tall": 2,
+      "Wide": 1
+    },
+    "inventoryClasses": {
+      "No1x1": 7,
+      "One1x1": 3,
+      "Two1x1": 2
+    },
+    "causalTemplates": {
+      "CrossRegionLongGate": 3,
+      "Lower1x1SpaceMaker": 3,
+      "LowerParkingUnlock": 2
+    },
+    "causalExpanded": 8,
+    "replayVerified": 12,
+    "validCausalProofs": 8,
+    "targetRow5Plus": 9,
+    "targetRow6": 5,
+    "diversityTargetUnmet": false,
+    "unityBatchValidation": {
+      "ok": true,
+      "dir": "output\\RUSH01071_DeepTargetPilot_002",
+      "accepted": 12,
+      "levelJsonCount": 12,
+      "solutionJsonCount": 12
+    },
+    "acceptanceCriteriaPass": true
+  },
+  "exactStateRepeatCount": 12,
+  "exactStateRepeats": [
+    {
+      "controlCandidateId": "Candidate_001",
+      "secondCandidateId": "Candidate_001",
+      "fingerprint": "5de3f910e27a92877db2e3864e400ad346fd8e233a5f37161497ce226107be43"
+    },
+    {
+      "controlCandidateId": "Candidate_002",
+      "secondCandidateId": "Candidate_002",
+      "fingerprint": "aba430a3a57922ef6c924290a5b58994487f2470f568180fe9e9eaaae64c9147"
+    },
+    {
+      "controlCandidateId": "Candidate_003",
+      "secondCandidateId": "Candidate_003",
+      "fingerprint": "d15d337b4cbfe5b61d2852a98a946d6e1bf43a2813da187f37b0372d23afdcbe"
+    },
+    {
+      "controlCandidateId": "Candidate_004",
+      "secondCandidateId": "Candidate_004",
+      "fingerprint": "89d166cf1ed42af774c92541e9a00e2b6b7487de617daf10c964295801805f64"
+    },
+    {
+      "controlCandidateId": "Candidate_005",
+      "secondCandidateId": "Candidate_005",
+      "fingerprint": "fc1ddf39a5da5ccc753cbb643a16ac8f810e3d9e41077b3bc69141b2a692d7b3"
+    },
+    {
+      "controlCandidateId": "Candidate_006",
+      "secondCandidateId": "Candidate_006",
+      "fingerprint": "55198c5c3e1171cc681cff26b592979e03ed1f0c5b04ce332edbbad207cae1ae"
+    },
+    {
+      "controlCandidateId": "Candidate_007",
+      "secondCandidateId": "Candidate_007",
+      "fingerprint": "e69a63b09252824c616e3925609809360a5229f2dc5927cd56cfa291d6e0c9ad"
+    },
+    {
+      "controlCandidateId": "Candidate_008",
+      "secondCandidateId": "Candidate_008",
+      "fingerprint": "f5e559c37964c7b916c6bf82c942e22b8398d30475e32ddaf805f40be51ca822"
+    },
+    {
+      "controlCandidateId": "Candidate_009",
+      "secondCandidateId": "Candidate_009",
+      "fingerprint": "c4a3d313fd7539aa3e7a9c772c76209031ca75e1f34eab2f5fc08ee8ca37c508"
+    },
+    {
+      "controlCandidateId": "Candidate_010",
+      "secondCandidateId": "Candidate_010",
+      "fingerprint": "20e0610a434e074309c91453840c87164aabfe4b09a401a790fac72922300334"
+    },
+    {
+      "controlCandidateId": "Candidate_011",
+      "secondCandidateId": "Candidate_011",
+      "fingerprint": "3fa177d4f0bb877aaaac38168ed4e655f4fbccd444a1dcf98032693be27dc4fc"
+    },
+    {
+      "controlCandidateId": "Candidate_012",
+      "secondCandidateId": "Candidate_012",
+      "fingerprint": "f480713de43ab72636ba9e8c48fbbfc0251c0d2e7f971f7de95146122e8d499a"
+    }
+  ],
+  "newStateCount": 0,
+  "controlFamilyCount": 12,
+  "secondFamilyCount": 12,
+  "familyIntersectionCount": 12,
+  "familyIntersection": [
+    "F013",
+    "F014",
+    "F015",
+    "F035",
+    "F036",
+    "F050",
+    "F063",
+    "F065",
+    "F086",
+    "F095",
+    "F125",
+    "F130"
+  ],
+  "newFamilies": null,
+  "removedFamilies": null,
+  "seedAffectsBoardMix": false,
+  "seedIndependenceConclusion": "Changing seed did not change any accepted start state. Boardmix currently does not consume Config.Seed, so this is a deterministic rerun, not an independent sampled set.",
+  "recommendationNote": "No genuinely new start states were produced; there are no new levels to recommend for manual play."
+}

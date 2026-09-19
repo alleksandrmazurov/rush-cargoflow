@@ -104,6 +104,45 @@ go build -o bin\cargoflow-boardmix.exe .\cmd\cargoflow-boardmix
   --resume
 ```
 
+## RUSH-010.7 / RUSH-010.7.1 causal and deep-target pilots
+
+RUSH-010.7 accepts cross-region additions only when exact solve, replay,
+intervention necessity, and a causal path toward the upper/corridor region pass.
+RUSH-010.7.1 keeps those checks and routes naturally deep-capable Rush sources
+through `ShiftDown1` / `FlushBottom`; it does not relocate Target manually.
+
+The first RUSH-010.7.1 pilot produced 12/12 levels with:
+
+- `CausalExpanded=8`
+- 9 levels with `TargetTopRow>=5`
+- 5 levels with `TargetTopRow=6`
+- `diversityTargetUnmet=false`
+
+Human validation is currently a **four-level spot-check only**: Candidate_001,
+Candidate_004, Candidate_006, and Candidate_008 were completed manually and
+showed noticeably stronger planning, broad block use, and some repeated block
+movement. This result must not be generalized to the other eight candidates.
+The visible “6×6 inside 7×8” composition remains, but was not blocking for this
+reviewed subset. Structured notes live in
+`data/calibration/rush01071_human_review.json`.
+
+The tracked control batch is under
+`testdata/cargoflow/pilots/RUSH01071_DeepTargetPilot_001`; generated `output/`
+directories remain ignored. Reproducibility checks compare ID-independent exact
+start-state fingerprints, FamilyId overlap, distributions, causal proofs, exact
+solutions, and replay validation.
+
+The `RUSH01071_DeepTargetPilot_002` rerun changed only seed and output paths.
+It passed the same acceptance checks but reproduced all 12 start states and all
+12 families exactly. The boardmix pipeline currently does not consume
+`BoardMixConfig.Seed`; therefore this result verifies deterministic rerun
+stability, not independence of seeded sampling. The comparison report is stored
+with the control batch under `reproducibility/RUSH01071_DeepTargetPilot_002`.
+
+The current repository documentation does not define a later RUSH-010 stage
+beyond this reproducibility check. Further improvement of native 7×8 spatial
+usage remains a separate task and is not part of this validation.
+
 ## Output
 
 Unity-compatible JSON (+ optional `enrichment` / `boardSpace` metadata), solutions, manifest,

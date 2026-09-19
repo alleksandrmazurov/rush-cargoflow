@@ -26,11 +26,31 @@ func main() {
 	calibrateTargetDepth := flag.String("calibrate-target-depth", "", "analyze target depth and vertical dependencies in an existing batch (no generation)")
 	analyzeSpatial := flag.String("analyze-spatial-dependencies", "", "write RUSH01041/RUSH0105 spatial dependency reports to this directory (no generation)")
 	analyzeDeepTarget := flag.String("analyze-deep-target-routing", "", "write RUSH0107 source-column/embedding funnel reports to this directory")
+	compareControl := flag.String("compare-control", "", "control boardmix batch directory")
+	compareSecond := flag.String("compare-second", "", "second boardmix batch directory")
+	compareOutput := flag.String("compare-output", "", "directory for pilot comparison report (defaults to second batch)")
 	reselect := flag.String("reselect-existing", "", "reselect final 12 from checkpoint pool (no generation)")
 	flag.Parse()
 
 	if *buildInfo {
 		fmt.Println(rush.BoardMixVersion)
+		return
+	}
+
+	if *compareControl != "" || *compareSecond != "" {
+		if *compareControl == "" || *compareSecond == "" {
+			log.Fatal("-compare-control and -compare-second must be provided together")
+		}
+		outDir := *compareOutput
+		if outDir == "" {
+			outDir = *compareSecond
+		}
+		report, err := rush.CompareBoardMixPilots(*compareControl, *compareSecond, outDir)
+		if err != nil {
+			log.Fatal(err)
+		}
+		b, _ := json.MarshalIndent(report, "", "  ")
+		fmt.Println(string(b))
 		return
 	}
 

@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "levelId": "Candidate_012",
+  "solved": true,
+  "optimal": true,
+  "optimalGestures": 8,
+  "visitedStates": 65782,
+  "elapsedMs": 0,
+  "timedOut": false,
+  "budgetExceeded": false,
+  "replayPass": true,
+  "replayVerified": true,
+  "fingerprint": "unity 7x8 exit=3\n.......\n.......\n.BoBBBB\n.B.....\n.BBBBBB\n.BBBBBB\n...T..x\n...T.o.\n",
+  "moves": [
+    {
+      "pieceId": "P01",
+      "fromX": 1,
+      "fromY": 4,
+      "toX": 1,
+      "toY": 6,
+      "axis": "vertical",
+      "distance": 2,
+      "isExit": false
+    },
+    {
+      "pieceId": "U02",
+      "fromX": 2,
+      "fromY": 5,
+      "toX": 0,
+      "toY": 5,
+      "axis": "horizontal",
+      "distance": 2,
+      "isExit": false
+    },
+    {
+      "pieceId": "P07",
+      "fromX": 3,
+      "fromY": 5,
+      "toX": 1,
+      "toY": 5,
+      "axis": "horizontal",
+      "distance": 2,
+      "isExit": false
+    },
+    {
+      "pieceId": "P08",
+      "fromX": 5,
+      "fromY": 5,
+      "toX": 4,
+      "toY": 5,
+      "axis": "horizontal",
+      "distance": 1,
+      "isExit": false
+    },
+    {
+      "pieceId": "P02",
+      "fromX": 6,
+      "fromY": 2,
+      "toX": 6,
+      "toY": 4,
+      "axis": "vertical",
+      "distance": 2,
+      "isExit": false
+    },
+    {
+      "pieceId": "P04",
+      "fromX": 3,
+      "fromY": 2,
+      "toX": 4,
+      "toY": 2,
+      "axis": "horizontal",
+      "distance": 1,
+      "isExit": false
+    },
+    {
+      "pieceId": "P06",
+      "fromX": 3,
+      "fromY": 3,
+      "toX": 4,
+      "toY": 3,
+      "axis": "horizontal",
+      "distance": 1,
+      "isExit": false
+    },
+    {
+      "pieceId": "target",
+      "fromX": 3,
+      "fromY": 0,
+      "toX": 3,
+      "toY": 8,
+      "axis": "vertical",
+      "distance": 8,
+      "isExit": true
+    }
+  ]
+}
