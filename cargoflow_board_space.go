@@ -258,6 +258,16 @@ type BoardSpaceJSON struct {
 	DependencyColumnsUsed             int     `json:"dependencyColumnsUsed,omitempty"`
 	OuterDependencyPieceCount         int     `json:"outerDependencyPieceCount,omitempty"`
 	IsolatedAddon1x1Suspect           bool    `json:"isolatedAddon1x1Suspect,omitempty"`
+	TargetTopRow                      int     `json:"targetTopRow,omitempty"`
+	TargetDepthClass                  string  `json:"targetDepthClass,omitempty"`
+	ExitCorridorLength                int     `json:"exitCorridorLength,omitempty"`
+	ExitCorridorBlockingPieceCount    int     `json:"exitCorridorBlockingPieceCount,omitempty"`
+	ExitCorridorDependencyPieceCount  int     `json:"exitCorridorDependencyPieceCount,omitempty"`
+	ExitCorridorDependencyMoves       int     `json:"exitCorridorDependencyMoves,omitempty"`
+	RowsBetweenTargetAndExitUsed      int     `json:"rowsBetweenTargetAndExitUsed,omitempty"`
+	BelowTargetMeaningfulPieceCount   int     `json:"belowTargetMeaningfulPieceCount,omitempty"`
+	BelowTargetDependencyMoves        int     `json:"belowTargetDependencyMoves,omitempty"`
+	AboveBelowDependencyBalance       float64 `json:"aboveBelowDependencyBalance,omitempty"`
 }
 
 func (m BoardUtilizationMetrics) ToJSON(embed EmbeddingVariant) *BoardSpaceJSON {

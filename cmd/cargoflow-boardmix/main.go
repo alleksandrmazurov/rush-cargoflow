@@ -23,11 +23,37 @@ func main() {
 	reexport := flag.String("reexport-existing", "", "re-export Unity batch from existing dir (no regeneration)")
 	validate := flag.String("validate-batch", "", "validate Unity BatchManifest/Candidates/Solutions contract")
 	calibrate := flag.String("calibrate-core-space", "", "calibrate 6x6 meaningful-space metrics on existing batch dir (no generation)")
+	calibrateTargetDepth := flag.String("calibrate-target-depth", "", "analyze target depth and vertical dependencies in an existing batch (no generation)")
 	reselect := flag.String("reselect-existing", "", "reselect final 12 from checkpoint pool (no generation)")
 	flag.Parse()
 
 	if *buildInfo {
 		fmt.Println(rush.BoardMixVersion)
+		return
+	}
+
+	if *calibrateTargetDepth != "" {
+		labels := map[string]string(nil)
+		if filepath.Base(filepath.Clean(*calibrateTargetDepth)) == "RUSH01041_NativeFamilyCoveragePilot_001" {
+			labels = rush.RUSH01041HumanCoreLabels
+		}
+		rows, summary, err := rush.CalibrateTargetDepthOnBatch(
+			*calibrateTargetDepth, labels, rush.DefaultCargoFlowSolveBudget())
+		if err != nil {
+			log.Fatal(err)
+		}
+		rep := map[string]interface{}{
+			"batchDir": *calibrateTargetDepth,
+			"rows":     rows,
+			"summary":  summary,
+		}
+		outPath := filepath.Join(*calibrateTargetDepth, "TargetDepthCalibrationReport.json")
+		if err := rush.WriteJSONFile(outPath, rep); err != nil {
+			log.Fatal(err)
+		}
+		b, _ := json.MarshalIndent(rep, "", "  ")
+		fmt.Println(string(b))
+		fmt.Printf("Wrote %s\n", outPath)
 		return
 	}
 

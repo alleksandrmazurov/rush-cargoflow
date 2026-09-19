@@ -15,77 +15,77 @@ const BoardMixVersion = "boardmix-v1.5.1"
 
 // BoardMixConfig drives RUSH-010.3 / 010.4 / 010.4.1 board-space diversity generation.
 type BoardMixConfig struct {
-	BatchDir                   string         `json:"batchDir"`
-	OutputDir                  string         `json:"outputDir"`
-	CachePath                  string         `json:"cachePath"`
-	CheckpointPath             string         `json:"checkpointPath"`
-	DatabasePath               string         `json:"databasePath"`
-	TargetAccepted             int            `json:"targetAccepted"`
-	BaseCount                  int            `json:"baseCount"`
-	Seed                       int64          `json:"seed"`
-	Workers                    int            `json:"workers"`
-	CheckpointEvery            int            `json:"checkpointEvery"`
-	Resume                     bool           `json:"resume"`
-	SolveTimeLimitMs           int            `json:"solveTimeLimitMs"`
-	MaxVisitedStates           int            `json:"maxVisitedStates"`
-	TryOuterAugment            bool           `json:"tryOuterAugment"`
-	TryNativeAugment           bool           `json:"tryNativeAugment"`
-	TryCoreExpansion           bool           `json:"tryCoreExpansion"`
-	TryInventoryEnrichment     bool           `json:"tryInventoryEnrichment"`
-	MaxNativeAcceptedPerEmbed  int            `json:"maxNativeAcceptedPerEmbed"`
-	MaxNativeProposalsPerEmbed int            `json:"maxNativeProposalsPerEmbed"`
-	MaxCoreExpansionAccepted   int            `json:"maxCoreExpansionAccepted"`
-	MaxCoreExpansionProposals  int            `json:"maxCoreExpansionProposals"`
-	CoreSpaceFitThreshold      float64        `json:"coreSpaceFitThreshold"`
-	RequireCoreNotFitIn6x6     bool           `json:"requireCoreNotFitIn6x6"`
+	BatchDir                   string  `json:"batchDir"`
+	OutputDir                  string  `json:"outputDir"`
+	CachePath                  string  `json:"cachePath"`
+	CheckpointPath             string  `json:"checkpointPath"`
+	DatabasePath               string  `json:"databasePath"`
+	TargetAccepted             int     `json:"targetAccepted"`
+	BaseCount                  int     `json:"baseCount"`
+	Seed                       int64   `json:"seed"`
+	Workers                    int     `json:"workers"`
+	CheckpointEvery            int     `json:"checkpointEvery"`
+	Resume                     bool    `json:"resume"`
+	SolveTimeLimitMs           int     `json:"solveTimeLimitMs"`
+	MaxVisitedStates           int     `json:"maxVisitedStates"`
+	TryOuterAugment            bool    `json:"tryOuterAugment"`
+	TryNativeAugment           bool    `json:"tryNativeAugment"`
+	TryCoreExpansion           bool    `json:"tryCoreExpansion"`
+	TryInventoryEnrichment     bool    `json:"tryInventoryEnrichment"`
+	MaxNativeAcceptedPerEmbed  int     `json:"maxNativeAcceptedPerEmbed"`
+	MaxNativeProposalsPerEmbed int     `json:"maxNativeProposalsPerEmbed"`
+	MaxCoreExpansionAccepted   int     `json:"maxCoreExpansionAccepted"`
+	MaxCoreExpansionProposals  int     `json:"maxCoreExpansionProposals"`
+	CoreSpaceFitThreshold      float64 `json:"coreSpaceFitThreshold"`
+	RequireCoreNotFitIn6x6     bool    `json:"requireCoreNotFitIn6x6"`
 	// TargetGenuineCoreExpanded reserves final slots for IsGenuineCoreExpanded (RUSH-010.5.1).
 	// 0 = disabled (legacy diversity-only selection).
-	TargetGenuineCoreExpanded  int            `json:"targetGenuineCoreExpanded"`
-	FamilyFirstExploration     bool           `json:"familyFirstExploration"`
-	PerFamilyPoolCap           int            `json:"perFamilyPoolCap"`
-	MinUniqueFamiliesInPool    int            `json:"minUniqueFamiliesInPool"`
-	MinDistinctInventoryClasses int           `json:"minDistinctInventoryClasses"`
-	Embeddings                 []string       `json:"embeddings"`
-	ShapeQuotas                map[string]int `json:"shapeQuotas"`
-	InventoryQuotas            map[string]int `json:"inventoryQuotas"`
-	ProgressEvery              int            `json:"progressEvery"`
-	MaxPoolSize                int            `json:"maxPoolSize"`
-	MaxAttempts                int            `json:"maxAttempts"`
-	MinDistinctBoardShapes     int            `json:"minDistinctBoardShapes"`
-	MaxBoardShapeFraction      float64        `json:"maxBoardShapeFraction"`
-	MinOuterZoneRelevant       int            `json:"minOuterZoneRelevant"`
-	MaxInventoryClassFraction  float64        `json:"maxInventoryClassFraction"`
-	UniqueFamily               bool           `json:"uniqueFamily"`
+	TargetGenuineCoreExpanded   int            `json:"targetGenuineCoreExpanded"`
+	FamilyFirstExploration      bool           `json:"familyFirstExploration"`
+	PerFamilyPoolCap            int            `json:"perFamilyPoolCap"`
+	MinUniqueFamiliesInPool     int            `json:"minUniqueFamiliesInPool"`
+	MinDistinctInventoryClasses int            `json:"minDistinctInventoryClasses"`
+	Embeddings                  []string       `json:"embeddings"`
+	ShapeQuotas                 map[string]int `json:"shapeQuotas"`
+	InventoryQuotas             map[string]int `json:"inventoryQuotas"`
+	ProgressEvery               int            `json:"progressEvery"`
+	MaxPoolSize                 int            `json:"maxPoolSize"`
+	MaxAttempts                 int            `json:"maxAttempts"`
+	MinDistinctBoardShapes      int            `json:"minDistinctBoardShapes"`
+	MaxBoardShapeFraction       float64        `json:"maxBoardShapeFraction"`
+	MinOuterZoneRelevant        int            `json:"minOuterZoneRelevant"`
+	MaxInventoryClassFraction   float64        `json:"maxInventoryClassFraction"`
+	UniqueFamily                bool           `json:"uniqueFamily"`
 }
 
 // DefaultBoardMixConfig returns sane long-run defaults (manual pilot).
 func DefaultBoardMixConfig() BoardMixConfig {
 	return BoardMixConfig{
-		BatchDir:               "output/RUSH009_CuratedShortlist_001",
-		OutputDir:              "output/RUSH01031_DiversityQuotaPilot_001",
-		CachePath:              "data/cache/curator/solve_cache.jsonl",
-		DatabasePath:           "data/external/rush/rush.txt",
-		TargetAccepted:         12,
-		BaseCount:              32,
-		Seed:                   20260916,
-		Workers:                2,
-		CheckpointEvery:        1,
-		Resume:                 true,
-		SolveTimeLimitMs:       8000,
-		MaxVisitedStates:       2_000_000,
-		TryOuterAugment:            true,
-		TryNativeAugment:           true,
-		TryCoreExpansion:           false, // enabled by RUSH-010.5 configs
-		TryInventoryEnrichment:     true,
-		MaxNativeAcceptedPerEmbed:  2,
-		MaxNativeProposalsPerEmbed: 10,
-		MaxCoreExpansionAccepted:   2,
-		MaxCoreExpansionProposals:  12,
-		CoreSpaceFitThreshold:      Default6x6FitThreshold,
-		RequireCoreNotFitIn6x6:     false,
-		FamilyFirstExploration:     true,
-		PerFamilyPoolCap:           4,
-		MinUniqueFamiliesInPool:    12,
+		BatchDir:                    "output/RUSH009_CuratedShortlist_001",
+		OutputDir:                   "output/RUSH01031_DiversityQuotaPilot_001",
+		CachePath:                   "data/cache/curator/solve_cache.jsonl",
+		DatabasePath:                "data/external/rush/rush.txt",
+		TargetAccepted:              12,
+		BaseCount:                   32,
+		Seed:                        20260916,
+		Workers:                     2,
+		CheckpointEvery:             1,
+		Resume:                      true,
+		SolveTimeLimitMs:            8000,
+		MaxVisitedStates:            2_000_000,
+		TryOuterAugment:             true,
+		TryNativeAugment:            true,
+		TryCoreExpansion:            false, // enabled by RUSH-010.5 configs
+		TryInventoryEnrichment:      true,
+		MaxNativeAcceptedPerEmbed:   2,
+		MaxNativeProposalsPerEmbed:  10,
+		MaxCoreExpansionAccepted:    2,
+		MaxCoreExpansionProposals:   12,
+		CoreSpaceFitThreshold:       Default6x6FitThreshold,
+		RequireCoreNotFitIn6x6:      false,
+		FamilyFirstExploration:      true,
+		PerFamilyPoolCap:            4,
+		MinUniqueFamiliesInPool:     12,
 		MinDistinctInventoryClasses: 3,
 		Embeddings: []string{
 			string(EmbedFlushTop), string(EmbedShiftDown1), string(EmbedFlushBottom),
@@ -189,31 +189,31 @@ func LoadBoardMixConfigJSON(path string) (BoardMixConfig, error) {
 
 // BoardMixCheckpoint is resumable progress for long boardmix runs.
 type BoardMixCheckpoint struct {
-	Version              string             `json:"version"`
-	ConfigPath           string             `json:"configPath,omitempty"`
-	CompletedAttemptKeys []string           `json:"completedAttemptKeys"`
-	AcceptedIDs          []string           `json:"acceptedIds"`
-	Accepted             []BoardMixAccepted `json:"accepted"`
-	Pool                 []BoardMixAccepted `json:"pool"`
-	Rejected             map[string]int     `json:"rejected"`
-	Stats                BoardMixStats      `json:"stats"`
+	Version              string               `json:"version"`
+	ConfigPath           string               `json:"configPath,omitempty"`
+	CompletedAttemptKeys []string             `json:"completedAttemptKeys"`
+	AcceptedIDs          []string             `json:"acceptedIds"`
+	Accepted             []BoardMixAccepted   `json:"accepted"`
+	Pool                 []BoardMixAccepted   `json:"pool"`
+	Rejected             map[string]int       `json:"rejected"`
+	Stats                BoardMixStats        `json:"stats"`
 	SelectReport         BoardMixSelectReport `json:"selectReport,omitempty"`
-	UpdatedAt            time.Time          `json:"updatedAt"`
+	UpdatedAt            time.Time            `json:"updatedAt"`
 }
 
 type BoardMixStats struct {
-	Attempts                  int            `json:"attempts"`
-	ExactSolves               int            `json:"exactSolves"`
-	RestrictedSolves          int            `json:"restrictedSolves"`
-	CacheHits                 int            `json:"cacheHits"`
-	Accepted                  int            `json:"accepted"`
-	BaseFamiliesTried         int            `json:"baseFamiliesTried"`
-	EmbeddingsTried           int            `json:"embeddingsTried"`
-	AugmentationsProposed     int            `json:"augmentationsProposed"`
-	AcceptedByShape           map[string]int `json:"acceptedByShape,omitempty"`
+	Attempts                    int            `json:"attempts"`
+	ExactSolves                 int            `json:"exactSolves"`
+	RestrictedSolves            int            `json:"restrictedSolves"`
+	CacheHits                   int            `json:"cacheHits"`
+	Accepted                    int            `json:"accepted"`
+	BaseFamiliesTried           int            `json:"baseFamiliesTried"`
+	EmbeddingsTried             int            `json:"embeddingsTried"`
+	AugmentationsProposed       int            `json:"augmentationsProposed"`
+	AcceptedByShape             map[string]int `json:"acceptedByShape,omitempty"`
 	AcceptedByAugmentationClass map[string]int `json:"acceptedByAugmentationClass,omitempty"`
-	ElapsedMs                 int64          `json:"elapsedMs"`
-	LastProgressAt            time.Time      `json:"lastProgressAt"`
+	ElapsedMs                   int64          `json:"elapsedMs"`
+	LastProgressAt              time.Time      `json:"lastProgressAt"`
 }
 
 // BoardMixAccepted is one validated board-diversity candidate.
@@ -756,25 +756,25 @@ func enrichBoardMixInventory(baseCand BoardMixAccepted, budget SolveBudget, res 
 			}
 		}
 		out = append(out, BoardMixAccepted{
-			BaseCandidateID:   baseCand.BaseCandidateID,
-			FamilyID:          baseCand.FamilyID,
-			SourcePuzzleID:    baseCand.SourcePuzzleID,
-			Embedding:         baseCand.Embedding,
-			OffsetX:           baseCand.OffsetX,
-			OffsetY:           baseCand.OffsetY,
-			InventoryClass:    inv.InventoryClass,
-			BoardUtil:         util,
-			OptimalGestures:   best.EnrichedOptimal,
-			SelectionBand:     baseCand.SelectionBand,
-			Augmented:         baseCand.Augmented,
-			AugmentationClass: baseCand.AugmentationClass,
-			NativeMeta:        baseCand.NativeMeta,
+			BaseCandidateID:          baseCand.BaseCandidateID,
+			FamilyID:                 baseCand.FamilyID,
+			SourcePuzzleID:           baseCand.SourcePuzzleID,
+			Embedding:                baseCand.Embedding,
+			OffsetX:                  baseCand.OffsetX,
+			OffsetY:                  baseCand.OffsetY,
+			InventoryClass:           inv.InventoryClass,
+			BoardUtil:                util,
+			OptimalGestures:          best.EnrichedOptimal,
+			SelectionBand:            baseCand.SelectionBand,
+			Augmented:                baseCand.Augmented,
+			AugmentationClass:        baseCand.AugmentationClass,
+			NativeMeta:               baseCand.NativeMeta,
 			NativeVariantFingerprint: baseCand.NativeVariantFingerprint,
-			ReplayVerified:    best.ReplayVerified,
-			Level:             level,
-			Board:             best.Board,
-			Solution:          best.Solution,
-			ASCIIPreview:      best.ASCIIPreview,
+			ReplayVerified:           best.ReplayVerified,
+			Level:                    level,
+			Board:                    best.Board,
+			Solution:                 best.Solution,
+			ASCIIPreview:             best.ASCIIPreview,
 		})
 	}
 	// Merge enrich reject counters from batch
@@ -1015,6 +1015,8 @@ func attachCoreSpaceMetrics(c *BoardMixAccepted, budget SolveBudget, fitThreshol
 		c.Level.BoardSpace.DependencyColumnsUsed = cs.DependencyColumnsUsed
 		c.Level.BoardSpace.OuterDependencyPieceCount = cs.OuterDependencyPieceCount
 		c.Level.BoardSpace.IsolatedAddon1x1Suspect = cs.IsolatedAddon1x1Suspect
+		ApplyTargetDepthMetricsToBoardSpace(c.Level.BoardSpace,
+			ComputeTargetDepthMetrics(c.Board, sol, budget))
 	}
 }
 
@@ -1068,6 +1070,8 @@ func evaluateCoreExpansionJob(base EnrichmentBase, embed EmbeddingVariant, budge
 		level.BoardSpace.DependencyColumnsUsed = cs.DependencyColumnsUsed
 		level.BoardSpace.OuterDependencyPieceCount = cs.OuterDependencyPieceCount
 		level.BoardSpace.IsolatedAddon1x1Suspect = cs.IsolatedAddon1x1Suspect
+		ApplyTargetDepthMetricsToBoardSpace(level.BoardSpace,
+			ComputeTargetDepthMetrics(c.Board, c.Sol, budget))
 		out = append(out, &BoardMixAccepted{
 			BaseCandidateID:          plain.BaseCandidateID,
 			FamilyID:                 plain.FamilyID,
@@ -1170,14 +1174,14 @@ func LoadBoardMixCheckpoint(path string) (BoardMixCheckpoint, error) {
 
 func writeBoardMixProgress(dir string, cp BoardMixCheckpoint, totalJobs int) error {
 	return WriteJSONFile(filepath.Join(dir, "progress.json"), map[string]interface{}{
-		"attempts":     cp.Stats.Attempts,
-		"totalJobs":    totalJobs,
-		"accepted":     cp.Stats.Accepted,
-		"exactSolves":  cp.Stats.ExactSolves,
-		"cacheHits":    cp.Stats.CacheHits,
-		"rejected":     cp.Rejected,
-		"elapsedMs":    cp.Stats.ElapsedMs,
-		"updatedAt":    cp.UpdatedAt,
+		"attempts":    cp.Stats.Attempts,
+		"totalJobs":   totalJobs,
+		"accepted":    cp.Stats.Accepted,
+		"exactSolves": cp.Stats.ExactSolves,
+		"cacheHits":   cp.Stats.CacheHits,
+		"rejected":    cp.Rejected,
+		"elapsedMs":   cp.Stats.ElapsedMs,
+		"updatedAt":   cp.UpdatedAt,
 	})
 }
 

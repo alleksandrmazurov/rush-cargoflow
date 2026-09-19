@@ -47,18 +47,11 @@ func ComputeCoreSpaceMetrics(board *Board, offX, offY int, sol Solution, budget 
 	}
 	w := board.Width
 
-	meaningful := map[int]bool{}
-	// Target always meaningful.
-	if len(board.Pieces) > 0 {
-		meaningful[0] = true
-	}
-	moved := map[int]bool{}
+	meaningful, moved := computeMeaningfulPieces(board, sol, budget)
 	moveRows, moveCols := map[int]bool{}, map[int]bool{}
 	outerDepMoves := 0
 	work := board.Copy()
 	for _, mv := range sol.Moves {
-		moved[mv.Piece] = true
-		meaningful[mv.Piece] = true
 		p := work.Pieces[mv.Piece]
 		from := pieceOccupancyCells(p, w)
 		for _, cell := range from {
@@ -82,23 +75,6 @@ func ComputeCoreSpaceMetrics(board *Board, offX, offY int, sol Solution, budget 
 	m.OptimalMoveRowsUsed = len(moveRows)
 	m.OptimalMoveColumnsUsed = len(moveCols)
 	m.OuterDependencyMoves = outerDepMoves
-
-	// Necessity: freeze unmoved non-target pieces; if worsens, they are meaningful.
-	for i := 1; i < len(board.Pieces); i++ {
-		if moved[i] {
-			continue
-		}
-		rest := board.Copy()
-		rest.ImmobilePieces = make([]bool, len(rest.Pieces))
-		rest.ImmobilePieces[i] = true
-		rsol := rest.SolveWithBudget(budget)
-		if rsol.TimedOut || rsol.BudgetExceeded {
-			continue
-		}
-		if !rsol.Solvable || rsol.NumMoves > sol.NumMoves {
-			meaningful[i] = true
-		}
-	}
 
 	// Static walls: meaningful if removing them (board without that wall) improves/shortens.
 	// Cheap proxy: wall adjacent to a meaningful piece cell counts as structural if on outer.
