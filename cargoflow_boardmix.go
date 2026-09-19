@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-const BoardMixVersion = "boardmix-v1.5.0"
+const BoardMixVersion = "boardmix-v1.5.1"
 
 // BoardMixConfig drives RUSH-010.3 / 010.4 / 010.4.1 board-space diversity generation.
 type BoardMixConfig struct {
@@ -38,6 +38,9 @@ type BoardMixConfig struct {
 	MaxCoreExpansionProposals  int            `json:"maxCoreExpansionProposals"`
 	CoreSpaceFitThreshold      float64        `json:"coreSpaceFitThreshold"`
 	RequireCoreNotFitIn6x6     bool           `json:"requireCoreNotFitIn6x6"`
+	// TargetGenuineCoreExpanded reserves final slots for IsGenuineCoreExpanded (RUSH-010.5.1).
+	// 0 = disabled (legacy diversity-only selection).
+	TargetGenuineCoreExpanded  int            `json:"targetGenuineCoreExpanded"`
 	FamilyFirstExploration     bool           `json:"familyFirstExploration"`
 	PerFamilyPoolCap           int            `json:"perFamilyPoolCap"`
 	MinUniqueFamiliesInPool    int            `json:"minUniqueFamiliesInPool"`
@@ -1132,12 +1135,16 @@ func finalizeBoardMixCandidate(c *BoardMixAccepted, id string) {
 			c.Level.Enrichment.OptimalDelta = c.CoreExpansionMeta.OptimalDelta
 			c.Level.Enrichment.CoreExpansionClass = string(c.CoreExpansionMeta.ExpansionClass)
 		}
-		inv := BuildCargoInventorySignature(c.Board)
-		c.Level.Enrichment.InventorySignature = inv.Signature
-		if c.Level.BoardSpace != nil {
+		if c.Board != nil {
+			inv := BuildCargoInventorySignature(c.Board)
+			c.Level.Enrichment.InventorySignature = inv.Signature
+			if c.Level.BoardSpace != nil {
+				c.Level.BoardSpace.BoardShapeClass = string(c.BoardUtil.BoardShapeClass)
+			}
+			c.SolutionDoc = ExportSolutionJSON(c.Level, c.Board, c.Solution, 0, c.ReplayVerified)
+		} else if c.Level.BoardSpace != nil {
 			c.Level.BoardSpace.BoardShapeClass = string(c.BoardUtil.BoardShapeClass)
 		}
-		c.SolutionDoc = ExportSolutionJSON(c.Level, c.Board, c.Solution, 0, c.ReplayVerified)
 	}
 }
 

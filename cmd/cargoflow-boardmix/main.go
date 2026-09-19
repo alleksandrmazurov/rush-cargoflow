@@ -23,10 +23,39 @@ func main() {
 	reexport := flag.String("reexport-existing", "", "re-export Unity batch from existing dir (no regeneration)")
 	validate := flag.String("validate-batch", "", "validate Unity BatchManifest/Candidates/Solutions contract")
 	calibrate := flag.String("calibrate-core-space", "", "calibrate 6x6 meaningful-space metrics on existing batch dir (no generation)")
+	reselect := flag.String("reselect-existing", "", "reselect final 12 from checkpoint pool (no generation)")
 	flag.Parse()
 
 	if *buildInfo {
 		fmt.Println(rush.BoardMixVersion)
+		return
+	}
+
+	if *reselect != "" {
+		cfg, err := rush.LoadBoardMixConfigJSON(*configPath)
+		if err != nil {
+			log.Fatal(err)
+		}
+		if *output != "" {
+			cfg.OutputDir = *output
+		}
+		fmt.Printf("Reselect from existing pool (no generation): %s\n", *reselect)
+		fmt.Printf("config=%s targetGenuine=%d targetAccepted=%d\n",
+			*configPath, cfg.TargetGenuineCoreExpanded, cfg.TargetAccepted)
+		rep, err := rush.ReselectBoardMixFromExisting(*reselect, cfg)
+		if err != nil {
+			b, _ := json.MarshalIndent(rep, "", "  ")
+			fmt.Println(string(b))
+			log.Fatal(err)
+		}
+		b, _ := json.MarshalIndent(rep, "", "  ")
+		fmt.Println(string(b))
+		fmt.Printf("OK — FinalAccepted=%d Genuine=%d/%d PoolPreserved=%v\n",
+			rep.SelectReport.FinalAccepted,
+			rep.SelectReport.FinalGenuineCoreExpanded,
+			rep.SelectReport.FinalGenuineCoreExpandedTarget,
+			rep.PoolPreserved)
+		fmt.Printf("Import folder:\n  %s\n", filepath.Clean(*reselect))
 		return
 	}
 

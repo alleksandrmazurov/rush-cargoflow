@@ -22,6 +22,7 @@
   "maxCoreExpansionProposals": 12,
   "coreSpaceFitThreshold": 0.97,
   "requireCoreNotFitIn6x6": false,
+  "targetGenuineCoreExpanded": 8,
   "familyFirstExploration": true,
   "perFamilyPoolCap": 4,
   "minUniqueFamiliesInPool": 12,

@@ -32,6 +32,16 @@ type BoardMixSelectReport struct {
 	ExpandedFullFieldDiag    BoardShapeFeasibilityDiag `json:"expandedFullFieldDiagnostic"`
 	HardConstraints          []string          `json:"hardConstraints"`
 	SoftConstraints          []string          `json:"softConstraints"`
+	// RUSH-010.5.1 genuine core-expansion selection diagnostics.
+	PoolGenuineCoreExpanded                 int            `json:"poolGenuineCoreExpanded"`
+	PoolGenuineCoreExpandedUniqueFamilies   int            `json:"poolGenuineCoreExpandedUniqueFamilies"`
+	FinalGenuineCoreExpanded                int            `json:"finalGenuineCoreExpanded"`
+	FinalGenuineCoreExpandedTarget          int            `json:"finalGenuineCoreExpandedTarget"`
+	FinalCoreExpansionClass                 map[string]int `json:"finalCoreExpansionClass,omitempty"`
+	FinalContainmentValues                  []float64      `json:"finalContainmentValues,omitempty"`
+	FinalFits6x6False                       int            `json:"finalFits6x6False"`
+	FinalIsolated1x1Suspect                 int            `json:"finalIsolated1x1Suspect"`
+	GenuineCoreExpandedMonocultureNote      string         `json:"genuineCoreExpandedMonocultureNote,omitempty"`
 }
 
 // BoardShapeFeasibilityDiag explains missing Expanded/FullField/Compact classes.
@@ -74,6 +84,7 @@ func SelectBoardMixShortlist(pool []BoardMixAccepted, cfg BoardMixConfig) ([]Boa
 	}
 
 	famSet := map[string]bool{}
+	genuineFam := map[string]bool{}
 	for _, c := range pool {
 		shape := string(c.BoardUtil.BoardShapeClass)
 		inv := string(c.InventoryClass)
@@ -108,8 +119,13 @@ func SelectBoardMixShortlist(pool []BoardMixAccepted, cfg BoardMixConfig) ([]Boa
 		if c.BoardUtil.BoardShapeClass == ShapeCompact6x6 {
 			rep.PoolCrossAvailability["Compact6x6"]++
 		}
+		if IsGenuineCoreExpanded(c) {
+			rep.PoolGenuineCoreExpanded++
+			genuineFam[c.FamilyID] = true
+		}
 	}
 	rep.PoolUniqueFamilies = len(famSet)
+	rep.PoolGenuineCoreExpandedUniqueFamilies = len(genuineFam)
 	rep.ExpandedFullFieldDiag = DiagnoseExpandedFullFieldAvailability(rep.PoolShapeDist)
 
 	target := cfg.TargetAccepted
@@ -117,6 +133,14 @@ func SelectBoardMixShortlist(pool []BoardMixAccepted, cfg BoardMixConfig) ([]Boa
 		target = 12
 	}
 	rep.FinalTarget = target
+	targetGenuine := cfg.TargetGenuineCoreExpanded
+	if targetGenuine < 0 {
+		targetGenuine = 0
+	}
+	if targetGenuine > target {
+		targetGenuine = target
+	}
+	rep.FinalGenuineCoreExpandedTarget = targetGenuine
 	minShapes := cfg.MinDistinctBoardShapes
 	if minShapes <= 0 {
 		minShapes = 3
@@ -187,6 +211,20 @@ func SelectBoardMixShortlist(pool []BoardMixAccepted, cfg BoardMixConfig) ([]Boa
 		return n
 	}
 
+	takeCandidate := func(c BoardMixAccepted) {
+		selected = append(selected, c)
+		usedFam[c.FamilyID] = true
+		shape := string(c.BoardUtil.BoardShapeClass)
+		inv := string(c.InventoryClass)
+		shapeCount[shape]++
+		invCount[inv]++
+		if c.BoardUtil.OuterZoneRelevant {
+			outerCount++
+		}
+		decQuota(shapeNeed, shape)
+		decQuota(invNeed, inv)
+	}
+
 	canTake := func(c BoardMixAccepted, maxShapeCount, maxInvCount int, relaxOuter bool) (bool, string) {
 		shape := string(c.BoardUtil.BoardShapeClass)
 		inv := string(c.InventoryClass)
@@ -226,20 +264,38 @@ func SelectBoardMixShortlist(pool []BoardMixAccepted, cfg BoardMixConfig) ([]Boa
 				rep.SelectionSkipCounters[reason]++
 				continue
 			}
-			selected = append(selected, c)
-			usedFam[c.FamilyID] = true
-			shape := string(c.BoardUtil.BoardShapeClass)
-			inv := string(c.InventoryClass)
-			shapeCount[shape]++
-			invCount[inv]++
-			if c.BoardUtil.OuterZoneRelevant {
-				outerCount++
-			}
-			decQuota(shapeNeed, shape)
-			decQuota(invNeed, inv)
+			takeCandidate(c)
 			return true
 		}
 		return false
+	}
+
+	// RUSH-010.5.1: reserve genuine core-expanded slots first (unique FamilyId).
+	if targetGenuine > 0 {
+		rep.HardConstraints = append(rep.HardConstraints,
+			fmt.Sprintf("TargetGenuineCoreExpanded=%d (unique FamilyId)", targetGenuine))
+		rep.SoftConstraints = append(rep.SoftConstraints,
+			"Genuine ranking: lower Best6x6Containment, higher DepRows/Cols, higher OuterDependencyMoves")
+		genuineIdx := []int{}
+		for i, c := range pool {
+			if IsGenuineCoreExpanded(c) {
+				genuineIdx = append(genuineIdx, i)
+			}
+		}
+		sort.SliceStable(genuineIdx, func(i, j int) bool {
+			return compareGenuineCoreExpanded(pool[genuineIdx[i]], pool[genuineIdx[j]]) < 0
+		})
+		for _, i := range genuineIdx {
+			if len(selected) >= targetGenuine {
+				break
+			}
+			c := pool[i]
+			if usedFam[c.FamilyID] {
+				continue
+			}
+			takeCandidate(c)
+		}
+		noteGenuineMonoculture(&rep, selected)
 	}
 
 	inventoryOrder := []InventoryClass{InvNo1x1, InvOne1x1, InvTwo1x1, InvThree1x1}
@@ -359,6 +415,26 @@ func SelectBoardMixShortlist(pool []BoardMixAccepted, cfg BoardMixConfig) ([]Boa
 		if c.BoardUtil.OuterZoneRelevant {
 			rep.FinalOuterZoneRelevant++
 		}
+		cls := string(c.CoreExpansionClass)
+		if cls == "" {
+			cls = string(CoreExpNone)
+		}
+		if rep.FinalCoreExpansionClass == nil {
+			rep.FinalCoreExpansionClass = map[string]int{}
+		}
+		rep.FinalCoreExpansionClass[cls]++
+		if c.CoreSpace != nil {
+			rep.FinalContainmentValues = append(rep.FinalContainmentValues, c.CoreSpace.Best6x6MeaningfulContainmentRatio)
+			if !c.CoreSpace.CanMeaningfulStructureFitInAny6x6 {
+				rep.FinalFits6x6False++
+			}
+			if c.CoreSpace.IsolatedAddon1x1Suspect {
+				rep.FinalIsolated1x1Suspect++
+			}
+		}
+		if IsGenuineCoreExpanded(c) {
+			rep.FinalGenuineCoreExpanded++
+		}
 	}
 	rep.DistinctBoardShapes = len(rep.FinalShapeDist)
 	rep.FinalAccepted = len(selected)
@@ -374,6 +450,15 @@ func SelectBoardMixShortlist(pool []BoardMixAccepted, cfg BoardMixConfig) ([]Boa
 			fmt.Sprintf("FinalTarget: need %d, got %d", rep.FinalTarget, rep.FinalAccepted))
 		rep.DiversityUnmetReasons = append(rep.DiversityUnmetReasons,
 			fmt.Sprintf("FinalAccepted %d < FinalTarget %d", rep.FinalAccepted, rep.FinalTarget))
+	}
+	if targetGenuine > 0 &&
+		rep.PoolGenuineCoreExpandedUniqueFamilies >= targetGenuine &&
+		rep.FinalGenuineCoreExpanded < targetGenuine {
+		rep.DiversityTargetUnmet = true
+		msg := fmt.Sprintf("TargetGenuineCoreExpanded: need %d, got %d (pool unique genuine families %d)",
+			targetGenuine, rep.FinalGenuineCoreExpanded, rep.PoolGenuineCoreExpandedUniqueFamilies)
+		rep.UnmetRequirements = append(rep.UnmetRequirements, msg)
+		rep.DiversityUnmetReasons = append(rep.DiversityUnmetReasons, msg)
 	}
 	if rep.DistinctBoardShapes < minShapes && countPositiveKeys(rep.PoolShapeDist) >= minShapes {
 		rep.DiversityTargetUnmet = true
@@ -500,6 +585,98 @@ func SelectBoardMixShortlist(pool []BoardMixAccepted, cfg BoardMixConfig) ([]Boa
 		finalizeBoardMixCandidate(&selected[i], id)
 	}
 	return selected, rep
+}
+
+// IsGenuineCoreExpanded reports whether a candidate is a non-decorative structural core expansion
+// whose meaningful structure does not fit in any 6×6 window and is not an isolated-1x1 suspect.
+func IsGenuineCoreExpanded(c BoardMixAccepted) bool {
+	if c.CoreExpansionClass == "" || c.CoreExpansionClass == CoreExpNone {
+		return false
+	}
+	if c.CoreSpace == nil {
+		return false
+	}
+	if c.CoreSpace.CanMeaningfulStructureFitInAny6x6 {
+		return false
+	}
+	if c.CoreSpace.IsolatedAddon1x1Suspect {
+		return false
+	}
+	return true
+}
+
+// compareGenuineCoreExpanded returns <0 if a should rank before b (preferred).
+func compareGenuineCoreExpanded(a, b BoardMixAccepted) int {
+	ra, rb := 1.0, 1.0
+	da, db := 0, 0
+	oa, ob := 0, 0
+	if a.CoreSpace != nil {
+		ra = a.CoreSpace.Best6x6MeaningfulContainmentRatio
+		da = a.CoreSpace.DependencyColumnsUsed + a.CoreSpace.DependencyRowsUsed
+		oa = a.CoreSpace.OuterDependencyMoves
+	}
+	if b.CoreSpace != nil {
+		rb = b.CoreSpace.Best6x6MeaningfulContainmentRatio
+		db = b.CoreSpace.DependencyColumnsUsed + b.CoreSpace.DependencyRowsUsed
+		ob = b.CoreSpace.OuterDependencyMoves
+	}
+	if ra != rb {
+		if ra < rb {
+			return -1
+		}
+		return 1
+	}
+	if da != db {
+		if da > db {
+			return -1
+		}
+		return 1
+	}
+	if oa != ob {
+		if oa > ob {
+			return -1
+		}
+		return 1
+	}
+	if a.FamilyID != b.FamilyID {
+		if a.FamilyID < b.FamilyID {
+			return -1
+		}
+		return 1
+	}
+	return 0
+}
+
+func noteGenuineMonoculture(rep *BoardMixSelectReport, selected []BoardMixAccepted) {
+	classes, shapes, invs := map[string]int{}, map[string]int{}, map[string]int{}
+	n := 0
+	for _, c := range selected {
+		if !IsGenuineCoreExpanded(c) {
+			continue
+		}
+		n++
+		classes[string(c.CoreExpansionClass)]++
+		shapes[string(c.BoardUtil.BoardShapeClass)]++
+		invs[string(c.InventoryClass)]++
+	}
+	if n == 0 {
+		return
+	}
+	if len(classes) == 1 && len(shapes) == 1 && len(invs) == 1 {
+		var cls, shape, inv string
+		for k := range classes {
+			cls = k
+		}
+		for k := range shapes {
+			shape = k
+		}
+		for k := range invs {
+			inv = k
+		}
+		rep.GenuineCoreExpandedMonocultureNote = fmt.Sprintf(
+			"All %d reserved genuine-expanded slots are %s / %s / %s — adequate for human validation of the visual 6x6-in-7x8 pattern, but NOT sufficient template diversity for a mass factory (defer broader CoreExpansion templates to a later milestone).",
+			n, cls, shape, inv)
+	}
 }
 
 func countPositiveKeys(m map[string]int) int {
