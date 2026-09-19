@@ -24,11 +24,29 @@ func main() {
 	validate := flag.String("validate-batch", "", "validate Unity BatchManifest/Candidates/Solutions contract")
 	calibrate := flag.String("calibrate-core-space", "", "calibrate 6x6 meaningful-space metrics on existing batch dir (no generation)")
 	calibrateTargetDepth := flag.String("calibrate-target-depth", "", "analyze target depth and vertical dependencies in an existing batch (no generation)")
+	analyzeSpatial := flag.String("analyze-spatial-dependencies", "", "write RUSH01041/RUSH0105 spatial dependency reports to this directory (no generation)")
 	reselect := flag.String("reselect-existing", "", "reselect final 12 from checkpoint pool (no generation)")
 	flag.Parse()
 
 	if *buildInfo {
 		fmt.Println(rush.BoardMixVersion)
+		return
+	}
+
+	if *analyzeSpatial != "" {
+		report, err := rush.AnalyzeSpatialDependencies(
+			"output/RUSH01041_NativeFamilyCoveragePilot_001",
+			"output/RUSH0105_NativeCoreExpansionPilot_001",
+			*analyzeSpatial,
+			rush.DefaultCargoFlowSolveBudget(),
+		)
+		if err != nil {
+			log.Fatal(err)
+		}
+		b, _ := rush.MarshalSpatialReport(report)
+		fmt.Println(string(b))
+		fmt.Printf("Wrote %s\n", filepath.Join(*analyzeSpatial, "SpatialDependencyAnalysisReport.json"))
+		fmt.Printf("Wrote %s\n", filepath.Join(*analyzeSpatial, "SpatialDependencyAnalysisReport.md"))
 		return
 	}
 
