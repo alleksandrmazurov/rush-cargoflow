@@ -251,6 +251,13 @@ type BoardSpaceJSON struct {
 	CoreOffsetX                  int     `json:"coreOffsetX"`
 	CoreOffsetY                  int     `json:"coreOffsetY"`
 	EmbeddingVariant             string  `json:"embeddingVariant,omitempty"`
+	// RUSH-010.5 meaningful-space metrics (optional; old importers ignore).
+	Best6x6MeaningfulContainmentRatio float64 `json:"best6x6MeaningfulContainmentRatio,omitempty"`
+	CanMeaningfulStructureFitInAny6x6 bool    `json:"canMeaningfulStructureFitInAny6x6,omitempty"`
+	DependencyRowsUsed                int     `json:"dependencyRowsUsed,omitempty"`
+	DependencyColumnsUsed             int     `json:"dependencyColumnsUsed,omitempty"`
+	OuterDependencyPieceCount         int     `json:"outerDependencyPieceCount,omitempty"`
+	IsolatedAddon1x1Suspect           bool    `json:"isolatedAddon1x1Suspect,omitempty"`
 }
 
 func (m BoardUtilizationMetrics) ToJSON(embed EmbeddingVariant) *BoardSpaceJSON {

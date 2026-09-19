@@ -15,17 +15,40 @@ import (
 )
 
 func main() {
-	configPath := flag.String("config", "configs/RUSH01041_NativeFamilyCoveragePilot_001.json", "boardmix config JSON")
+	configPath := flag.String("config", "configs/RUSH0105_NativeCoreExpansionPilot_001.json", "boardmix config JSON")
 	output := flag.String("output", "", "override output directory")
 	resume := flag.Bool("resume", true, "resume from checkpoint if present")
 	smoke := flag.Bool("smoke", false, "tiny smoke: few bases, short budget (~30-60s)")
 	buildInfo := flag.Bool("version", false, "print version and exit")
 	reexport := flag.String("reexport-existing", "", "re-export Unity batch from existing dir (no regeneration)")
 	validate := flag.String("validate-batch", "", "validate Unity BatchManifest/Candidates/Solutions contract")
+	calibrate := flag.String("calibrate-core-space", "", "calibrate 6x6 meaningful-space metrics on existing batch dir (no generation)")
 	flag.Parse()
 
 	if *buildInfo {
 		fmt.Println(rush.BoardMixVersion)
+		return
+	}
+
+	if *calibrate != "" {
+		budget := rush.DefaultCargoFlowSolveBudget()
+		rows, summary, err := rush.CalibrateCoreSpaceOnBatch(*calibrate, budget)
+		if err != nil {
+			log.Fatal(err)
+		}
+		rep := map[string]interface{}{
+			"batchDir": *calibrate,
+			"rows":     rows,
+			"summary":  summary,
+		}
+		outPath := filepath.Join(*calibrate, "CoreSpaceCalibrationReport.json")
+		if err := rush.WriteJSONFile(outPath, rep); err != nil {
+			log.Printf("warn: could not write %s: %v", outPath, err)
+		} else {
+			fmt.Printf("Wrote %s\n", outPath)
+		}
+		b, _ := json.MarshalIndent(rep, "", "  ")
+		fmt.Println(string(b))
 		return
 	}
 
@@ -76,17 +99,22 @@ func main() {
 	}
 
 	if *smoke {
-		cfg.OutputDir = "output/RUSH0104_NativeSmoke"
+		cfg.OutputDir = "output/RUSH0105_CoreExpandSmoke"
 		cfg.CheckpointPath = filepath.Join(cfg.OutputDir, "checkpoint.json")
 		cfg.TargetAccepted = 4
 		cfg.BaseCount = 4
-		cfg.MaxPoolSize = 12
-		cfg.MaxAttempts = 20
+		cfg.MaxPoolSize = 16
+		cfg.MaxAttempts = 24
 		cfg.TryOuterAugment = true
 		cfg.TryNativeAugment = true
+		cfg.TryCoreExpansion = true
 		cfg.TryInventoryEnrichment = false
 		cfg.MaxNativeAcceptedPerEmbed = 1
-		cfg.MaxNativeProposalsPerEmbed = 6
+		cfg.MaxNativeProposalsPerEmbed = 4
+		cfg.MaxCoreExpansionAccepted = 1
+		cfg.MaxCoreExpansionProposals = 6
+		cfg.CoreSpaceFitThreshold = rush.Default6x6FitThreshold
+		cfg.RequireCoreNotFitIn6x6 = false
 		cfg.SolveTimeLimitMs = 2500
 		cfg.MaxVisitedStates = 400_000
 		cfg.MinDistinctBoardShapes = 2
@@ -110,14 +138,14 @@ func main() {
 		cfg.FamilyFirstExploration = true
 		cfg.PerFamilyPoolCap = 2
 		cfg.MinUniqueFamiliesInPool = 3
-		fmt.Println("Cargo Flow Native SMOKE (RUSH-010.4.2)")
+		fmt.Println("Cargo Flow Core Expansion SMOKE (RUSH-010.5)")
 	} else {
-		fmt.Println("Cargo Flow Boardmix (RUSH-010.4.2 Unity export contract)")
-		fmt.Println("Ctrl+C safe; --resume continues. Use -reexport-existing / -validate-batch for export fixes.")
+		fmt.Println("Cargo Flow Boardmix (RUSH-010.5 Native Core Expansion)")
+		fmt.Println("Ctrl+C safe; --resume continues. Use -calibrate-core-space / -reexport-existing / -validate-batch.")
 	}
 
-	fmt.Printf("config=%s output=%s resume=%v workers=%d target=%d maxPool=%d\n",
-		*configPath, cfg.OutputDir, cfg.Resume, cfg.Workers, cfg.TargetAccepted, cfg.MaxPoolSize)
+	fmt.Printf("config=%s output=%s resume=%v workers=%d target=%d maxPool=%d coreExpand=%v\n",
+		*configPath, cfg.OutputDir, cfg.Resume, cfg.Workers, cfg.TargetAccepted, cfg.MaxPoolSize, cfg.TryCoreExpansion)
 
 	cancel := make(chan struct{})
 	sigCh := make(chan os.Signal, 1)

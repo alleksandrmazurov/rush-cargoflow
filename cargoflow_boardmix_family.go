@@ -79,12 +79,16 @@ func buildBoardMixJobs(bases []EnrichmentBase, embeds []EmbeddingVariant, cfg Bo
 	pass1 := map[string]bool{}
 	jobs := []boardMixJob{}
 
-	// Pass 1: each family gets one plain (+ native if enabled) on primary embed.
+	// Pass 1: each family gets one plain (+ native/corexpand if enabled) on primary embed.
 	for _, base := range bases {
 		kPlain := boardMixJobKey(base.CandidateID, primary, "plain")
 		jobs = append(jobs, boardMixJob{base: base, embed: primary, mode: "plain", pass: 1})
 		pass1[kPlain] = true
-		if cfg.TryNativeAugment {
+		if cfg.TryCoreExpansion {
+			kCore := boardMixJobKey(base.CandidateID, primary, "corexpand")
+			jobs = append(jobs, boardMixJob{base: base, embed: primary, mode: "corexpand", pass: 1})
+			pass1[kCore] = true
+		} else if cfg.TryNativeAugment {
 			kNat := boardMixJobKey(base.CandidateID, primary, "native")
 			jobs = append(jobs, boardMixJob{base: base, embed: primary, mode: "native", pass: 1})
 			pass1[kNat] = true
@@ -117,6 +121,9 @@ func boardMixModes(cfg BoardMixConfig) []string {
 	}
 	if cfg.TryNativeAugment {
 		modes = append(modes, "native")
+	}
+	if cfg.TryCoreExpansion {
+		modes = append(modes, "corexpand")
 	}
 	return modes
 }

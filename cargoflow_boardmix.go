@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-const BoardMixVersion = "boardmix-v1.4.3"
+const BoardMixVersion = "boardmix-v1.5.0"
 
 // BoardMixConfig drives RUSH-010.3 / 010.4 / 010.4.1 board-space diversity generation.
 type BoardMixConfig struct {
@@ -30,9 +30,14 @@ type BoardMixConfig struct {
 	MaxVisitedStates           int            `json:"maxVisitedStates"`
 	TryOuterAugment            bool           `json:"tryOuterAugment"`
 	TryNativeAugment           bool           `json:"tryNativeAugment"`
+	TryCoreExpansion           bool           `json:"tryCoreExpansion"`
 	TryInventoryEnrichment     bool           `json:"tryInventoryEnrichment"`
 	MaxNativeAcceptedPerEmbed  int            `json:"maxNativeAcceptedPerEmbed"`
 	MaxNativeProposalsPerEmbed int            `json:"maxNativeProposalsPerEmbed"`
+	MaxCoreExpansionAccepted   int            `json:"maxCoreExpansionAccepted"`
+	MaxCoreExpansionProposals  int            `json:"maxCoreExpansionProposals"`
+	CoreSpaceFitThreshold      float64        `json:"coreSpaceFitThreshold"`
+	RequireCoreNotFitIn6x6     bool           `json:"requireCoreNotFitIn6x6"`
 	FamilyFirstExploration     bool           `json:"familyFirstExploration"`
 	PerFamilyPoolCap           int            `json:"perFamilyPoolCap"`
 	MinUniqueFamiliesInPool    int            `json:"minUniqueFamiliesInPool"`
@@ -67,9 +72,14 @@ func DefaultBoardMixConfig() BoardMixConfig {
 		MaxVisitedStates:       2_000_000,
 		TryOuterAugment:            true,
 		TryNativeAugment:           true,
+		TryCoreExpansion:           false, // enabled by RUSH-010.5 configs
 		TryInventoryEnrichment:     true,
 		MaxNativeAcceptedPerEmbed:  2,
 		MaxNativeProposalsPerEmbed: 10,
+		MaxCoreExpansionAccepted:   2,
+		MaxCoreExpansionProposals:  12,
+		CoreSpaceFitThreshold:      Default6x6FitThreshold,
+		RequireCoreNotFitIn6x6:     false,
 		FamilyFirstExploration:     true,
 		PerFamilyPoolCap:           4,
 		MinUniqueFamiliesInPool:    12,
@@ -150,6 +160,15 @@ func LoadBoardMixConfigJSON(path string) (BoardMixConfig, error) {
 	if cfg.MaxNativeProposalsPerEmbed <= 0 {
 		cfg.MaxNativeProposalsPerEmbed = 10
 	}
+	if cfg.MaxCoreExpansionAccepted <= 0 {
+		cfg.MaxCoreExpansionAccepted = 2
+	}
+	if cfg.MaxCoreExpansionProposals <= 0 {
+		cfg.MaxCoreExpansionProposals = 12
+	}
+	if cfg.CoreSpaceFitThreshold <= 0 {
+		cfg.CoreSpaceFitThreshold = Default6x6FitThreshold
+	}
 	if cfg.PerFamilyPoolCap <= 0 {
 		cfg.PerFamilyPoolCap = 4
 	}
@@ -209,7 +228,10 @@ type BoardMixAccepted struct {
 	SelectionBand            string                  `json:"selectionBand"`
 	Augmented                bool                    `json:"augmented"`
 	AugmentationClass        AugmentationClass       `json:"augmentationClass,omitempty"`
+	CoreExpansionClass       CoreExpansionClass      `json:"coreExpansionClass,omitempty"`
+	CoreSpace                *CoreSpaceMetrics       `json:"coreSpace,omitempty"`
 	NativeMeta               *NativeAugmentMeta      `json:"nativeAugment,omitempty"`
+	CoreExpansionMeta        *CoreExpansionMeta      `json:"coreExpansion,omitempty"`
 	NativeVariantFingerprint string                  `json:"nativeVariantFingerprint,omitempty"`
 	ReplayVerified           bool                    `json:"replayVerified"`
 	Level                    *LevelJSON              `json:"level,omitempty"`
@@ -492,6 +514,12 @@ func RunBoardMixPilot(cfg BoardMixConfig, cancel <-chan struct{}) (BoardMixResul
 					mu.Lock()
 					out.Stats.AugmentationsProposed += len(cands)
 					mu.Unlock()
+				case "corexpand":
+					cands, reason, cached = evaluateCoreExpansionJob(j.base, j.embed, budget, cache, dbHash, cfg)
+					augProposed = len(cands)
+					mu.Lock()
+					out.Stats.AugmentationsProposed += len(cands)
+					mu.Unlock()
 				default:
 					cand, r, c := evaluateBoardMixJob(j.base, j.embed, j.mode == "outer1", budget, cache, dbHash)
 					reason, cached = r, c
@@ -501,7 +529,7 @@ func RunBoardMixPilot(cfg BoardMixConfig, cancel <-chan struct{}) (BoardMixResul
 						} else {
 							cand.AugmentationClass = AugNone
 						}
-						// Metadata invariant: FamilyID must match source base.
+						attachCoreSpaceMetrics(cand, budget, cfg.CoreSpaceFitThreshold)
 						cand.FamilyID = j.base.FamilyID
 						cand.BaseCandidateID = j.base.CandidateID
 						cands = []*BoardMixAccepted{cand}
@@ -956,6 +984,114 @@ func evaluateNativeBoardMixJob(base EnrichmentBase, embed EmbeddingVariant, budg
 	if len(out) == 0 {
 		return nil, "NativeAugmentFiltered", cached
 	}
+	for _, c := range out {
+		attachCoreSpaceMetrics(c, budget, cfg.CoreSpaceFitThreshold)
+	}
+	return out, "", cached
+}
+
+func attachCoreSpaceMetrics(c *BoardMixAccepted, budget SolveBudget, fitThreshold float64) {
+	if c == nil || c.Board == nil {
+		return
+	}
+	sol := c.Solution
+	if !sol.Solvable {
+		sol = c.Board.SolveWithBudget(budget)
+		if !sol.Solvable {
+			return
+		}
+		c.Solution = sol
+	}
+	cs := ComputeCoreSpaceMetrics(c.Board, c.OffsetX, c.OffsetY, sol, budget)
+	ApplyCoreSpaceThreshold(&cs, fitThreshold)
+	c.CoreSpace = &cs
+	if c.Level != nil && c.Level.BoardSpace != nil {
+		c.Level.BoardSpace.Best6x6MeaningfulContainmentRatio = cs.Best6x6MeaningfulContainmentRatio
+		c.Level.BoardSpace.CanMeaningfulStructureFitInAny6x6 = cs.CanMeaningfulStructureFitInAny6x6
+		c.Level.BoardSpace.DependencyRowsUsed = cs.DependencyRowsUsed
+		c.Level.BoardSpace.DependencyColumnsUsed = cs.DependencyColumnsUsed
+		c.Level.BoardSpace.OuterDependencyPieceCount = cs.OuterDependencyPieceCount
+		c.Level.BoardSpace.IsolatedAddon1x1Suspect = cs.IsolatedAddon1x1Suspect
+	}
+}
+
+// evaluateCoreExpansionJob applies dependency-preserving structural expansion of the Rush core.
+func evaluateCoreExpansionJob(base EnrichmentBase, embed EmbeddingVariant, budget SolveBudget, cache *SolveCache, dbHash string, cfg BoardMixConfig) ([]*BoardMixAccepted, string, bool) {
+	plain, reason, cached := evaluateBoardMixJob(base, embed, false, budget, cache, dbHash)
+	if plain == nil || plain.Board == nil {
+		if reason == "" {
+			reason = "CoreExpandBaseFailed"
+		}
+		return nil, reason, cached
+	}
+	ecfg := DefaultCoreExpansionConfig()
+	ecfg.MaxAcceptedPerBoard = cfg.MaxCoreExpansionAccepted
+	ecfg.MaxProposalsPerBoard = cfg.MaxCoreExpansionProposals
+	ecfg.FitThreshold = cfg.CoreSpaceFitThreshold
+	ecfg.RequireNotFitIn6x6 = cfg.RequireCoreNotFitIn6x6
+	cands, rej := GenerateCoreExpansionCandidates(plain.Board, plain.OffsetX, plain.OffsetY, plain.OptimalGestures, budget, ecfg)
+	if len(cands) == 0 {
+		top, topN := "CoreExpandFailed", 0
+		for k, v := range rej {
+			if v > topN {
+				top, topN = k, v
+			}
+		}
+		return nil, top, cached
+	}
+	out := []*BoardMixAccepted{}
+	for _, c := range cands {
+		util := ComputeBoardUtilization(c.Board, plain.OffsetX, plain.OffsetY, &c.Sol)
+		inv := BuildCargoInventorySignature(c.Board)
+		level, err := LevelJSONFromBoard(c.Board, "pending", "RushDatabaseCoreExpansion")
+		if err != nil {
+			continue
+		}
+		level.Transplant = plain.Level.Transplant
+		if level.Transplant != nil {
+			cp := *level.Transplant
+			cp.EmbeddingVariant = string(embed)
+			cp.OffsetX = plain.OffsetX
+			cp.OffsetY = plain.OffsetY
+			cp.TransformRotation = TransformRotationCW90
+			level.Transplant = &cp
+		}
+		level.BoardSpace = util.ToJSON(embed)
+		meta := c.Meta
+		cs := meta.CoreSpace
+		level.BoardSpace.Best6x6MeaningfulContainmentRatio = cs.Best6x6MeaningfulContainmentRatio
+		level.BoardSpace.CanMeaningfulStructureFitInAny6x6 = cs.CanMeaningfulStructureFitInAny6x6
+		level.BoardSpace.DependencyRowsUsed = cs.DependencyRowsUsed
+		level.BoardSpace.DependencyColumnsUsed = cs.DependencyColumnsUsed
+		level.BoardSpace.OuterDependencyPieceCount = cs.OuterDependencyPieceCount
+		level.BoardSpace.IsolatedAddon1x1Suspect = cs.IsolatedAddon1x1Suspect
+		out = append(out, &BoardMixAccepted{
+			BaseCandidateID:          plain.BaseCandidateID,
+			FamilyID:                 plain.FamilyID,
+			SourcePuzzleID:           plain.SourcePuzzleID,
+			Embedding:                embed,
+			OffsetX:                  plain.OffsetX,
+			OffsetY:                  plain.OffsetY,
+			InventoryClass:           inv.InventoryClass,
+			BoardUtil:                util,
+			OptimalGestures:          c.Sol.NumMoves,
+			SelectionBand:            plain.SelectionBand,
+			Augmented:                true,
+			AugmentationClass:        AugmentationClass(meta.ExpansionClass),
+			CoreExpansionClass:       meta.ExpansionClass,
+			CoreSpace:                &cs,
+			CoreExpansionMeta:        &meta,
+			NativeVariantFingerprint: fmt.Sprintf("corexpand|%s|%d", meta.ExpansionClass, c.Sol.NumMoves),
+			ReplayVerified:           true,
+			Level:                    level,
+			Board:                    c.Board,
+			Solution:                 c.Sol,
+			ASCIIPreview:             asciiCargoBoard(c.Board),
+		})
+	}
+	if len(out) == 0 {
+		return nil, "CoreExpandFiltered", cached
+	}
 	return out, "", cached
 }
 
@@ -977,6 +1113,9 @@ func finalizeBoardMixCandidate(c *BoardMixAccepted, id string) {
 		c.Level.Enrichment.BaseFamilyId = c.FamilyID
 		c.Level.Enrichment.AugmentationClass = string(c.AugmentationClass)
 		c.Level.Enrichment.NativeVariantFingerprint = c.NativeVariantFingerprint
+		if c.CoreExpansionClass != "" && c.CoreExpansionClass != CoreExpNone {
+			c.Level.Enrichment.CoreExpansionClass = string(c.CoreExpansionClass)
+		}
 		if c.NativeMeta != nil {
 			c.Level.Enrichment.BaseOptimal = c.NativeMeta.BaseOptimal
 			c.Level.Enrichment.EnrichedOptimal = c.NativeMeta.NativeOptimal
@@ -986,6 +1125,12 @@ func finalizeBoardMixCandidate(c *BoardMixAccepted, id string) {
 			c.Level.Enrichment.Added1x3Count = c.NativeMeta.Added1x3Count
 			c.Level.Enrichment.AddedStaticCount = c.NativeMeta.AddedStaticCount
 			c.Level.Enrichment.OuterZoneEssential = c.NativeMeta.OuterZoneEssential
+		}
+		if c.CoreExpansionMeta != nil {
+			c.Level.Enrichment.BaseOptimal = c.CoreExpansionMeta.BaseOptimal
+			c.Level.Enrichment.EnrichedOptimal = c.CoreExpansionMeta.NativeOptimal
+			c.Level.Enrichment.OptimalDelta = c.CoreExpansionMeta.OptimalDelta
+			c.Level.Enrichment.CoreExpansionClass = string(c.CoreExpansionMeta.ExpansionClass)
 		}
 		inv := BuildCargoInventorySignature(c.Board)
 		c.Level.Enrichment.InventorySignature = inv.Signature

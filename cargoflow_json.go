@@ -65,6 +65,8 @@ type EnrichmentJSON struct {
 	Added1x3Count            int    `json:"added1x3Count,omitempty"`
 	AddedStaticCount         int    `json:"addedStaticCount,omitempty"`
 	OuterZoneEssential       bool   `json:"outerZoneEssential,omitempty"`
+	// RUSH-010.5 structural core expansion.
+	CoreExpansionClass string `json:"coreExpansionClass,omitempty"`
 }
 
 // TransplantJSON records Rush-database provenance for RUSH-008 candidates.
