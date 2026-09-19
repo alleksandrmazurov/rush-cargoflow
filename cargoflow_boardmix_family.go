@@ -66,7 +66,7 @@ func buildBoardMixJobs(bases []EnrichmentBase, embeds []EmbeddingVariant, cfg Bo
 	if !familyFirst {
 		jobs := []boardMixJob{}
 		for _, base := range bases {
-			for _, emb := range embeds {
+			for _, emb := range embeddingsForSource(base, embeds, cfg.SourceAwareEmbeddingRouting) {
 				for _, mode := range modes {
 					jobs = append(jobs, boardMixJob{base: base, embed: emb, mode: mode, pass: 2})
 				}
@@ -75,12 +75,13 @@ func buildBoardMixJobs(bases []EnrichmentBase, embeds []EmbeddingVariant, cfg Bo
 		return jobs
 	}
 
-	primary := embeds[0]
 	pass1 := map[string]bool{}
 	jobs := []boardMixJob{}
 
 	// Pass 1: each family gets one plain (+ native/corexpand if enabled) on primary embed.
 	for _, base := range bases {
+		baseEmbeds := embeddingsForSource(base, embeds, cfg.SourceAwareEmbeddingRouting)
+		primary := baseEmbeds[0]
 		kPlain := boardMixJobKey(base.CandidateID, primary, "plain")
 		jobs = append(jobs, boardMixJob{base: base, embed: primary, mode: "plain", pass: 1})
 		pass1[kPlain] = true
@@ -105,7 +106,7 @@ func buildBoardMixJobs(bases []EnrichmentBase, embeds []EmbeddingVariant, cfg Bo
 
 	// Pass 2: remaining family×embed×mode combinations.
 	for _, base := range bases {
-		for _, emb := range embeds {
+		for _, emb := range embeddingsForSource(base, embeds, cfg.SourceAwareEmbeddingRouting) {
 			for _, mode := range modes {
 				k := boardMixJobKey(base.CandidateID, emb, mode)
 				if pass1[k] {
@@ -116,6 +117,40 @@ func buildBoardMixJobs(bases []EnrichmentBase, embeds []EmbeddingVariant, cfg Bo
 		}
 	}
 	return jobs
+}
+
+func embeddingsForSource(base EnrichmentBase, configured []EmbeddingVariant, sourceAware bool) []EmbeddingVariant {
+	out := append([]EmbeddingVariant{}, configured...)
+	if !sourceAware || len(out) < 2 || base.Level == nil || base.Level.Transplant == nil {
+		return out
+	}
+	col, err := SourceTargetLeftColumn(base.Level.Transplant.OriginalBoard)
+	if err != nil {
+		return out
+	}
+	preferred := []EmbeddingVariant{EmbedFlushBottom, EmbedShiftDown1, EmbedFlushTop}
+	if col >= 3 {
+		preferred = []EmbeddingVariant{EmbedShiftDown1, EmbedFlushTop, EmbedFlushBottom}
+	}
+	rank := map[EmbeddingVariant]int{}
+	for i, embedding := range preferred {
+		rank[embedding] = i
+	}
+	sort.SliceStable(out, func(i, j int) bool {
+		ri, iOK := rank[out[i]]
+		rj, jOK := rank[out[j]]
+		switch {
+		case iOK && jOK:
+			return ri < rj
+		case iOK:
+			return true
+		case jOK:
+			return false
+		default:
+			return false
+		}
+	})
+	return out
 }
 
 func boardMixModes(cfg BoardMixConfig) []string {

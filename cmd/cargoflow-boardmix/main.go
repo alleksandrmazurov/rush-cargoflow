@@ -15,7 +15,7 @@ import (
 )
 
 func main() {
-	configPath := flag.String("config", "configs/RUSH0107_CrossRegionCausalPilot_001.json", "boardmix config JSON")
+	configPath := flag.String("config", "configs/RUSH01071_DeepTargetPilot_001.json", "boardmix config JSON")
 	output := flag.String("output", "", "override output directory")
 	resume := flag.Bool("resume", true, "resume from checkpoint if present")
 	smoke := flag.Bool("smoke", false, "tiny smoke: few bases, short budget (~30-60s)")
@@ -25,6 +25,7 @@ func main() {
 	calibrate := flag.String("calibrate-core-space", "", "calibrate 6x6 meaningful-space metrics on existing batch dir (no generation)")
 	calibrateTargetDepth := flag.String("calibrate-target-depth", "", "analyze target depth and vertical dependencies in an existing batch (no generation)")
 	analyzeSpatial := flag.String("analyze-spatial-dependencies", "", "write RUSH01041/RUSH0105 spatial dependency reports to this directory (no generation)")
+	analyzeDeepTarget := flag.String("analyze-deep-target-routing", "", "write RUSH0107 source-column/embedding funnel reports to this directory")
 	reselect := flag.String("reselect-existing", "", "reselect final 12 from checkpoint pool (no generation)")
 	flag.Parse()
 
@@ -47,6 +48,24 @@ func main() {
 		fmt.Println(string(b))
 		fmt.Printf("Wrote %s\n", filepath.Join(*analyzeSpatial, "SpatialDependencyAnalysisReport.json"))
 		fmt.Printf("Wrote %s\n", filepath.Join(*analyzeSpatial, "SpatialDependencyAnalysisReport.md"))
+		return
+	}
+
+	if *analyzeDeepTarget != "" {
+		report, err := rush.AnalyzeDeepTargetRouting(
+			"output/RUSH009_CuratedShortlist_001",
+			"output/RUSH0107_CrossRegionCausalPilot_001/checkpoint.json",
+			"data/external/rush/rush.txt",
+			*analyzeDeepTarget,
+			rush.DefaultCargoFlowSolveBudget(),
+		)
+		if err != nil {
+			log.Fatal(err)
+		}
+		b, _ := json.MarshalIndent(report, "", "  ")
+		fmt.Println(string(b))
+		fmt.Printf("Wrote %s\n", filepath.Join(*analyzeDeepTarget, "DeepTargetRoutingAnalysis.json"))
+		fmt.Printf("Wrote %s\n", filepath.Join(*analyzeDeepTarget, "DeepTargetRoutingAnalysis.md"))
 		return
 	}
 
@@ -174,10 +193,14 @@ func main() {
 	}
 
 	if *smoke {
-		cfg.OutputDir = "output/RUSH0107_CausalSmoke"
+		cfg.OutputDir = "output/RUSH01071_DeepTargetSmoke"
 		cfg.CheckpointPath = filepath.Join(cfg.OutputDir, "checkpoint.json")
 		cfg.TargetAccepted = 2
 		cfg.TargetCausalExpanded = 1
+		cfg.SourceAwareEmbeddingRouting = true
+		cfg.TargetDeepRows5Plus = 1
+		cfg.TargetBottomRow6 = 1
+		cfg.TargetTopRowQuotas = map[string]int{"6": 1, "4": 1}
 		cfg.TargetGenuineCoreExpanded = 0
 		cfg.BaseCount = 2
 		cfg.MaxPoolSize = 8
@@ -197,7 +220,11 @@ func main() {
 		cfg.MinOuterZoneRelevant = 1
 		cfg.MaxBoardShapeFraction = 1.0
 		cfg.MaxInventoryClassFraction = 1.0
-		cfg.Embeddings = []string{string(rush.EmbedFlushTop)}
+		cfg.Embeddings = []string{
+			string(rush.EmbedFlushTop),
+			string(rush.EmbedShiftDown1),
+			string(rush.EmbedFlushBottom),
+		}
 		cfg.ShapeQuotas = map[string]int{}
 		cfg.InventoryQuotas = map[string]int{}
 		cfg.CheckpointEvery = 1
@@ -206,9 +233,9 @@ func main() {
 		cfg.FamilyFirstExploration = true
 		cfg.PerFamilyPoolCap = 2
 		cfg.MinUniqueFamiliesInPool = 3
-		fmt.Println("Cargo Flow Cross-Region Causal SMOKE (RUSH-010.7)")
+		fmt.Println("Cargo Flow Deep-Target Causal SMOKE (RUSH-010.7.1)")
 	} else {
-		fmt.Println("Cargo Flow Boardmix (RUSH-010.7 Cross-Region Causal Synthesis)")
+		fmt.Println("Cargo Flow Boardmix (RUSH-010.7.1 Deep-Target Source Routing)")
 		fmt.Println("Ctrl+C safe; --resume continues. Use -calibrate-core-space / -reexport-existing / -validate-batch.")
 	}
 

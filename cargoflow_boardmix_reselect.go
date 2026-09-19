@@ -8,17 +8,17 @@ import (
 
 // ReselectReport summarizes a no-generation reselect from an existing checkpoint pool.
 type ReselectReport struct {
-	BatchDir              string               `json:"batchDir"`
-	PoolSizeBefore        int                  `json:"poolSizeBefore"`
-	PoolSizeAfter         int                  `json:"poolSizeAfter"`
-	PoolPreserved         bool                 `json:"poolPreserved"`
-	GenerationPerformed   bool                 `json:"generationPerformed"`
-	SelectedCount         int                  `json:"selectedCount"`
-	ExactSolvesSelected   int                  `json:"exactSolvesSelected"`
-	SelectReport          BoardMixSelectReport `json:"selectReport"`
-	Validation            BatchValidationReport `json:"validation"`
-	OK                    bool                 `json:"ok"`
-	Errors                []string             `json:"errors,omitempty"`
+	BatchDir            string                `json:"batchDir"`
+	PoolSizeBefore      int                   `json:"poolSizeBefore"`
+	PoolSizeAfter       int                   `json:"poolSizeAfter"`
+	PoolPreserved       bool                  `json:"poolPreserved"`
+	GenerationPerformed bool                  `json:"generationPerformed"`
+	SelectedCount       int                   `json:"selectedCount"`
+	ExactSolvesSelected int                   `json:"exactSolvesSelected"`
+	SelectReport        BoardMixSelectReport  `json:"selectReport"`
+	Validation          BatchValidationReport `json:"validation"`
+	OK                  bool                  `json:"ok"`
+	Errors              []string              `json:"errors,omitempty"`
 }
 
 // ReselectBoardMixFromExisting reloads checkpoint.Pool, runs core-aware selection,
@@ -52,6 +52,7 @@ func ReselectBoardMixFromExisting(batchDir string, cfg BoardMixConfig) (Reselect
 	}
 
 	selected, selRep := SelectBoardMixShortlist(pool, cfg)
+	selRep.RejectionReasonsByTargetRow = copyNestedIntMap(cp.RejectedByTargetRow)
 	rep.SelectReport = selRep
 	rep.SelectedCount = len(selected)
 

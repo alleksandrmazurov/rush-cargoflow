@@ -80,6 +80,9 @@ type EnrichmentJSON struct {
 	CausalRegionCount              int     `json:"causalRegionCount,omitempty"`
 	DistributedCausalityScore      float64 `json:"distributedCausalityScore,omitempty"`
 	MultiRegionChain               bool    `json:"multiRegionChain,omitempty"`
+	SourceTargetLeftColumn         int     `json:"sourceTargetLeftColumn"`
+	ExpectedTargetTopRow           int     `json:"expectedTargetTopRow"`
+	TargetTopRow                   int     `json:"targetTopRow"`
 }
 
 // TransplantJSON records Rush-database provenance for RUSH-008 candidates.

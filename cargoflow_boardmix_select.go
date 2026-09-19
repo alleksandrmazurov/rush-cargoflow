@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math"
 	"sort"
+	"strconv"
 	"strings"
 )
 
@@ -99,6 +100,19 @@ type BoardMixSelectReport struct {
 	MultiRegionChainCount            int                             `json:"multiRegionChainCount"`
 	MatchedFamilyComparison          []CausalMatchedFamilyComparison `json:"matchedFamilyComparison,omitempty"`
 	HumanValidationCandidates        []CausalCandidateReport         `json:"humanValidationCandidates,omitempty"`
+	PoolTargetTopRowDistribution     map[int]int                     `json:"poolTargetTopRowDistribution"`
+	CausalTargetTopRowDistribution   map[int]int                     `json:"causalTargetTopRowDistribution"`
+	FinalTargetRowDistribution       map[int]int                     `json:"finalTargetRowDistribution"`
+	DeepTargetPoolCount              int                             `json:"deepTargetPoolCount"`
+	DeepTargetPoolUniqueFamilies     int                             `json:"deepTargetPoolUniqueFamilies"`
+	BottomTargetPoolCount            int                             `json:"bottomTargetPoolCount"`
+	BottomTargetPoolUniqueFamilies   int                             `json:"bottomTargetPoolUniqueFamilies"`
+	FinalTargetRow5PlusCount         int                             `json:"finalTargetRow5PlusCount"`
+	FinalTargetRow6Count             int                             `json:"finalTargetRow6Count"`
+	FinalTargetRow5PlusTarget        int                             `json:"finalTargetRow5PlusTarget"`
+	FinalTargetRow6Target            int                             `json:"finalTargetRow6Target"`
+	SourceColumnEmbeddingFunnel      map[string]int                  `json:"sourceColumnEmbeddingFunnel,omitempty"`
+	RejectionReasonsByTargetRow      map[int]map[string]int          `json:"rejectionReasonsByTargetRow,omitempty"`
 }
 
 // BoardShapeFeasibilityDiag explains missing Expanded/FullField/Compact classes.
@@ -113,18 +127,22 @@ type BoardShapeFeasibilityDiag struct {
 // SelectBoardMixShortlist picks a diversity-aware final shortlist from a solved pool.
 func SelectBoardMixShortlist(pool []BoardMixAccepted, cfg BoardMixConfig) ([]BoardMixAccepted, BoardMixSelectReport) {
 	rep := BoardMixSelectReport{
-		PoolSize:                len(pool),
-		PoolShapeDist:           map[string]int{},
-		PoolInventoryDist:       map[string]int{},
-		PoolDifficultyBands:     map[string]int{},
-		PoolShapeInventoryCross: map[string]map[string]int{},
-		PoolCrossAvailability:   map[string]int{},
-		FinalShapeDist:          map[string]int{},
-		FinalInventoryDist:      map[string]int{},
-		SelectionSkipCounters:   map[string]int{},
-		QuotaRelaxations:        []string{},
-		UnmetRequirements:       []string{},
-		WhyFinalShort:           []string{},
+		PoolSize:                       len(pool),
+		PoolShapeDist:                  map[string]int{},
+		PoolInventoryDist:              map[string]int{},
+		PoolDifficultyBands:            map[string]int{},
+		PoolShapeInventoryCross:        map[string]map[string]int{},
+		PoolCrossAvailability:          map[string]int{},
+		FinalShapeDist:                 map[string]int{},
+		FinalInventoryDist:             map[string]int{},
+		SelectionSkipCounters:          map[string]int{},
+		PoolTargetTopRowDistribution:   map[int]int{},
+		CausalTargetTopRowDistribution: map[int]int{},
+		FinalTargetRowDistribution:     map[int]int{},
+		SourceColumnEmbeddingFunnel:    map[string]int{},
+		QuotaRelaxations:               []string{},
+		UnmetRequirements:              []string{},
+		WhyFinalShort:                  []string{},
 		HardConstraints: []string{
 			"UniqueFamily (one final slot per FamilyId)",
 			"MinDistinctBoardShapes if pool supports it",
@@ -143,6 +161,8 @@ func SelectBoardMixShortlist(pool []BoardMixAccepted, cfg BoardMixConfig) ([]Boa
 	famSet := map[string]bool{}
 	genuineFam := map[string]bool{}
 	causalFam := map[string]bool{}
+	deepFam := map[string]bool{}
+	bottomFam := map[string]bool{}
 	for _, c := range pool {
 		shape := string(c.BoardUtil.BoardShapeClass)
 		inv := string(c.InventoryClass)
@@ -185,10 +205,27 @@ func SelectBoardMixShortlist(pool []BoardMixAccepted, cfg BoardMixConfig) ([]Boa
 			rep.PoolCausalExpanded++
 			causalFam[c.FamilyID] = true
 		}
+		row := candidateTargetTopRow(c)
+		rep.PoolTargetTopRowDistribution[row]++
+		rep.SourceColumnEmbeddingFunnel[fmt.Sprintf("col%d|%s|row%d",
+			c.SourceTargetLeftColumn, c.Embedding, row)]++
+		if row >= 5 {
+			rep.DeepTargetPoolCount++
+			deepFam[c.FamilyID] = true
+		}
+		if row == 6 {
+			rep.BottomTargetPoolCount++
+			bottomFam[c.FamilyID] = true
+		}
+		if IsCausalExpanded(c) {
+			rep.CausalTargetTopRowDistribution[row]++
+		}
 	}
 	rep.PoolUniqueFamilies = len(famSet)
 	rep.PoolGenuineCoreExpandedUniqueFamilies = len(genuineFam)
 	rep.PoolCausalExpandedUniqueFamilies = len(causalFam)
+	rep.DeepTargetPoolUniqueFamilies = len(deepFam)
+	rep.BottomTargetPoolUniqueFamilies = len(bottomFam)
 	rep.ExpandedFullFieldDiag = DiagnoseExpandedFullFieldAvailability(rep.PoolShapeDist)
 
 	target := cfg.TargetAccepted
@@ -212,6 +249,22 @@ func SelectBoardMixShortlist(pool []BoardMixAccepted, cfg BoardMixConfig) ([]Boa
 		targetCausal = target
 	}
 	rep.FinalCausalExpandedTarget = targetCausal
+	targetDeep := cfg.TargetDeepRows5Plus
+	if targetDeep < 0 {
+		targetDeep = 0
+	}
+	if targetDeep > target {
+		targetDeep = target
+	}
+	targetBottom := cfg.TargetBottomRow6
+	if targetBottom < 0 {
+		targetBottom = 0
+	}
+	if targetBottom > targetDeep {
+		targetBottom = targetDeep
+	}
+	rep.FinalTargetRow5PlusTarget = targetDeep
+	rep.FinalTargetRow6Target = targetBottom
 	minShapes := cfg.MinDistinctBoardShapes
 	if minShapes <= 0 {
 		minShapes = 3
@@ -341,6 +394,69 @@ func SelectBoardMixShortlist(pool []BoardMixAccepted, cfg BoardMixConfig) ([]Boa
 		return false
 	}
 
+	selectedRowCount := func(pred func(int) bool) int {
+		count := 0
+		for _, candidate := range selected {
+			if pred(candidateTargetTopRow(candidate)) {
+				count++
+			}
+		}
+		return count
+	}
+	selectedCausalCount := func() int {
+		count := 0
+		for _, candidate := range selected {
+			if IsCausalExpanded(candidate) {
+				count++
+			}
+		}
+		return count
+	}
+	selectedGenuineCount := func() int {
+		count := 0
+		for _, candidate := range selected {
+			if IsGenuineCoreExpanded(candidate) {
+				count++
+			}
+		}
+		return count
+	}
+	reserveTargetRows := func(predicate func(int) bool, desired int) {
+		for selectedRowCount(predicate) < desired && len(selected) < target {
+			bestIndex, bestScore := -1, math.Inf(-1)
+			for i, candidate := range pool {
+				if usedFam[candidate.FamilyID] || !predicate(candidateTargetTopRow(candidate)) {
+					continue
+				}
+				score := 0.0
+				if IsCausalExpanded(candidate) {
+					score += 1000 + candidate.CausalProof.DistributedCausalityScore
+				}
+				if candidate.ReplayVerified {
+					score += 100
+				}
+				if score > bestScore ||
+					(score == bestScore && (bestIndex < 0 || candidate.FamilyID < pool[bestIndex].FamilyID)) {
+					bestIndex, bestScore = i, score
+				}
+			}
+			if bestIndex < 0 {
+				break
+			}
+			takeCandidate(pool[bestIndex])
+		}
+	}
+	if targetBottom > 0 {
+		rep.HardConstraints = append(rep.HardConstraints,
+			fmt.Sprintf("TargetBottomRow6=%d when unique-family pool availability supports it", targetBottom))
+		reserveTargetRows(func(row int) bool { return row == 6 }, targetBottom)
+	}
+	if targetDeep > 0 {
+		rep.HardConstraints = append(rep.HardConstraints,
+			fmt.Sprintf("TargetDeepRows5Plus=%d when unique-family pool availability supports it", targetDeep))
+		reserveTargetRows(func(row int) bool { return row >= 5 }, targetDeep)
+	}
+
 	// RUSH-010.7: reserve proof-backed causal slots before geometric balancing.
 	if targetCausal > 0 {
 		rep.HardConstraints = append(rep.HardConstraints,
@@ -348,7 +464,7 @@ func SelectBoardMixShortlist(pool []BoardMixAccepted, cfg BoardMixConfig) ([]Boa
 		usedTemplate := map[CausalTemplate]bool{}
 		usedEdgeSignature := map[string]bool{}
 		usedCausalInventory := map[InventoryClass]bool{}
-		for len(selected) < targetCausal {
+		for selectedCausalCount() < targetCausal && len(selected) < target {
 			bestIndex, bestScore := -1, math.Inf(-1)
 			for i, c := range pool {
 				if !IsCausalExpanded(c) || usedFam[c.FamilyID] {
@@ -404,7 +520,7 @@ func SelectBoardMixShortlist(pool []BoardMixAccepted, cfg BoardMixConfig) ([]Boa
 			return compareGenuineCoreExpanded(pool[genuineIdx[i]], pool[genuineIdx[j]]) < 0
 		})
 		for _, i := range genuineIdx {
-			if len(selected) >= targetGenuine {
+			if selectedGenuineCount() >= targetGenuine || len(selected) >= target {
 				break
 			}
 			c := pool[i]
@@ -414,6 +530,18 @@ func SelectBoardMixShortlist(pool []BoardMixAccepted, cfg BoardMixConfig) ([]Boa
 			takeCandidate(c)
 		}
 		noteGenuineMonoculture(&rep, selected)
+	}
+
+	for _, row := range []int{6, 5, 4, 3, 2, 1} {
+		desired := cfg.TargetTopRowQuotas[strconv.Itoa(row)]
+		for desired > 0 && selectedRowCount(func(value int) bool { return value == row }) < desired &&
+			len(selected) < target {
+			if !tryPick(func(candidate BoardMixAccepted) bool {
+				return candidateTargetTopRow(candidate) == row
+			}, 0, 0, true) {
+				break
+			}
+		}
 	}
 
 	inventoryOrder := []InventoryClass{InvNo1x1, InvOne1x1, InvTwo1x1, InvThree1x1}
@@ -528,6 +656,14 @@ func SelectBoardMixShortlist(pool []BoardMixAccepted, cfg BoardMixConfig) ([]Boa
 	}
 
 	for selectedIndex, c := range selected {
+		targetRow := candidateTargetTopRow(c)
+		rep.FinalTargetRowDistribution[targetRow]++
+		if targetRow >= 5 {
+			rep.FinalTargetRow5PlusCount++
+		}
+		if targetRow == 6 {
+			rep.FinalTargetRow6Count++
+		}
 		rep.FinalShapeDist[string(c.BoardUtil.BoardShapeClass)]++
 		rep.FinalInventoryDist[string(c.InventoryClass)]++
 		if c.BoardUtil.OuterZoneRelevant {
@@ -636,6 +772,22 @@ func SelectBoardMixShortlist(pool []BoardMixAccepted, cfg BoardMixConfig) ([]Boa
 		rep.DiversityTargetUnmet = true
 		msg := fmt.Sprintf("TargetCausalExpanded: need %d, got %d (pool unique causal families %d)",
 			targetCausal, rep.FinalCausalExpanded, rep.PoolCausalExpandedUniqueFamilies)
+		rep.UnmetRequirements = append(rep.UnmetRequirements, msg)
+		rep.DiversityUnmetReasons = append(rep.DiversityUnmetReasons, msg)
+	}
+	if targetDeep > 0 && rep.DeepTargetPoolUniqueFamilies >= targetDeep &&
+		rep.FinalTargetRow5PlusCount < targetDeep {
+		rep.DiversityTargetUnmet = true
+		msg := fmt.Sprintf("TargetDeepRows5Plus: need %d, got %d (pool unique deep families %d)",
+			targetDeep, rep.FinalTargetRow5PlusCount, rep.DeepTargetPoolUniqueFamilies)
+		rep.UnmetRequirements = append(rep.UnmetRequirements, msg)
+		rep.DiversityUnmetReasons = append(rep.DiversityUnmetReasons, msg)
+	}
+	if targetBottom > 0 && rep.BottomTargetPoolUniqueFamilies >= targetBottom &&
+		rep.FinalTargetRow6Count < targetBottom {
+		rep.DiversityTargetUnmet = true
+		msg := fmt.Sprintf("TargetBottomRow6: need %d, got %d (pool unique bottom families %d)",
+			targetBottom, rep.FinalTargetRow6Count, rep.BottomTargetPoolUniqueFamilies)
 		rep.UnmetRequirements = append(rep.UnmetRequirements, msg)
 		rep.DiversityUnmetReasons = append(rep.DiversityUnmetReasons, msg)
 	}

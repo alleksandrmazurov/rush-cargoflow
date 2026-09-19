@@ -23,6 +23,9 @@ type BoardMixUnityManifestEntry struct {
 	AugmentationClass        string `json:"augmentationClass,omitempty"`
 	OuterZoneRelevant        bool   `json:"outerZoneRelevant,omitempty"`
 	NativeVariantFingerprint string `json:"nativeVariantFingerprint,omitempty"`
+	SourceTargetLeftColumn   int    `json:"sourceTargetLeftColumn"`
+	ExpectedTargetTopRow     int    `json:"expectedTargetTopRow"`
+	TargetTopRow             int    `json:"targetTopRow"`
 	ReplayVerified           bool   `json:"replayVerified"`
 	LevelFile                string `json:"levelFile"`
 	SolutionFile             string `json:"solutionFile"`
@@ -57,6 +60,9 @@ func ToUnityBatchManifest(accepted []BoardMixAccepted) BoardMixUnityManifest {
 			AugmentationClass:        string(c.AugmentationClass),
 			OuterZoneRelevant:        c.BoardUtil.OuterZoneRelevant,
 			NativeVariantFingerprint: c.NativeVariantFingerprint,
+			SourceTargetLeftColumn:   c.SourceTargetLeftColumn,
+			ExpectedTargetTopRow:     c.ExpectedTargetTopRow,
+			TargetTopRow:             candidateTargetTopRow(c),
 			ReplayVerified:           c.ReplayVerified,
 			LevelFile:                "Candidates/" + id + ".json",
 			SolutionFile:             "Solutions/" + id + ".solution.json",
@@ -251,6 +257,9 @@ func WriteBoardMixBatch(dir string, res BoardMixResult) error {
 			"causalTarget":      res.SelectReport.FinalCausalExpandedTarget,
 			"causalTemplates":   res.SelectReport.CausalTemplateDistribution,
 			"crossRegionEdges":  res.SelectReport.CrossRegionEdgeDistribution,
+			"targetTopRow":      res.SelectReport.FinalTargetRowDistribution,
+			"targetRow5Plus":    res.SelectReport.FinalTargetRow5PlusCount,
+			"targetRow6":        res.SelectReport.FinalTargetRow6Count,
 		},
 		"familyCoverage":        res.FamilyCoverage,
 		"unmetRequirements":     res.SelectReport.UnmetRequirements,

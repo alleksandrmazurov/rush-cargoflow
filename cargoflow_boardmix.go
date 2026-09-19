@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-const BoardMixVersion = "boardmix-v1.7.0"
+const BoardMixVersion = "boardmix-v1.7.1"
 
 // BoardMixConfig drives RUSH-010.3 / 010.4 / 010.4.1 board-space diversity generation.
 type BoardMixConfig struct {
@@ -45,6 +45,10 @@ type BoardMixConfig struct {
 	// 0 = disabled (legacy diversity-only selection).
 	TargetGenuineCoreExpanded   int            `json:"targetGenuineCoreExpanded"`
 	TargetCausalExpanded        int            `json:"targetCausalExpanded"`
+	SourceAwareEmbeddingRouting bool           `json:"sourceAwareEmbeddingRouting"`
+	TargetDeepRows5Plus         int            `json:"targetDeepRows5Plus"`
+	TargetBottomRow6            int            `json:"targetBottomRow6"`
+	TargetTopRowQuotas          map[string]int `json:"targetTopRowQuotas"`
 	FamilyFirstExploration      bool           `json:"familyFirstExploration"`
 	PerFamilyPoolCap            int            `json:"perFamilyPoolCap"`
 	MinUniqueFamiliesInPool     int            `json:"minUniqueFamiliesInPool"`
@@ -202,16 +206,17 @@ func LoadBoardMixConfigJSON(path string) (BoardMixConfig, error) {
 
 // BoardMixCheckpoint is resumable progress for long boardmix runs.
 type BoardMixCheckpoint struct {
-	Version              string               `json:"version"`
-	ConfigPath           string               `json:"configPath,omitempty"`
-	CompletedAttemptKeys []string             `json:"completedAttemptKeys"`
-	AcceptedIDs          []string             `json:"acceptedIds"`
-	Accepted             []BoardMixAccepted   `json:"accepted"`
-	Pool                 []BoardMixAccepted   `json:"pool"`
-	Rejected             map[string]int       `json:"rejected"`
-	Stats                BoardMixStats        `json:"stats"`
-	SelectReport         BoardMixSelectReport `json:"selectReport,omitempty"`
-	UpdatedAt            time.Time            `json:"updatedAt"`
+	Version              string                 `json:"version"`
+	ConfigPath           string                 `json:"configPath,omitempty"`
+	CompletedAttemptKeys []string               `json:"completedAttemptKeys"`
+	AcceptedIDs          []string               `json:"acceptedIds"`
+	Accepted             []BoardMixAccepted     `json:"accepted"`
+	Pool                 []BoardMixAccepted     `json:"pool"`
+	Rejected             map[string]int         `json:"rejected"`
+	RejectedByTargetRow  map[int]map[string]int `json:"rejectedByTargetRow,omitempty"`
+	Stats                BoardMixStats          `json:"stats"`
+	SelectReport         BoardMixSelectReport   `json:"selectReport,omitempty"`
+	UpdatedAt            time.Time              `json:"updatedAt"`
 }
 
 type BoardMixStats struct {
@@ -250,6 +255,9 @@ type BoardMixAccepted struct {
 	CoreExpansionMeta        *CoreExpansionMeta      `json:"coreExpansion,omitempty"`
 	CausalTemplate           CausalTemplate          `json:"causalTemplate,omitempty"`
 	CausalProof              *CausalProof            `json:"causalProof,omitempty"`
+	SourceTargetLeftColumn   int                     `json:"sourceTargetLeftColumn"`
+	ExpectedTargetTopRow     int                     `json:"expectedTargetTopRow"`
+	TargetTopRow             int                     `json:"targetTopRow"`
 	NativeVariantFingerprint string                  `json:"nativeVariantFingerprint,omitempty"`
 	ReplayVerified           bool                    `json:"replayVerified"`
 	Level                    *LevelJSON              `json:"level,omitempty"`
@@ -261,17 +269,18 @@ type BoardMixAccepted struct {
 
 // BoardMixResult is the final run summary.
 type BoardMixResult struct {
-	Config         BoardMixConfig
-	Accepted       []BoardMixAccepted
-	Pool           []BoardMixAccepted
-	Rejected       map[string]int
-	Stats          BoardMixStats
-	ShapeDist      map[string]int
-	InvDist        map[string]int
-	SelectReport   BoardMixSelectReport
-	FamilyCoverage FamilyCoverageReport
-	TotalWall      time.Duration
-	RootCauseNote  string
+	Config              BoardMixConfig
+	Accepted            []BoardMixAccepted
+	Pool                []BoardMixAccepted
+	Rejected            map[string]int
+	RejectedByTargetRow map[int]map[string]int
+	Stats               BoardMixStats
+	ShapeDist           map[string]int
+	InvDist             map[string]int
+	SelectReport        BoardMixSelectReport
+	FamilyCoverage      FamilyCoverageReport
+	TotalWall           time.Duration
+	RootCauseNote       string
 }
 
 type boardMixAttemptKey struct {
@@ -347,11 +356,12 @@ func TryAddOuterStructuralPiece(board *Board, offX, offY int, budget SolveBudget
 func RunBoardMixPilot(cfg BoardMixConfig, cancel <-chan struct{}) (BoardMixResult, error) {
 	start := time.Now()
 	out := BoardMixResult{
-		Config:        cfg,
-		Rejected:      map[string]int{},
-		ShapeDist:     map[string]int{},
-		InvDist:       map[string]int{},
-		RootCauseNote: "RUSH-010.4.1: family-first native coverage + pool→diversity-select.",
+		Config:              cfg,
+		Rejected:            map[string]int{},
+		RejectedByTargetRow: map[int]map[string]int{},
+		ShapeDist:           map[string]int{},
+		InvDist:             map[string]int{},
+		RootCauseNote:       "RUSH-010.4.1: family-first native coverage + pool→diversity-select.",
 	}
 	out.Stats.AcceptedByShape = map[string]int{}
 	out.Stats.AcceptedByAugmentationClass = map[string]int{}
@@ -402,6 +412,7 @@ func RunBoardMixPilot(cfg BoardMixConfig, cancel <-chan struct{}) (BoardMixResul
 		Version:              BoardMixVersion,
 		CompletedAttemptKeys: []string{},
 		Rejected:             map[string]int{},
+		RejectedByTargetRow:  map[int]map[string]int{},
 		Pool:                 []BoardMixAccepted{},
 	}
 	completed := map[string]bool{}
@@ -413,6 +424,10 @@ func RunBoardMixPilot(cfg BoardMixConfig, cancel <-chan struct{}) (BoardMixResul
 				completed[k] = true
 			}
 			out.Rejected = cp.Rejected
+			if cp.RejectedByTargetRow == nil {
+				cp.RejectedByTargetRow = map[int]map[string]int{}
+			}
+			out.RejectedByTargetRow = cp.RejectedByTargetRow
 			if out.Rejected == nil {
 				out.Rejected = map[string]int{}
 			}
@@ -582,6 +597,7 @@ func RunBoardMixPilot(cfg BoardMixConfig, cancel <-chan struct{}) (BoardMixResul
 				}
 				if reason != "" && len(cands) == 0 {
 					out.Rejected[reason]++
+					noteTargetRowRejection(out.RejectedByTargetRow, j.base, j.embed, reason)
 				}
 
 				acceptedNow := 0
@@ -655,6 +671,7 @@ func RunBoardMixPilot(cfg BoardMixConfig, cancel <-chan struct{}) (BoardMixResul
 				noteFamilyAttempt(funnelMap, j.base.FamilyID, reason, exact, augProposed, acceptedNow)
 				cp.Pool = append([]BoardMixAccepted{}, pool...)
 				cp.Rejected = copyIntMap(out.Rejected)
+				cp.RejectedByTargetRow = copyNestedIntMap(out.RejectedByTargetRow)
 				cp.Stats = out.Stats
 				cp.Stats.ElapsedMs = time.Since(start).Milliseconds()
 				cp.Stats.LastProgressAt = time.Now()
@@ -694,6 +711,7 @@ func RunBoardMixPilot(cfg BoardMixConfig, cancel <-chan struct{}) (BoardMixResul
 
 	// Diversity-aware final selection (does NOT take first N valids).
 	selected, selRep := SelectBoardMixShortlist(pool, cfg)
+	selRep.RejectionReasonsByTargetRow = copyNestedIntMap(out.RejectedByTargetRow)
 	out.Pool = pool
 	out.Accepted = selected
 	out.SelectReport = selRep
@@ -726,6 +744,7 @@ func RunBoardMixPilot(cfg BoardMixConfig, cancel <-chan struct{}) (BoardMixResul
 	cp.SelectReport = selRep
 	cp.Stats = out.Stats
 	cp.Rejected = copyIntMap(out.Rejected)
+	cp.RejectedByTargetRow = copyNestedIntMap(out.RejectedByTargetRow)
 	cp.UpdatedAt = time.Now()
 	_ = SaveBoardMixCheckpoint(cfg.CheckpointPath, cp)
 	_ = writeBoardMixProgress(cfg.OutputDir, cp, len(jobs))
@@ -796,6 +815,11 @@ func enrichBoardMixInventory(baseCand BoardMixAccepted, budget SolveBudget, res 
 			CoreExpansionClass:       baseCand.CoreExpansionClass,
 			CoreSpace:                baseCand.CoreSpace,
 			CoreExpansionMeta:        baseCand.CoreExpansionMeta,
+			CausalTemplate:           baseCand.CausalTemplate,
+			CausalProof:              baseCand.CausalProof,
+			SourceTargetLeftColumn:   baseCand.SourceTargetLeftColumn,
+			ExpectedTargetTopRow:     baseCand.ExpectedTargetTopRow,
+			TargetTopRow:             best.Board.Pieces[0].Row(best.Board.Width),
 			NativeVariantFingerprint: baseCand.NativeVariantFingerprint,
 			ReplayVerified:           best.ReplayVerified,
 			Level:                    level,
@@ -906,6 +930,9 @@ func evaluateBoardMixJob(base EnrichmentBase, embed EmbeddingVariant, augment bo
 
 	util := ComputeBoardUtilization(board, offX, offY, &sol)
 	inv := BuildCargoInventorySignature(board)
+	sourceCol, _ := SourceTargetLeftColumn(trMeta.OriginalBoard)
+	expectedRow, _ := ExpectedTargetTopRow(sourceCol, embed)
+	actualRow := board.Pieces[0].Row(board.Width)
 	level, err := LevelJSONFromBoard(board, "pending", "RushDatabaseBoardMix")
 	if err != nil {
 		return nil, "ExportFailed", cached
@@ -922,23 +949,26 @@ func evaluateBoardMixJob(base EnrichmentBase, embed EmbeddingVariant, augment bo
 	level.BoardSpace = util.ToJSON(embed)
 
 	return &BoardMixAccepted{
-		BaseCandidateID:   base.CandidateID,
-		FamilyID:          base.FamilyID,
-		SourcePuzzleID:    firstNonEmpty(base.SourcePuzzleID, trMeta.SourcePuzzleId),
-		Embedding:         embed,
-		OffsetX:           offX,
-		OffsetY:           offY,
-		InventoryClass:    inv.InventoryClass,
-		BoardUtil:         util,
-		OptimalGestures:   sol.NumMoves,
-		SelectionBand:     base.SelectionBand,
-		Augmented:         aug,
-		AugmentationClass: AugNone,
-		ReplayVerified:    true,
-		Level:             level,
-		Board:             board,
-		Solution:          sol,
-		ASCIIPreview:      asciiCargoBoard(board),
+		BaseCandidateID:        base.CandidateID,
+		FamilyID:               base.FamilyID,
+		SourcePuzzleID:         firstNonEmpty(base.SourcePuzzleID, trMeta.SourcePuzzleId),
+		Embedding:              embed,
+		OffsetX:                offX,
+		OffsetY:                offY,
+		InventoryClass:         inv.InventoryClass,
+		BoardUtil:              util,
+		OptimalGestures:        sol.NumMoves,
+		SelectionBand:          base.SelectionBand,
+		Augmented:              aug,
+		AugmentationClass:      AugNone,
+		SourceTargetLeftColumn: sourceCol,
+		ExpectedTargetTopRow:   expectedRow,
+		TargetTopRow:           actualRow,
+		ReplayVerified:         true,
+		Level:                  level,
+		Board:                  board,
+		Solution:               sol,
+		ASCIIPreview:           asciiCargoBoard(board),
 	}, "", cached
 }
 
@@ -1003,6 +1033,9 @@ func evaluateNativeBoardMixJob(base EnrichmentBase, embed EmbeddingVariant, budg
 			Augmented:                true,
 			AugmentationClass:        meta.AugmentationClass,
 			NativeMeta:               &meta,
+			SourceTargetLeftColumn:   plain.SourceTargetLeftColumn,
+			ExpectedTargetTopRow:     plain.ExpectedTargetTopRow,
+			TargetTopRow:             c.Board.Pieces[0].Row(c.Board.Width),
 			NativeVariantFingerprint: meta.NativeVariantFingerprint,
 			ReplayVerified:           true,
 			Level:                    level,
@@ -1115,6 +1148,9 @@ func evaluateCoreExpansionJob(base EnrichmentBase, embed EmbeddingVariant, budge
 			CoreExpansionClass:       meta.ExpansionClass,
 			CoreSpace:                &cs,
 			CoreExpansionMeta:        &meta,
+			SourceTargetLeftColumn:   plain.SourceTargetLeftColumn,
+			ExpectedTargetTopRow:     plain.ExpectedTargetTopRow,
+			TargetTopRow:             c.Board.Pieces[0].Row(c.Board.Width),
 			NativeVariantFingerprint: fmt.Sprintf("corexpand|%s|%d", meta.ExpansionClass, c.Sol.NumMoves),
 			ReplayVerified:           true,
 			Level:                    level,
@@ -1180,6 +1216,9 @@ func evaluateCausalSynthesisJob(base EnrichmentBase, embed EmbeddingVariant, bud
 			OptimalGestures: candidate.Sol.NumMoves, SelectionBand: plain.SelectionBand,
 			Augmented: true, AugmentationClass: AugmentationClass(proof.Template),
 			CausalTemplate: proof.Template, CausalProof: &proof,
+			SourceTargetLeftColumn: plain.SourceTargetLeftColumn,
+			ExpectedTargetTopRow:   plain.ExpectedTargetTopRow,
+			TargetTopRow:           candidate.Board.Pieces[0].Row(candidate.Board.Width),
 			NativeVariantFingerprint: nativeVariantFingerprint(
 				candidate.Board, AugmentationClass(proof.Template)),
 			ReplayVerified: true, Level: level, Board: candidate.Board,
@@ -1212,6 +1251,16 @@ func finalizeBoardMixCandidate(c *BoardMixAccepted, id string) {
 		c.Level.Enrichment.BaseFamilyId = c.FamilyID
 		c.Level.Enrichment.AugmentationClass = string(c.AugmentationClass)
 		c.Level.Enrichment.NativeVariantFingerprint = c.NativeVariantFingerprint
+		if c.Board != nil && len(c.Board.Pieces) > 0 {
+			c.TargetTopRow = c.Board.Pieces[0].Row(c.Board.Width)
+			if c.Level.BoardSpace != nil {
+				c.Level.BoardSpace.TargetTopRow = c.TargetTopRow
+				c.Level.BoardSpace.TargetDepthClass = string(ClassifyTargetDepth(c.TargetTopRow))
+			}
+		}
+		c.Level.Enrichment.SourceTargetLeftColumn = c.SourceTargetLeftColumn
+		c.Level.Enrichment.ExpectedTargetTopRow = c.ExpectedTargetTopRow
+		c.Level.Enrichment.TargetTopRow = c.TargetTopRow
 		if c.CoreExpansionClass != "" && c.CoreExpansionClass != CoreExpNone {
 			c.Level.Enrichment.CoreExpansionClass = string(c.CoreExpansionClass)
 		}
@@ -1339,6 +1388,32 @@ func copyIntMap(m map[string]int) map[string]int {
 		out[k] = v
 	}
 	return out
+}
+
+func copyNestedIntMap(m map[int]map[string]int) map[int]map[string]int {
+	out := map[int]map[string]int{}
+	for row, reasons := range m {
+		out[row] = copyIntMap(reasons)
+	}
+	return out
+}
+
+func noteTargetRowRejection(out map[int]map[string]int, base EnrichmentBase, embedding EmbeddingVariant, reason string) {
+	if out == nil || base.Level == nil || base.Level.Transplant == nil {
+		return
+	}
+	col, err := SourceTargetLeftColumn(base.Level.Transplant.OriginalBoard)
+	if err != nil {
+		return
+	}
+	row, err := ExpectedTargetTopRow(col, embedding)
+	if err != nil {
+		return
+	}
+	if out[row] == nil {
+		out[row] = map[string]int{}
+	}
+	out[row][reason]++
 }
 
 func quotasSatisfied(shape, inv map[string]int, target, have int) bool {
