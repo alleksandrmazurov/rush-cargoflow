@@ -222,10 +222,12 @@ func WriteBoardMixBatch(dir string, res BoardMixResult) error {
 		augDist[k]++
 	}
 	report := map[string]interface{}{
-		"generatorVersion":  BoardMixVersion,
-		"pipeline":          "CargoFlowNative7x8BoardMix",
-		"rootCauseRUSH0104": "6x6-core-centric embeds produced ShiftedCore/Tall/Wide but almost never Expanded/FullField; native structural augmentation adds interacting Cargo pieces in free 7x8 space.",
-		"performance":       res.Stats,
+		"generatorVersion":         BoardMixVersion,
+		"pipeline":                 "CargoFlowNative7x8BoardMix",
+		"rootCauseRUSH0104":        "6x6-core-centric embeds produced ShiftedCore/Tall/Wide but almost never Expanded/FullField; native structural augmentation adds interacting Cargo pieces in free 7x8 space.",
+		"rootCauseRUSH01061":       "The compact-core pattern is primarily causal-topology concentration. RUSH-010.7 accepts synthesized pieces only with exact replay, intervention necessity, and a lower/side path to upper/corridor.",
+		"causalAcceptanceContract": "Valid proof + replay verified + cross-region edge; frozen inserted prerequisites must make the puzzle unsolvable or strictly increase the optimum.",
+		"performance":              res.Stats,
 		"poolDistribution": map[string]interface{}{
 			"size":                res.SelectReport.PoolSize,
 			"uniqueFamilies":      res.SelectReport.PoolUniqueFamilies,
@@ -245,6 +247,10 @@ func WriteBoardMixBatch(dir string, res BoardMixResult) error {
 			"inventoryClass":    res.SelectReport.FinalInventoryDist,
 			"outerZoneRelevant": res.SelectReport.FinalOuterZoneRelevant,
 			"distinctShapes":    res.SelectReport.DistinctBoardShapes,
+			"causalExpanded":    res.SelectReport.FinalCausalExpanded,
+			"causalTarget":      res.SelectReport.FinalCausalExpandedTarget,
+			"causalTemplates":   res.SelectReport.CausalTemplateDistribution,
+			"crossRegionEdges":  res.SelectReport.CrossRegionEdgeDistribution,
 		},
 		"familyCoverage":        res.FamilyCoverage,
 		"unmetRequirements":     res.SelectReport.UnmetRequirements,

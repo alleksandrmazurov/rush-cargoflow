@@ -84,7 +84,11 @@ func buildBoardMixJobs(bases []EnrichmentBase, embeds []EmbeddingVariant, cfg Bo
 		kPlain := boardMixJobKey(base.CandidateID, primary, "plain")
 		jobs = append(jobs, boardMixJob{base: base, embed: primary, mode: "plain", pass: 1})
 		pass1[kPlain] = true
-		if cfg.TryCoreExpansion {
+		if cfg.TryCausalSynthesis {
+			kCausal := boardMixJobKey(base.CandidateID, primary, "causal")
+			jobs = append(jobs, boardMixJob{base: base, embed: primary, mode: "causal", pass: 1})
+			pass1[kCausal] = true
+		} else if cfg.TryCoreExpansion {
 			kCore := boardMixJobKey(base.CandidateID, primary, "corexpand")
 			jobs = append(jobs, boardMixJob{base: base, embed: primary, mode: "corexpand", pass: 1})
 			pass1[kCore] = true
@@ -124,6 +128,9 @@ func boardMixModes(cfg BoardMixConfig) []string {
 	}
 	if cfg.TryCoreExpansion {
 		modes = append(modes, "corexpand")
+	}
+	if cfg.TryCausalSynthesis {
+		modes = append(modes, "causal")
 	}
 	return modes
 }

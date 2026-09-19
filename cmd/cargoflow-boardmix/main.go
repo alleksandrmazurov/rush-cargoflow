@@ -15,7 +15,7 @@ import (
 )
 
 func main() {
-	configPath := flag.String("config", "configs/RUSH0105_NativeCoreExpansionPilot_001.json", "boardmix config JSON")
+	configPath := flag.String("config", "configs/RUSH0107_CrossRegionCausalPilot_001.json", "boardmix config JSON")
 	output := flag.String("output", "", "override output directory")
 	resume := flag.Bool("resume", true, "resume from checkpoint if present")
 	smoke := flag.Bool("smoke", false, "tiny smoke: few bases, short budget (~30-60s)")
@@ -84,8 +84,8 @@ func main() {
 			cfg.OutputDir = *output
 		}
 		fmt.Printf("Reselect from existing pool (no generation): %s\n", *reselect)
-		fmt.Printf("config=%s targetGenuine=%d targetAccepted=%d\n",
-			*configPath, cfg.TargetGenuineCoreExpanded, cfg.TargetAccepted)
+		fmt.Printf("config=%s targetGenuine=%d targetCausal=%d targetAccepted=%d\n",
+			*configPath, cfg.TargetGenuineCoreExpanded, cfg.TargetCausalExpanded, cfg.TargetAccepted)
 		rep, err := rush.ReselectBoardMixFromExisting(*reselect, cfg)
 		if err != nil {
 			b, _ := json.MarshalIndent(rep, "", "  ")
@@ -94,10 +94,12 @@ func main() {
 		}
 		b, _ := json.MarshalIndent(rep, "", "  ")
 		fmt.Println(string(b))
-		fmt.Printf("OK — FinalAccepted=%d Genuine=%d/%d PoolPreserved=%v\n",
+		fmt.Printf("OK — FinalAccepted=%d Genuine=%d/%d Causal=%d/%d PoolPreserved=%v\n",
 			rep.SelectReport.FinalAccepted,
 			rep.SelectReport.FinalGenuineCoreExpanded,
 			rep.SelectReport.FinalGenuineCoreExpandedTarget,
+			rep.SelectReport.FinalCausalExpanded,
+			rep.SelectReport.FinalCausalExpandedTarget,
 			rep.PoolPreserved)
 		fmt.Printf("Import folder:\n  %s\n", filepath.Clean(*reselect))
 		return
@@ -172,53 +174,46 @@ func main() {
 	}
 
 	if *smoke {
-		cfg.OutputDir = "output/RUSH0105_CoreExpandSmoke"
+		cfg.OutputDir = "output/RUSH0107_CausalSmoke"
 		cfg.CheckpointPath = filepath.Join(cfg.OutputDir, "checkpoint.json")
-		cfg.TargetAccepted = 4
-		cfg.BaseCount = 4
-		cfg.MaxPoolSize = 16
-		cfg.MaxAttempts = 24
-		cfg.TryOuterAugment = true
-		cfg.TryNativeAugment = true
-		cfg.TryCoreExpansion = true
+		cfg.TargetAccepted = 2
+		cfg.TargetCausalExpanded = 1
+		cfg.TargetGenuineCoreExpanded = 0
+		cfg.BaseCount = 2
+		cfg.MaxPoolSize = 8
+		cfg.MaxAttempts = 8
+		cfg.TryOuterAugment = false
+		cfg.TryNativeAugment = false
+		cfg.TryCoreExpansion = false
+		cfg.TryCausalSynthesis = true
 		cfg.TryInventoryEnrichment = false
-		cfg.MaxNativeAcceptedPerEmbed = 1
-		cfg.MaxNativeProposalsPerEmbed = 4
-		cfg.MaxCoreExpansionAccepted = 1
-		cfg.MaxCoreExpansionProposals = 6
+		cfg.MaxCausalAcceptedPerEmbed = 1
+		cfg.MaxCausalProposalsPerEmbed = 4
 		cfg.CoreSpaceFitThreshold = rush.Default6x6FitThreshold
 		cfg.RequireCoreNotFitIn6x6 = false
-		cfg.SolveTimeLimitMs = 2500
-		cfg.MaxVisitedStates = 400_000
-		cfg.MinDistinctBoardShapes = 2
+		cfg.SolveTimeLimitMs = 1500
+		cfg.MaxVisitedStates = 250_000
+		cfg.MinDistinctBoardShapes = 1
 		cfg.MinOuterZoneRelevant = 1
-		cfg.MaxBoardShapeFraction = 0.75
+		cfg.MaxBoardShapeFraction = 1.0
 		cfg.MaxInventoryClassFraction = 1.0
-		cfg.Embeddings = []string{
-			string(rush.EmbedFlushTop),
-			string(rush.EmbedShiftDown1),
-		}
-		cfg.ShapeQuotas = map[string]int{
-			string(rush.ShapeShiftedCore): 1,
-			string(rush.ShapeExpanded):    1,
-			string(rush.ShapeTall):        1,
-			string(rush.ShapeWide):        1,
-		}
-		cfg.InventoryQuotas = map[string]int{string(rush.InvNo1x1): 4}
+		cfg.Embeddings = []string{string(rush.EmbedFlushTop)}
+		cfg.ShapeQuotas = map[string]int{}
+		cfg.InventoryQuotas = map[string]int{}
 		cfg.CheckpointEvery = 1
 		cfg.ProgressEvery = 1
 		cfg.Workers = 2
 		cfg.FamilyFirstExploration = true
 		cfg.PerFamilyPoolCap = 2
 		cfg.MinUniqueFamiliesInPool = 3
-		fmt.Println("Cargo Flow Core Expansion SMOKE (RUSH-010.5)")
+		fmt.Println("Cargo Flow Cross-Region Causal SMOKE (RUSH-010.7)")
 	} else {
-		fmt.Println("Cargo Flow Boardmix (RUSH-010.5 Native Core Expansion)")
+		fmt.Println("Cargo Flow Boardmix (RUSH-010.7 Cross-Region Causal Synthesis)")
 		fmt.Println("Ctrl+C safe; --resume continues. Use -calibrate-core-space / -reexport-existing / -validate-batch.")
 	}
 
-	fmt.Printf("config=%s output=%s resume=%v workers=%d target=%d maxPool=%d coreExpand=%v\n",
-		*configPath, cfg.OutputDir, cfg.Resume, cfg.Workers, cfg.TargetAccepted, cfg.MaxPoolSize, cfg.TryCoreExpansion)
+	fmt.Printf("config=%s output=%s resume=%v workers=%d target=%d maxPool=%d causal=%v\n",
+		*configPath, cfg.OutputDir, cfg.Resume, cfg.Workers, cfg.TargetAccepted, cfg.MaxPoolSize, cfg.TryCausalSynthesis)
 
 	cancel := make(chan struct{})
 	sigCh := make(chan os.Signal, 1)

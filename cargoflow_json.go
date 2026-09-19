@@ -18,46 +18,46 @@ const CoordinateSpaceUnity = "unity"
 
 // LevelJSON is the neutral development interchange for one Cargo Flow level.
 type LevelJSON struct {
-	SchemaVersion    int         `json:"schemaVersion"`
-	LevelID          string      `json:"levelId"`
-	Width            int         `json:"width"`
-	Height           int         `json:"height"`
-	CoordinateSpace  string      `json:"coordinateSpace"`
-	Exit             ExitJSON    `json:"exit"`
-	Pieces           []PieceJSON `json:"pieces"`
-	CanonicalGestures *int             `json:"canonicalGestures,omitempty"`
-	Source            string           `json:"source,omitempty"`
-	Transplant        *TransplantJSON  `json:"transplant,omitempty"`
-	Enrichment        *EnrichmentJSON  `json:"enrichment,omitempty"`
-	BoardSpace        *BoardSpaceJSON  `json:"boardSpace,omitempty"`
+	SchemaVersion     int             `json:"schemaVersion"`
+	LevelID           string          `json:"levelId"`
+	Width             int             `json:"width"`
+	Height            int             `json:"height"`
+	CoordinateSpace   string          `json:"coordinateSpace"`
+	Exit              ExitJSON        `json:"exit"`
+	Pieces            []PieceJSON     `json:"pieces"`
+	CanonicalGestures *int            `json:"canonicalGestures,omitempty"`
+	Source            string          `json:"source,omitempty"`
+	Transplant        *TransplantJSON `json:"transplant,omitempty"`
+	Enrichment        *EnrichmentJSON `json:"enrichment,omitempty"`
+	BoardSpace        *BoardSpaceJSON `json:"boardSpace,omitempty"`
 }
 
 // EnrichmentJSON records RUSH-010 / RUSH-010.1 movable-1x1 enrichment provenance.
 type EnrichmentJSON struct {
-	BaseCandidateId              string  `json:"baseCandidateId"`
-	BaseFamilyId                 string  `json:"baseFamilyId"`
-	BaseSourcePuzzleId           string  `json:"baseSourcePuzzleId"`
-	Added1x1Count                int     `json:"added1x1Count"`
-	Essential1x1Count            int     `json:"essential1x1Count"`
-	OneByOneMovesInOptimal       int     `json:"oneByOneMovesInOptimal"`
-	BaseOptimal                  int     `json:"baseOptimal"`
-	EnrichedOptimal              int     `json:"enrichedOptimal"`
-	OptimalDelta                 int     `json:"optimalDelta"`
-	EnrichmentImpact             float64 `json:"enrichmentImpact"`
-	PlacementCells               []int   `json:"placementCells"`
-	OneByOneRole                      string `json:"oneByOneRole,omitempty"`
-	OneByOneInitiallyInTargetCorridor bool   `json:"oneByOneInitiallyInTargetCorridor"`
-	RoleEvidenceSummary               string `json:"roleEvidenceSummary,omitempty"`
-	ReleasedCells                []int   `json:"releasedCells,omitempty"`
-	SubsequentPieceClass         string  `json:"subsequentPieceClass,omitempty"`
+	BaseCandidateId                   string  `json:"baseCandidateId"`
+	BaseFamilyId                      string  `json:"baseFamilyId"`
+	BaseSourcePuzzleId                string  `json:"baseSourcePuzzleId"`
+	Added1x1Count                     int     `json:"added1x1Count"`
+	Essential1x1Count                 int     `json:"essential1x1Count"`
+	OneByOneMovesInOptimal            int     `json:"oneByOneMovesInOptimal"`
+	BaseOptimal                       int     `json:"baseOptimal"`
+	EnrichedOptimal                   int     `json:"enrichedOptimal"`
+	OptimalDelta                      int     `json:"optimalDelta"`
+	EnrichmentImpact                  float64 `json:"enrichmentImpact"`
+	PlacementCells                    []int   `json:"placementCells"`
+	OneByOneRole                      string  `json:"oneByOneRole,omitempty"`
+	OneByOneInitiallyInTargetCorridor bool    `json:"oneByOneInitiallyInTargetCorridor"`
+	RoleEvidenceSummary               string  `json:"roleEvidenceSummary,omitempty"`
+	ReleasedCells                     []int   `json:"releasedCells,omitempty"`
+	SubsequentPieceClass              string  `json:"subsequentPieceClass,omitempty"`
 	// RUSH-010.2 inventory diversity metadata (sequencer-ready).
-	InventoryClass       string `json:"inventoryClass,omitempty"`
-	InventorySignature   string `json:"inventorySignature,omitempty"`
-	Relevant1x1Count     int    `json:"relevant1x1Count,omitempty"`
-	Corridor1x1Count     int    `json:"corridor1x1Count,omitempty"`
-	DistinctRowsUsed     int    `json:"distinctRowsUsed,omitempty"`
-	DistinctColumnsUsed  int    `json:"distinctColumnsUsed,omitempty"`
-	BoardRegionsUsed     int    `json:"boardRegionsUsed,omitempty"`
+	InventoryClass      string `json:"inventoryClass,omitempty"`
+	InventorySignature  string `json:"inventorySignature,omitempty"`
+	Relevant1x1Count    int    `json:"relevant1x1Count,omitempty"`
+	Corridor1x1Count    int    `json:"corridor1x1Count,omitempty"`
+	DistinctRowsUsed    int    `json:"distinctRowsUsed,omitempty"`
+	DistinctColumnsUsed int    `json:"distinctColumnsUsed,omitempty"`
+	BoardRegionsUsed    int    `json:"boardRegionsUsed,omitempty"`
 	// RUSH-010.4 native structural augmentation metadata.
 	AugmentationClass        string `json:"augmentationClass,omitempty"`
 	NativeVariantFingerprint string `json:"nativeVariantFingerprint,omitempty"`
@@ -67,21 +67,34 @@ type EnrichmentJSON struct {
 	OuterZoneEssential       bool   `json:"outerZoneEssential,omitempty"`
 	// RUSH-010.5 structural core expansion.
 	CoreExpansionClass string `json:"coreExpansionClass,omitempty"`
+	// RUSH-010.7 cross-region causal synthesis.
+	CausalTemplate                 string  `json:"causalTemplate,omitempty"`
+	CrossRegionDependencyEdgeCount int     `json:"crossRegionDependencyEdgeCount,omitempty"`
+	LowerToUpperDependencyEdges    int     `json:"lowerToUpperDependencyEdges,omitempty"`
+	SideToUpperDependencyEdges     int     `json:"sideToUpperDependencyEdges,omitempty"`
+	LowerToCorridorDependencyEdges int     `json:"lowerToCorridorDependencyEdges,omitempty"`
+	SideToCorridorDependencyEdges  int     `json:"sideToCorridorDependencyEdges,omitempty"`
+	CrossRegionDependencyDepth     int     `json:"crossRegionDependencyDepth,omitempty"`
+	RequiredLowerPieceCount        int     `json:"requiredLowerPieceCount,omitempty"`
+	RequiredSidePieceCount         int     `json:"requiredSidePieceCount,omitempty"`
+	CausalRegionCount              int     `json:"causalRegionCount,omitempty"`
+	DistributedCausalityScore      float64 `json:"distributedCausalityScore,omitempty"`
+	MultiRegionChain               bool    `json:"multiRegionChain,omitempty"`
 }
 
 // TransplantJSON records Rush-database provenance for RUSH-008 candidates.
 type TransplantJSON struct {
-	SourceDataset          string `json:"sourceDataset"`
-	SourcePuzzleId         string `json:"sourcePuzzleId"`
-	SourceLine             int    `json:"sourceLine"`
-	OriginalBoard          string `json:"originalBoard"`
-	OriginalOptimalMoves   int    `json:"originalOptimalMoves"`
-	OriginalClusterSize    int    `json:"originalClusterSize"`
-	TransformRotation      string `json:"transformRotation"`
-	EmbeddingVariant       string `json:"embeddingVariant"`
-	OffsetX                int    `json:"offsetX"`
-	OffsetY                int    `json:"offsetY"`
-	CargoFlowOptimalGestures *int `json:"cargoFlowOptimalGestures,omitempty"`
+	SourceDataset            string `json:"sourceDataset"`
+	SourcePuzzleId           string `json:"sourcePuzzleId"`
+	SourceLine               int    `json:"sourceLine"`
+	OriginalBoard            string `json:"originalBoard"`
+	OriginalOptimalMoves     int    `json:"originalOptimalMoves"`
+	OriginalClusterSize      int    `json:"originalClusterSize"`
+	TransformRotation        string `json:"transformRotation"`
+	EmbeddingVariant         string `json:"embeddingVariant"`
+	OffsetX                  int    `json:"offsetX"`
+	OffsetY                  int    `json:"offsetY"`
+	CargoFlowOptimalGestures *int   `json:"cargoFlowOptimalGestures,omitempty"`
 }
 
 type ExitJSON struct {
@@ -90,30 +103,30 @@ type ExitJSON struct {
 }
 
 type PieceJSON struct {
-	ID       string `json:"id"`
-	Type     string `json:"type"`
-	X        int    `json:"x"`
-	Y        int    `json:"y"`
-	Width    int    `json:"width"`
-	Height   int    `json:"height"`
-	Movable  bool   `json:"movable"`
+	ID      string `json:"id"`
+	Type    string `json:"type"`
+	X       int    `json:"x"`
+	Y       int    `json:"y"`
+	Width   int    `json:"width"`
+	Height  int    `json:"height"`
+	Movable bool   `json:"movable"`
 }
 
 // SolutionJSON is the exported solver result (Unity coordinate space in from/to).
 type SolutionJSON struct {
-	SchemaVersion    int            `json:"schemaVersion"`
-	LevelID          string         `json:"levelId"`
-	Solved           bool           `json:"solved"`
-	Optimal          bool           `json:"optimal"`
-	OptimalGestures  int            `json:"optimalGestures"`
-	VisitedStates    int            `json:"visitedStates"`
-	ElapsedMs        int64          `json:"elapsedMs"`
-	TimedOut         bool           `json:"timedOut"`
-	BudgetExceeded   bool           `json:"budgetExceeded"`
-	ReplayPass       bool           `json:"replayPass"`
-	ReplayVerified   bool           `json:"replayVerified"`
-	Fingerprint      string         `json:"fingerprint"`
-	Moves            []MoveJSON     `json:"moves"`
+	SchemaVersion   int        `json:"schemaVersion"`
+	LevelID         string     `json:"levelId"`
+	Solved          bool       `json:"solved"`
+	Optimal         bool       `json:"optimal"`
+	OptimalGestures int        `json:"optimalGestures"`
+	VisitedStates   int        `json:"visitedStates"`
+	ElapsedMs       int64      `json:"elapsedMs"`
+	TimedOut        bool       `json:"timedOut"`
+	BudgetExceeded  bool       `json:"budgetExceeded"`
+	ReplayPass      bool       `json:"replayPass"`
+	ReplayVerified  bool       `json:"replayVerified"`
+	Fingerprint     string     `json:"fingerprint"`
+	Moves           []MoveJSON `json:"moves"`
 }
 
 type MoveJSON struct {
@@ -129,9 +142,9 @@ type MoveJSON struct {
 
 // SolveBudget bounds Cargo Flow searches for pilot validation.
 type SolveBudget struct {
-	TimeLimit   time.Duration
-	MaxVisited  int
-	MaxDepth    int
+	TimeLimit  time.Duration
+	MaxVisited int
+	MaxDepth   int
 }
 
 // DefaultCargoFlowSolveBudget is a finite safety bound for real-level pilots.

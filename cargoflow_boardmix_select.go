@@ -4,53 +4,110 @@ import (
 	"fmt"
 	"math"
 	"sort"
+	"strings"
 )
+
+type CausalCandidateReport struct {
+	CandidateID                    string          `json:"candidateId"`
+	FamilyID                       string          `json:"familyId"`
+	CausalTemplate                 CausalTemplate  `json:"causalTemplate"`
+	OptimalGestures                int             `json:"optimalGestures"`
+	BaseOptimal                    int             `json:"baseOptimal"`
+	CrossRegionDependencyEdgeCount int             `json:"crossRegionDependencyEdgeCount"`
+	LowerToUpperDependencyEdges    int             `json:"lowerToUpperDependencyEdges"`
+	SideToUpperDependencyEdges     int             `json:"sideToUpperDependencyEdges"`
+	LowerToCorridorDependencyEdges int             `json:"lowerToCorridorDependencyEdges"`
+	SideToCorridorDependencyEdges  int             `json:"sideToCorridorDependencyEdges"`
+	CrossRegionDependencyDepth     int             `json:"crossRegionDependencyDepth"`
+	RequiredLowerPieceCount        int             `json:"requiredLowerPieceCount"`
+	RequiredSidePieceCount         int             `json:"requiredSidePieceCount"`
+	InventoryClass                 InventoryClass  `json:"inventoryClass"`
+	BoardShapeClass                BoardShapeClass `json:"boardShapeClass"`
+}
+
+type CausalMatchedFamilyComparison struct {
+	FamilyID                   string  `json:"familyId"`
+	BaseOptimal                int     `json:"baseOptimal"`
+	CausalOptimal              int     `json:"causalOptimal"`
+	BaseGraphEdges             int     `json:"baseGraphEdges"`
+	CausalGraphEdges           int     `json:"causalGraphEdges"`
+	BaseGraphDepth             int     `json:"baseGraphDepth"`
+	CausalGraphDepth           int     `json:"causalGraphDepth"`
+	BaseCrossRegionEdges       int     `json:"baseCrossRegionEdges"`
+	CausalCrossRegionEdges     int     `json:"causalCrossRegionEdges"`
+	BaseDependencyRowSpan      int     `json:"baseDependencyRowSpan"`
+	CausalDependencyRowSpan    int     `json:"causalDependencyRowSpan"`
+	BaseDependencyColumnSpan   int     `json:"baseDependencyColumnSpan"`
+	CausalDependencyColumnSpan int     `json:"causalDependencyColumnSpan"`
+	BaseContainment            float64 `json:"baseContainment"`
+	CausalContainment          float64 `json:"causalContainment"`
+	PullLeftAvailable          bool    `json:"pullLeftAvailable"`
+	PullLeftOptimal            int     `json:"pullLeftOptimal,omitempty"`
+	PullLeftGraphEdges         int     `json:"pullLeftGraphEdges,omitempty"`
+	PullLeftGraphDepth         int     `json:"pullLeftGraphDepth,omitempty"`
+	PullLeftCrossRegionEdges   int     `json:"pullLeftCrossRegionEdges,omitempty"`
+	PullLeftDependencyRowSpan  int     `json:"pullLeftDependencyRowSpan,omitempty"`
+	PullLeftDependencyColSpan  int     `json:"pullLeftDependencyColumnSpan,omitempty"`
+	PullLeftContainment        float64 `json:"pullLeftContainment,omitempty"`
+}
 
 // BoardMixSelectReport explains pool vs final diversity selection and feasibility.
 type BoardMixSelectReport struct {
-	FinalTarget              int               `json:"finalTarget"`
-	FinalAccepted            int               `json:"finalAccepted"`
-	MissingCount             int               `json:"missingCount"`
-	PoolSize                 int               `json:"poolSize"`
-	PoolUniqueFamilies       int               `json:"poolUniqueFamilies"`
-	PoolShapeDist            map[string]int    `json:"poolBoardShapeClass"`
-	PoolInventoryDist        map[string]int    `json:"poolInventoryClass"`
-	PoolOuterZoneRelevant    int               `json:"poolOuterZoneRelevant"`
-	PoolDifficultyBands      map[string]int    `json:"poolDifficultyBands"`
-	PoolShapeInventoryCross  map[string]map[string]int `json:"poolShapeInventoryCross"`
-	PoolCrossAvailability    map[string]int    `json:"poolCrossAvailability"`
-	FinalShapeDist           map[string]int    `json:"finalBoardShapeClass"`
-	FinalInventoryDist       map[string]int    `json:"finalInventoryClass"`
-	FinalOuterZoneRelevant   int               `json:"finalOuterZoneRelevant"`
-	DistinctBoardShapes      int               `json:"distinctBoardShapes"`
-	SelectionSkipCounters    map[string]int    `json:"selectionSkipCounters"`
-	QuotaRelaxations         []string          `json:"quotaRelaxations"`
-	UnmetRequirements        []string          `json:"unmetRequirements"`
-	WhyFinalShort            []string          `json:"whyFinalShort,omitempty"`
-	DiversityTargetUnmet     bool              `json:"diversityTargetUnmet"`
-	DiversityUnmetReasons    []string          `json:"diversityUnmetReasons,omitempty"`
-	ExpandedFullFieldDiag    BoardShapeFeasibilityDiag `json:"expandedFullFieldDiagnostic"`
-	HardConstraints          []string          `json:"hardConstraints"`
-	SoftConstraints          []string          `json:"softConstraints"`
+	FinalTarget             int                       `json:"finalTarget"`
+	FinalAccepted           int                       `json:"finalAccepted"`
+	MissingCount            int                       `json:"missingCount"`
+	PoolSize                int                       `json:"poolSize"`
+	PoolUniqueFamilies      int                       `json:"poolUniqueFamilies"`
+	PoolShapeDist           map[string]int            `json:"poolBoardShapeClass"`
+	PoolInventoryDist       map[string]int            `json:"poolInventoryClass"`
+	PoolOuterZoneRelevant   int                       `json:"poolOuterZoneRelevant"`
+	PoolDifficultyBands     map[string]int            `json:"poolDifficultyBands"`
+	PoolShapeInventoryCross map[string]map[string]int `json:"poolShapeInventoryCross"`
+	PoolCrossAvailability   map[string]int            `json:"poolCrossAvailability"`
+	FinalShapeDist          map[string]int            `json:"finalBoardShapeClass"`
+	FinalInventoryDist      map[string]int            `json:"finalInventoryClass"`
+	FinalOuterZoneRelevant  int                       `json:"finalOuterZoneRelevant"`
+	DistinctBoardShapes     int                       `json:"distinctBoardShapes"`
+	SelectionSkipCounters   map[string]int            `json:"selectionSkipCounters"`
+	QuotaRelaxations        []string                  `json:"quotaRelaxations"`
+	UnmetRequirements       []string                  `json:"unmetRequirements"`
+	WhyFinalShort           []string                  `json:"whyFinalShort,omitempty"`
+	DiversityTargetUnmet    bool                      `json:"diversityTargetUnmet"`
+	DiversityUnmetReasons   []string                  `json:"diversityUnmetReasons,omitempty"`
+	ExpandedFullFieldDiag   BoardShapeFeasibilityDiag `json:"expandedFullFieldDiagnostic"`
+	HardConstraints         []string                  `json:"hardConstraints"`
+	SoftConstraints         []string                  `json:"softConstraints"`
 	// RUSH-010.5.1 genuine core-expansion selection diagnostics.
-	PoolGenuineCoreExpanded                 int            `json:"poolGenuineCoreExpanded"`
-	PoolGenuineCoreExpandedUniqueFamilies   int            `json:"poolGenuineCoreExpandedUniqueFamilies"`
-	FinalGenuineCoreExpanded                int            `json:"finalGenuineCoreExpanded"`
-	FinalGenuineCoreExpandedTarget          int            `json:"finalGenuineCoreExpandedTarget"`
-	FinalCoreExpansionClass                 map[string]int `json:"finalCoreExpansionClass,omitempty"`
-	FinalContainmentValues                  []float64      `json:"finalContainmentValues,omitempty"`
-	FinalFits6x6False                       int            `json:"finalFits6x6False"`
-	FinalIsolated1x1Suspect                 int            `json:"finalIsolated1x1Suspect"`
-	GenuineCoreExpandedMonocultureNote      string         `json:"genuineCoreExpandedMonocultureNote,omitempty"`
+	PoolGenuineCoreExpanded               int            `json:"poolGenuineCoreExpanded"`
+	PoolGenuineCoreExpandedUniqueFamilies int            `json:"poolGenuineCoreExpandedUniqueFamilies"`
+	FinalGenuineCoreExpanded              int            `json:"finalGenuineCoreExpanded"`
+	FinalGenuineCoreExpandedTarget        int            `json:"finalGenuineCoreExpandedTarget"`
+	FinalCoreExpansionClass               map[string]int `json:"finalCoreExpansionClass,omitempty"`
+	FinalContainmentValues                []float64      `json:"finalContainmentValues,omitempty"`
+	FinalFits6x6False                     int            `json:"finalFits6x6False"`
+	FinalIsolated1x1Suspect               int            `json:"finalIsolated1x1Suspect"`
+	GenuineCoreExpandedMonocultureNote    string         `json:"genuineCoreExpandedMonocultureNote,omitempty"`
+	// RUSH-010.7 causal synthesis diagnostics.
+	PoolCausalExpanded               int                             `json:"poolCausalExpanded"`
+	PoolCausalExpandedUniqueFamilies int                             `json:"poolCausalExpandedUniqueFamilies"`
+	FinalCausalExpanded              int                             `json:"finalCausalExpanded"`
+	FinalCausalExpandedTarget        int                             `json:"finalCausalExpandedTarget"`
+	CausalTemplateDistribution       map[string]int                  `json:"causalTemplateDistribution,omitempty"`
+	CrossRegionEdgeDistribution      map[string]int                  `json:"crossRegionEdgeDistribution,omitempty"`
+	LowerToUpperCount                int                             `json:"lowerToUpperCount"`
+	SideToUpperCount                 int                             `json:"sideToUpperCount"`
+	MultiRegionChainCount            int                             `json:"multiRegionChainCount"`
+	MatchedFamilyComparison          []CausalMatchedFamilyComparison `json:"matchedFamilyComparison,omitempty"`
+	HumanValidationCandidates        []CausalCandidateReport         `json:"humanValidationCandidates,omitempty"`
 }
 
 // BoardShapeFeasibilityDiag explains missing Expanded/FullField/Compact classes.
 type BoardShapeFeasibilityDiag struct {
-	Summary              string         `json:"summary"`
-	ClassifierNotes      []string       `json:"classifierNotes"`
-	PoolShapeCounts      map[string]int `json:"poolShapeCounts"`
-	LikelyRootCause      string         `json:"likelyRootCause"`
-	Native7x8Limitation  string         `json:"native7x8Limitation"`
+	Summary             string         `json:"summary"`
+	ClassifierNotes     []string       `json:"classifierNotes"`
+	PoolShapeCounts     map[string]int `json:"poolShapeCounts"`
+	LikelyRootCause     string         `json:"likelyRootCause"`
+	Native7x8Limitation string         `json:"native7x8Limitation"`
 }
 
 // SelectBoardMixShortlist picks a diversity-aware final shortlist from a solved pool.
@@ -85,6 +142,7 @@ func SelectBoardMixShortlist(pool []BoardMixAccepted, cfg BoardMixConfig) ([]Boa
 
 	famSet := map[string]bool{}
 	genuineFam := map[string]bool{}
+	causalFam := map[string]bool{}
 	for _, c := range pool {
 		shape := string(c.BoardUtil.BoardShapeClass)
 		inv := string(c.InventoryClass)
@@ -123,9 +181,14 @@ func SelectBoardMixShortlist(pool []BoardMixAccepted, cfg BoardMixConfig) ([]Boa
 			rep.PoolGenuineCoreExpanded++
 			genuineFam[c.FamilyID] = true
 		}
+		if IsCausalExpanded(c) {
+			rep.PoolCausalExpanded++
+			causalFam[c.FamilyID] = true
+		}
 	}
 	rep.PoolUniqueFamilies = len(famSet)
 	rep.PoolGenuineCoreExpandedUniqueFamilies = len(genuineFam)
+	rep.PoolCausalExpandedUniqueFamilies = len(causalFam)
 	rep.ExpandedFullFieldDiag = DiagnoseExpandedFullFieldAvailability(rep.PoolShapeDist)
 
 	target := cfg.TargetAccepted
@@ -141,6 +204,14 @@ func SelectBoardMixShortlist(pool []BoardMixAccepted, cfg BoardMixConfig) ([]Boa
 		targetGenuine = target
 	}
 	rep.FinalGenuineCoreExpandedTarget = targetGenuine
+	targetCausal := cfg.TargetCausalExpanded
+	if targetCausal < 0 {
+		targetCausal = 0
+	}
+	if targetCausal > target {
+		targetCausal = target
+	}
+	rep.FinalCausalExpandedTarget = targetCausal
 	minShapes := cfg.MinDistinctBoardShapes
 	if minShapes <= 0 {
 		minShapes = 3
@@ -268,6 +339,53 @@ func SelectBoardMixShortlist(pool []BoardMixAccepted, cfg BoardMixConfig) ([]Boa
 			return true
 		}
 		return false
+	}
+
+	// RUSH-010.7: reserve proof-backed causal slots before geometric balancing.
+	if targetCausal > 0 {
+		rep.HardConstraints = append(rep.HardConstraints,
+			fmt.Sprintf("TargetCausalExpanded=%d (proof-backed, unique FamilyId)", targetCausal))
+		usedTemplate := map[CausalTemplate]bool{}
+		usedEdgeSignature := map[string]bool{}
+		usedCausalInventory := map[InventoryClass]bool{}
+		for len(selected) < targetCausal {
+			bestIndex, bestScore := -1, math.Inf(-1)
+			for i, c := range pool {
+				if !IsCausalExpanded(c) || usedFam[c.FamilyID] {
+					continue
+				}
+				score := c.CausalProof.DistributedCausalityScore
+				if c.CausalProof.OptimalDelta >= 0 && c.CausalProof.OptimalDelta <= 10 {
+					score += 25
+				} else if c.CausalProof.OptimalDelta < 0 {
+					score -= 50
+				}
+				if !usedTemplate[c.CausalTemplate] {
+					score += 1000
+				}
+				signature := causalEdgeSignature(c.CausalProof)
+				if !usedEdgeSignature[signature] {
+					score += 500
+				}
+				if !usedCausalInventory[c.InventoryClass] {
+					score += 100
+				}
+				if c.CausalProof.MultiRegionChain {
+					score += 50
+				}
+				if score > bestScore || (score == bestScore && c.FamilyID < pool[bestIndex].FamilyID) {
+					bestIndex, bestScore = i, score
+				}
+			}
+			if bestIndex < 0 {
+				break
+			}
+			candidate := pool[bestIndex]
+			takeCandidate(candidate)
+			usedTemplate[candidate.CausalTemplate] = true
+			usedEdgeSignature[causalEdgeSignature(candidate.CausalProof)] = true
+			usedCausalInventory[candidate.InventoryClass] = true
+		}
 	}
 
 	// RUSH-010.5.1: reserve genuine core-expanded slots first (unique FamilyId).
@@ -409,7 +527,7 @@ func SelectBoardMixShortlist(pool []BoardMixAccepted, cfg BoardMixConfig) ([]Boa
 		}
 	}
 
-	for _, c := range selected {
+	for selectedIndex, c := range selected {
 		rep.FinalShapeDist[string(c.BoardUtil.BoardShapeClass)]++
 		rep.FinalInventoryDist[string(c.InventoryClass)]++
 		if c.BoardUtil.OuterZoneRelevant {
@@ -435,7 +553,59 @@ func SelectBoardMixShortlist(pool []BoardMixAccepted, cfg BoardMixConfig) ([]Boa
 		if IsGenuineCoreExpanded(c) {
 			rep.FinalGenuineCoreExpanded++
 		}
+		if IsCausalExpanded(c) {
+			rep.FinalCausalExpanded++
+			if rep.CausalTemplateDistribution == nil {
+				rep.CausalTemplateDistribution = map[string]int{}
+			}
+			if rep.CrossRegionEdgeDistribution == nil {
+				rep.CrossRegionEdgeDistribution = map[string]int{}
+			}
+			rep.CausalTemplateDistribution[string(c.CausalTemplate)]++
+			for edgeType, count := range c.CausalProof.EdgeTypeDistribution {
+				rep.CrossRegionEdgeDistribution[edgeType] += count
+			}
+			if c.CausalProof.RequiredLowerPieceCount > 0 {
+				rep.LowerToUpperCount++
+			}
+			if c.CausalProof.RequiredSidePieceCount > 0 ||
+				c.CausalProof.SideToUpperDependencyEdges+c.CausalProof.SideToCorridorDependencyEdges > 0 {
+				rep.SideToUpperCount++
+			}
+			if c.CausalProof.MultiRegionChain {
+				rep.MultiRegionChainCount++
+			}
+			rep.HumanValidationCandidates = append(rep.HumanValidationCandidates, CausalCandidateReport{
+				CandidateID: fmt.Sprintf("Candidate_%03d", selectedIndex+1),
+				FamilyID:    c.FamilyID, CausalTemplate: c.CausalTemplate,
+				OptimalGestures: c.OptimalGestures, BaseOptimal: c.CausalProof.BaseOptimal,
+				CrossRegionDependencyEdgeCount: c.CausalProof.CrossRegionDependencyEdgeCount,
+				LowerToUpperDependencyEdges:    c.CausalProof.LowerToUpperDependencyEdges,
+				SideToUpperDependencyEdges:     c.CausalProof.SideToUpperDependencyEdges,
+				LowerToCorridorDependencyEdges: c.CausalProof.LowerToCorridorDependencyEdges,
+				SideToCorridorDependencyEdges:  c.CausalProof.SideToCorridorDependencyEdges,
+				CrossRegionDependencyDepth:     c.CausalProof.CrossRegionDependencyDepth,
+				RequiredLowerPieceCount:        c.CausalProof.RequiredLowerPieceCount,
+				RequiredSidePieceCount:         c.CausalProof.RequiredSidePieceCount,
+				InventoryClass:                 c.InventoryClass, BoardShapeClass: c.BoardUtil.BoardShapeClass,
+			})
+			rep.MatchedFamilyComparison = append(rep.MatchedFamilyComparison, CausalMatchedFamilyComparison{
+				FamilyID: c.FamilyID, BaseOptimal: c.CausalProof.BaseOptimal,
+				CausalOptimal:  c.CausalProof.NativeOptimal,
+				BaseGraphEdges: c.CausalProof.BaseGraphEdges, CausalGraphEdges: c.CausalProof.GraphEdges,
+				BaseGraphDepth: c.CausalProof.BaseGraphDepth, CausalGraphDepth: c.CausalProof.GraphDepth,
+				BaseCrossRegionEdges:       c.CausalProof.BaseCrossRegionEdges,
+				CausalCrossRegionEdges:     c.CausalProof.CrossRegionDependencyEdgeCount,
+				BaseDependencyRowSpan:      c.CausalProof.BaseDependencyRowSpan,
+				CausalDependencyRowSpan:    c.CausalProof.DependencyRowSpan,
+				BaseDependencyColumnSpan:   c.CausalProof.BaseDependencyColumnSpan,
+				CausalDependencyColumnSpan: c.CausalProof.DependencyColumnSpan,
+				BaseContainment:            c.CausalProof.BaseContainment,
+				CausalContainment:          c.CausalProof.Best6x6Containment,
+			})
+		}
 	}
+	attachPullLeftMatchedComparisons(&rep, pool)
 	rep.DistinctBoardShapes = len(rep.FinalShapeDist)
 	rep.FinalAccepted = len(selected)
 	rep.MissingCount = target - len(selected)
@@ -457,6 +627,15 @@ func SelectBoardMixShortlist(pool []BoardMixAccepted, cfg BoardMixConfig) ([]Boa
 		rep.DiversityTargetUnmet = true
 		msg := fmt.Sprintf("TargetGenuineCoreExpanded: need %d, got %d (pool unique genuine families %d)",
 			targetGenuine, rep.FinalGenuineCoreExpanded, rep.PoolGenuineCoreExpandedUniqueFamilies)
+		rep.UnmetRequirements = append(rep.UnmetRequirements, msg)
+		rep.DiversityUnmetReasons = append(rep.DiversityUnmetReasons, msg)
+	}
+	if targetCausal > 0 &&
+		rep.PoolCausalExpandedUniqueFamilies >= targetCausal &&
+		rep.FinalCausalExpanded < targetCausal {
+		rep.DiversityTargetUnmet = true
+		msg := fmt.Sprintf("TargetCausalExpanded: need %d, got %d (pool unique causal families %d)",
+			targetCausal, rep.FinalCausalExpanded, rep.PoolCausalExpandedUniqueFamilies)
 		rep.UnmetRequirements = append(rep.UnmetRequirements, msg)
 		rep.DiversityUnmetReasons = append(rep.DiversityUnmetReasons, msg)
 	}
@@ -676,6 +855,71 @@ func noteGenuineMonoculture(rep *BoardMixSelectReport, selected []BoardMixAccept
 		rep.GenuineCoreExpandedMonocultureNote = fmt.Sprintf(
 			"All %d reserved genuine-expanded slots are %s / %s / %s — adequate for human validation of the visual 6x6-in-7x8 pattern, but NOT sufficient template diversity for a mass factory (defer broader CoreExpansion templates to a later milestone).",
 			n, cls, shape, inv)
+	}
+}
+
+func causalEdgeSignature(proof *CausalProof) string {
+	if proof == nil {
+		return "none"
+	}
+	parts := []string{}
+	if proof.LowerToUpperDependencyEdges > 0 {
+		parts = append(parts, "L>U")
+	}
+	if proof.LowerToCorridorDependencyEdges > 0 {
+		parts = append(parts, "L>C")
+	}
+	if proof.SideToUpperDependencyEdges > 0 {
+		parts = append(parts, "S>U")
+	}
+	if proof.SideToCorridorDependencyEdges > 0 {
+		parts = append(parts, "S>C")
+	}
+	if proof.MultiRegionChain {
+		parts = append(parts, "multi")
+	}
+	if len(parts) == 0 {
+		return "cross-other"
+	}
+	return strings.Join(parts, "+")
+}
+
+func attachPullLeftMatchedComparisons(rep *BoardMixSelectReport, pool []BoardMixAccepted) {
+	if rep == nil || len(rep.MatchedFamilyComparison) == 0 {
+		return
+	}
+	pullByFamily := map[string]BoardMixAccepted{}
+	for _, candidate := range pool {
+		if candidate.CoreExpansionClass != CoreExpDependencyPullLeft ||
+			candidate.Board == nil || !candidate.Solution.Solvable {
+			continue
+		}
+		if _, exists := pullByFamily[candidate.FamilyID]; !exists {
+			pullByFamily[candidate.FamilyID] = candidate
+		}
+	}
+	for i := range rep.MatchedFamilyComparison {
+		matched := &rep.MatchedFamilyComparison[i]
+		pull, ok := pullByFamily[matched.FamilyID]
+		if !ok {
+			continue
+		}
+		spatial := ComputeSpatialDependencyMetrics(
+			pull.Board, pull.Solution, DefaultCargoFlowSolveBudget())
+		core := pull.CoreSpace
+		if core == nil {
+			computed := ComputeCoreSpaceMetrics(
+				pull.Board, pull.OffsetX, pull.OffsetY, pull.Solution, DefaultCargoFlowSolveBudget())
+			core = &computed
+		}
+		matched.PullLeftAvailable = true
+		matched.PullLeftOptimal = pull.Solution.NumMoves
+		matched.PullLeftGraphEdges = spatial.DependencyGraphEdgeCount
+		matched.PullLeftGraphDepth = spatial.DependencyGraphDepth
+		matched.PullLeftCrossRegionEdges = spatial.CrossTargetDependencies
+		matched.PullLeftDependencyRowSpan = spatial.DependencyRowSpan
+		matched.PullLeftDependencyColSpan = spatial.DependencyColumnSpan
+		matched.PullLeftContainment = core.Best6x6MeaningfulContainmentRatio
 	}
 }
 

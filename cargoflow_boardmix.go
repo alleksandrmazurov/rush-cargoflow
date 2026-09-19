@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-const BoardMixVersion = "boardmix-v1.5.1"
+const BoardMixVersion = "boardmix-v1.7.0"
 
 // BoardMixConfig drives RUSH-010.3 / 010.4 / 010.4.1 board-space diversity generation.
 type BoardMixConfig struct {
@@ -31,16 +31,20 @@ type BoardMixConfig struct {
 	TryOuterAugment            bool    `json:"tryOuterAugment"`
 	TryNativeAugment           bool    `json:"tryNativeAugment"`
 	TryCoreExpansion           bool    `json:"tryCoreExpansion"`
+	TryCausalSynthesis         bool    `json:"tryCausalSynthesis"`
 	TryInventoryEnrichment     bool    `json:"tryInventoryEnrichment"`
 	MaxNativeAcceptedPerEmbed  int     `json:"maxNativeAcceptedPerEmbed"`
 	MaxNativeProposalsPerEmbed int     `json:"maxNativeProposalsPerEmbed"`
 	MaxCoreExpansionAccepted   int     `json:"maxCoreExpansionAccepted"`
 	MaxCoreExpansionProposals  int     `json:"maxCoreExpansionProposals"`
+	MaxCausalAcceptedPerEmbed  int     `json:"maxCausalAcceptedPerEmbed"`
+	MaxCausalProposalsPerEmbed int     `json:"maxCausalProposalsPerEmbed"`
 	CoreSpaceFitThreshold      float64 `json:"coreSpaceFitThreshold"`
 	RequireCoreNotFitIn6x6     bool    `json:"requireCoreNotFitIn6x6"`
 	// TargetGenuineCoreExpanded reserves final slots for IsGenuineCoreExpanded (RUSH-010.5.1).
 	// 0 = disabled (legacy diversity-only selection).
 	TargetGenuineCoreExpanded   int            `json:"targetGenuineCoreExpanded"`
+	TargetCausalExpanded        int            `json:"targetCausalExpanded"`
 	FamilyFirstExploration      bool           `json:"familyFirstExploration"`
 	PerFamilyPoolCap            int            `json:"perFamilyPoolCap"`
 	MinUniqueFamiliesInPool     int            `json:"minUniqueFamiliesInPool"`
@@ -76,11 +80,14 @@ func DefaultBoardMixConfig() BoardMixConfig {
 		TryOuterAugment:             true,
 		TryNativeAugment:            true,
 		TryCoreExpansion:            false, // enabled by RUSH-010.5 configs
+		TryCausalSynthesis:          false, // enabled by RUSH-010.7 configs
 		TryInventoryEnrichment:      true,
 		MaxNativeAcceptedPerEmbed:   2,
 		MaxNativeProposalsPerEmbed:  10,
 		MaxCoreExpansionAccepted:    2,
 		MaxCoreExpansionProposals:   12,
+		MaxCausalAcceptedPerEmbed:   2,
+		MaxCausalProposalsPerEmbed:  16,
 		CoreSpaceFitThreshold:       Default6x6FitThreshold,
 		RequireCoreNotFitIn6x6:      false,
 		FamilyFirstExploration:      true,
@@ -169,6 +176,12 @@ func LoadBoardMixConfigJSON(path string) (BoardMixConfig, error) {
 	if cfg.MaxCoreExpansionProposals <= 0 {
 		cfg.MaxCoreExpansionProposals = 12
 	}
+	if cfg.MaxCausalAcceptedPerEmbed <= 0 {
+		cfg.MaxCausalAcceptedPerEmbed = 2
+	}
+	if cfg.MaxCausalProposalsPerEmbed <= 0 {
+		cfg.MaxCausalProposalsPerEmbed = 16
+	}
 	if cfg.CoreSpaceFitThreshold <= 0 {
 		cfg.CoreSpaceFitThreshold = Default6x6FitThreshold
 	}
@@ -235,6 +248,8 @@ type BoardMixAccepted struct {
 	CoreSpace                *CoreSpaceMetrics       `json:"coreSpace,omitempty"`
 	NativeMeta               *NativeAugmentMeta      `json:"nativeAugment,omitempty"`
 	CoreExpansionMeta        *CoreExpansionMeta      `json:"coreExpansion,omitempty"`
+	CausalTemplate           CausalTemplate          `json:"causalTemplate,omitempty"`
+	CausalProof              *CausalProof            `json:"causalProof,omitempty"`
 	NativeVariantFingerprint string                  `json:"nativeVariantFingerprint,omitempty"`
 	ReplayVerified           bool                    `json:"replayVerified"`
 	Level                    *LevelJSON              `json:"level,omitempty"`
@@ -523,6 +538,12 @@ func RunBoardMixPilot(cfg BoardMixConfig, cancel <-chan struct{}) (BoardMixResul
 					mu.Lock()
 					out.Stats.AugmentationsProposed += len(cands)
 					mu.Unlock()
+				case "causal":
+					cands, reason, cached = evaluateCausalSynthesisJob(j.base, j.embed, budget, cache, dbHash, cfg)
+					augProposed = len(cands)
+					mu.Lock()
+					out.Stats.AugmentationsProposed += len(cands)
+					mu.Unlock()
 				default:
 					cand, r, c := evaluateBoardMixJob(j.base, j.embed, j.mode == "outer1", budget, cache, dbHash)
 					reason, cached = r, c
@@ -578,7 +599,10 @@ func RunBoardMixPilot(cfg BoardMixConfig, cancel <-chan struct{}) (BoardMixResul
 				}
 				cands = filtered
 
-				doEnrich := cfg.TryInventoryEnrichment
+				// Causal proofs are tied to the exact accepted board/solution.
+				// Inventory enrichment would mutate that topology and must re-prove it;
+				// keep causal candidates immutable in this bounded pilot.
+				doEnrich := cfg.TryInventoryEnrichment && j.mode != "causal"
 				plainList := append([]*BoardMixAccepted{}, cands...)
 				mu.Unlock()
 
@@ -769,6 +793,9 @@ func enrichBoardMixInventory(baseCand BoardMixAccepted, budget SolveBudget, res 
 			Augmented:                baseCand.Augmented,
 			AugmentationClass:        baseCand.AugmentationClass,
 			NativeMeta:               baseCand.NativeMeta,
+			CoreExpansionClass:       baseCand.CoreExpansionClass,
+			CoreSpace:                baseCand.CoreSpace,
+			CoreExpansionMeta:        baseCand.CoreExpansionMeta,
 			NativeVariantFingerprint: baseCand.NativeVariantFingerprint,
 			ReplayVerified:           best.ReplayVerified,
 			Level:                    level,
@@ -1102,6 +1129,71 @@ func evaluateCoreExpansionJob(base EnrichmentBase, embed EmbeddingVariant, budge
 	return out, "", cached
 }
 
+func evaluateCausalSynthesisJob(base EnrichmentBase, embed EmbeddingVariant, budget SolveBudget, cache *SolveCache, dbHash string, cfg BoardMixConfig) ([]*BoardMixAccepted, string, bool) {
+	plain, reason, cached := evaluateBoardMixJob(base, embed, false, budget, cache, dbHash)
+	if plain == nil || plain.Board == nil {
+		if reason == "" {
+			reason = "CausalBaseFailed"
+		}
+		return nil, reason, cached
+	}
+	ccfg := DefaultCausalSynthesisConfig()
+	ccfg.MaxAcceptedPerBoard = cfg.MaxCausalAcceptedPerEmbed
+	ccfg.MaxProposalsPerBoard = cfg.MaxCausalProposalsPerEmbed
+	ccfg.CoreOffsetX = plain.OffsetX
+	ccfg.CoreOffsetY = plain.OffsetY
+	candidates, rejected := GenerateCausalSynthesisCandidates(
+		plain.Board, plain.OptimalGestures, budget, ccfg)
+	if len(candidates) == 0 {
+		top, topN := "CausalSynthesisFailed", 0
+		for key, count := range rejected {
+			if count > topN {
+				top, topN = key, count
+			}
+		}
+		return nil, top, cached
+	}
+	out := make([]*BoardMixAccepted, 0, len(candidates))
+	for _, candidate := range candidates {
+		util := ComputeBoardUtilization(candidate.Board, plain.OffsetX, plain.OffsetY, &candidate.Sol)
+		inv := BuildCargoInventorySignature(candidate.Board)
+		level, err := LevelJSONFromBoard(candidate.Board, "pending", "RushDatabaseCausalSynthesis")
+		if err != nil {
+			continue
+		}
+		level.Transplant = plain.Level.Transplant
+		if level.Transplant != nil {
+			cp := *level.Transplant
+			cp.EmbeddingVariant = string(embed)
+			cp.OffsetX = plain.OffsetX
+			cp.OffsetY = plain.OffsetY
+			cp.TransformRotation = TransformRotationCW90
+			level.Transplant = &cp
+		}
+		level.BoardSpace = util.ToJSON(embed)
+		proof := candidate.Proof
+		accepted := &BoardMixAccepted{
+			BaseCandidateID: plain.BaseCandidateID, FamilyID: plain.FamilyID,
+			SourcePuzzleID: plain.SourcePuzzleID, Embedding: embed,
+			OffsetX: plain.OffsetX, OffsetY: plain.OffsetY,
+			InventoryClass: inv.InventoryClass, BoardUtil: util,
+			OptimalGestures: candidate.Sol.NumMoves, SelectionBand: plain.SelectionBand,
+			Augmented: true, AugmentationClass: AugmentationClass(proof.Template),
+			CausalTemplate: proof.Template, CausalProof: &proof,
+			NativeVariantFingerprint: nativeVariantFingerprint(
+				candidate.Board, AugmentationClass(proof.Template)),
+			ReplayVerified: true, Level: level, Board: candidate.Board,
+			Solution: candidate.Sol, ASCIIPreview: asciiCargoBoard(candidate.Board),
+		}
+		attachCoreSpaceMetrics(accepted, budget, cfg.CoreSpaceFitThreshold)
+		out = append(out, accepted)
+	}
+	if len(out) == 0 {
+		return nil, "CausalSynthesisFiltered", cached
+	}
+	return out, "", cached
+}
+
 func finalizeBoardMixCandidate(c *BoardMixAccepted, id string) {
 	c.CandidateID = id
 	if c.Level != nil {
@@ -1138,6 +1230,24 @@ func finalizeBoardMixCandidate(c *BoardMixAccepted, id string) {
 			c.Level.Enrichment.EnrichedOptimal = c.CoreExpansionMeta.NativeOptimal
 			c.Level.Enrichment.OptimalDelta = c.CoreExpansionMeta.OptimalDelta
 			c.Level.Enrichment.CoreExpansionClass = string(c.CoreExpansionMeta.ExpansionClass)
+		}
+		if c.CausalProof != nil {
+			p := c.CausalProof
+			c.Level.Enrichment.CausalTemplate = string(p.Template)
+			c.Level.Enrichment.BaseOptimal = p.BaseOptimal
+			c.Level.Enrichment.EnrichedOptimal = p.NativeOptimal
+			c.Level.Enrichment.OptimalDelta = p.OptimalDelta
+			c.Level.Enrichment.CrossRegionDependencyEdgeCount = p.CrossRegionDependencyEdgeCount
+			c.Level.Enrichment.LowerToUpperDependencyEdges = p.LowerToUpperDependencyEdges
+			c.Level.Enrichment.SideToUpperDependencyEdges = p.SideToUpperDependencyEdges
+			c.Level.Enrichment.LowerToCorridorDependencyEdges = p.LowerToCorridorDependencyEdges
+			c.Level.Enrichment.SideToCorridorDependencyEdges = p.SideToCorridorDependencyEdges
+			c.Level.Enrichment.CrossRegionDependencyDepth = p.CrossRegionDependencyDepth
+			c.Level.Enrichment.RequiredLowerPieceCount = p.RequiredLowerPieceCount
+			c.Level.Enrichment.RequiredSidePieceCount = p.RequiredSidePieceCount
+			c.Level.Enrichment.CausalRegionCount = p.CausalRegionCount
+			c.Level.Enrichment.DistributedCausalityScore = p.DistributedCausalityScore
+			c.Level.Enrichment.MultiRegionChain = p.MultiRegionChain
 		}
 		if c.Board != nil {
 			inv := BuildCargoInventorySignature(c.Board)
