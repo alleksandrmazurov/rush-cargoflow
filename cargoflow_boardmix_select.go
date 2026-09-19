@@ -309,7 +309,21 @@ func SelectBoardMixShortlist(pool []BoardMixAccepted, cfg BoardMixConfig) ([]Boa
 			return sa < sb
 		}
 		if a.FamilyID != b.FamilyID {
+			if cfg.Seed != 0 {
+				ra := seededPRNGRank(cfg.Seed, "select-idx", a.FamilyID, a.BaseCandidateID, a.Embedding, a.AugmentationClass, a.NativeVariantFingerprint)
+				rb := seededPRNGRank(cfg.Seed, "select-idx", b.FamilyID, b.BaseCandidateID, b.Embedding, b.AugmentationClass, b.NativeVariantFingerprint)
+				if ra != rb {
+					return ra < rb
+				}
+			}
 			return a.FamilyID < b.FamilyID
+		}
+		if cfg.Seed != 0 {
+			ra := seededPRNGRank(cfg.Seed, "select-same-family", a.FamilyID, a.BaseCandidateID, a.Embedding, a.AugmentationClass, a.NativeVariantFingerprint)
+			rb := seededPRNGRank(cfg.Seed, "select-same-family", b.FamilyID, b.BaseCandidateID, b.Embedding, b.AugmentationClass, b.NativeVariantFingerprint)
+			if ra != rb {
+				return ra < rb
+			}
 		}
 		return string(a.Embedding) < string(b.Embedding)
 	})
@@ -421,6 +435,27 @@ func SelectBoardMixShortlist(pool []BoardMixAccepted, cfg BoardMixConfig) ([]Boa
 		}
 		return count
 	}
+	reserveDiversityScore := func(c BoardMixAccepted) float64 {
+		score := 0.0
+		inv := string(c.InventoryClass)
+		shape := string(c.BoardUtil.BoardShapeClass)
+		if want := invNeed[inv]; want > invCount[inv] {
+			score += 5000 + float64(want-invCount[inv])*100
+		}
+		if invCount[inv] == 0 && len(invCount) < minInvClasses {
+			score += 2500
+		}
+		if maxInv := maxInvCountFor(maxInvFrac); maxInv > 0 && invCount[inv] >= maxInv {
+			score -= 5000
+		}
+		if want := shapeNeed[shape]; want > shapeCount[shape] {
+			score += 1500 + float64(want-shapeCount[shape])*50
+		}
+		if cfg.MaxBoardShapeFraction > 0 && shapeCount[shape] >= maxShapeCountFor(cfg.MaxBoardShapeFraction) {
+			score -= 1000
+		}
+		return score
+	}
 	reserveTargetRows := func(predicate func(int) bool, desired int) {
 		for selectedRowCount(predicate) < desired && len(selected) < target {
 			bestIndex, bestScore := -1, math.Inf(-1)
@@ -435,8 +470,10 @@ func SelectBoardMixShortlist(pool []BoardMixAccepted, cfg BoardMixConfig) ([]Boa
 				if candidate.ReplayVerified {
 					score += 100
 				}
+				score += reserveDiversityScore(candidate)
 				if score > bestScore ||
-					(score == bestScore && (bestIndex < 0 || candidate.FamilyID < pool[bestIndex].FamilyID)) {
+					(score == bestScore && (bestIndex < 0 ||
+						seededCandidateLess(cfg.Seed, "target-row", candidate, pool[bestIndex]))) {
 					bestIndex, bestScore = i, score
 				}
 			}
@@ -489,7 +526,9 @@ func SelectBoardMixShortlist(pool []BoardMixAccepted, cfg BoardMixConfig) ([]Boa
 				if c.CausalProof.MultiRegionChain {
 					score += 50
 				}
-				if score > bestScore || (score == bestScore && c.FamilyID < pool[bestIndex].FamilyID) {
+				score += reserveDiversityScore(c)
+				if score > bestScore || (score == bestScore &&
+					(bestIndex < 0 || seededCandidateLess(cfg.Seed, "causal", c, pool[bestIndex]))) {
 					bestIndex, bestScore = i, score
 				}
 			}
@@ -1034,6 +1073,26 @@ func causalEdgeSignature(proof *CausalProof) string {
 		return "cross-other"
 	}
 	return strings.Join(parts, "+")
+}
+
+func seededCandidateLess(seed int64, scope string, a, b BoardMixAccepted) bool {
+	if seed != 0 {
+		ra := seededPRNGRank(seed, scope, a.FamilyID, a.BaseCandidateID, a.Embedding, a.AugmentationClass, a.NativeVariantFingerprint)
+		rb := seededPRNGRank(seed, scope, b.FamilyID, b.BaseCandidateID, b.Embedding, b.AugmentationClass, b.NativeVariantFingerprint)
+		if ra != rb {
+			return ra < rb
+		}
+	}
+	if a.FamilyID != b.FamilyID {
+		return a.FamilyID < b.FamilyID
+	}
+	if a.BaseCandidateID != b.BaseCandidateID {
+		return a.BaseCandidateID < b.BaseCandidateID
+	}
+	if a.Embedding != b.Embedding {
+		return string(a.Embedding) < string(b.Embedding)
+	}
+	return a.NativeVariantFingerprint < b.NativeVariantFingerprint
 }
 
 func attachPullLeftMatchedComparisons(rep *BoardMixSelectReport, pool []BoardMixAccepted) {

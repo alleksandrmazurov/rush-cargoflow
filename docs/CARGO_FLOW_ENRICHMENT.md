@@ -139,6 +139,20 @@ It passed the same acceptance checks but reproduced all 12 start states and all
 stability, not independence of seeded sampling. The comparison report is stored
 with the control batch under `reproducibility/RUSH01071_DeepTargetPilot_002`.
 
+`boardmix-v1.7.2` wires `BoardMixConfig.Seed` into deterministic BoardMix
+choice points: enrichment-base tie-breaks, family/embedding/mode job ordering,
+per-family pool retention, and final selector tie-breaks. The seed is used only
+among already admissible alternatives; solver rules, movement rules, causal
+proofs, classifiers, difficulty thresholds, and pilot quotas are unchanged. A
+new seeded run, `output/RUSH01071_SeededPilot_003`, used the same RUSH-010.7.1
+budget and acceptance settings with seed `20260921`. Compared with the tracked
+control batch it produced 11 new exact start states and 4 new families, while
+keeping `CausalExpanded=8`, `TargetTopRow>=5=7`, `TargetTopRow=6=3`,
+`diversityTargetUnmet=false`, exact solution export, replay validation, and
+Unity batch validation. A normalized translation / horizontal-mirror check
+matched only one candidate to the control set, so the new batch is not primarily
+shifted or mirrored copies.
+
 The current repository documentation does not define a later RUSH-010 stage
 beyond this reproducibility check. Further improvement of native 7×8 spatial
 usage remains a separate task and is not part of this validation.

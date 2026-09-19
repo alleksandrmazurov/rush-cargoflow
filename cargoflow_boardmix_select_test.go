@@ -98,14 +98,14 @@ func TestControlledInventoryRelaxationPASS(t *testing.T) {
 	for i := 0; i < 5; i++ {
 		pool = append(pool, BoardMixAccepted{
 			FamilyID: fmt.Sprintf("N%d", i), InventoryClass: InvNo1x1,
-			BoardUtil: BoardUtilizationMetrics{BoardShapeClass: ShapeCompact6x6, OuterZoneRelevant: i < 2},
+			BoardUtil:     BoardUtilizationMetrics{BoardShapeClass: ShapeCompact6x6, OuterZoneRelevant: i < 2},
 			SelectionBand: "lower-mid",
 		})
 	}
 	for i := 0; i < 4; i++ {
 		pool = append(pool, BoardMixAccepted{
 			FamilyID: fmt.Sprintf("O%d", i), InventoryClass: InvOne1x1,
-			BoardUtil: BoardUtilizationMetrics{BoardShapeClass: ShapeShiftedCore, OuterZoneRelevant: true},
+			BoardUtil:     BoardUtilizationMetrics{BoardShapeClass: ShapeShiftedCore, OuterZoneRelevant: true},
 			SelectionBand: "medium",
 		})
 	}
@@ -213,6 +213,7 @@ func TestExpandedFullFieldAvailabilityDiagnosedPASS(t *testing.T) {
 func TestSameSeedDeterministicPASS(t *testing.T) {
 	pool := syntheticDiversityPool()
 	cfg := DefaultBoardMixConfig()
+	cfg.Seed = 20260919
 	a, _ := SelectBoardMixShortlist(pool, cfg)
 	b, _ := SelectBoardMixShortlist(pool, cfg)
 	if len(a) != len(b) {
@@ -225,14 +226,57 @@ func TestSameSeedDeterministicPASS(t *testing.T) {
 	}
 }
 
+func TestDifferentSeedCanChangeSelectedFamiliesPASS(t *testing.T) {
+	pool := seededAlternativePool()
+	cfg := DefaultBoardMixConfig()
+	cfg.TargetAccepted = 6
+	cfg.MinDistinctBoardShapes = 1
+	cfg.MinOuterZoneRelevant = 0
+	cfg.MaxBoardShapeFraction = 1
+	cfg.MaxInventoryClassFraction = 1
+	cfg.InventoryQuotas = map[string]int{string(InvNo1x1): 6}
+
+	cfg.Seed = 101
+	a, repA := SelectBoardMixShortlist(pool, cfg)
+	cfg.Seed = 202
+	b, repB := SelectBoardMixShortlist(pool, cfg)
+	if len(a) != 6 || len(b) != 6 {
+		t.Fatalf("selection shortfall: %d/%d reports %+v %+v", len(a), len(b), repA, repB)
+	}
+	if sameFamilySet(a, b) {
+		t.Fatalf("expected fixture seeds to be capable of changing selected families: %v", familiesOf(a))
+	}
+	assertUniqueFamilies(t, a)
+	assertUniqueFamilies(t, b)
+}
+
+func TestSameSeedPreservesStateSetPASS(t *testing.T) {
+	pool := seededAlternativePool()
+	cfg := DefaultBoardMixConfig()
+	cfg.TargetAccepted = 6
+	cfg.MinDistinctBoardShapes = 1
+	cfg.MinOuterZoneRelevant = 0
+	cfg.MaxBoardShapeFraction = 1
+	cfg.MaxInventoryClassFraction = 1
+	cfg.InventoryQuotas = map[string]int{string(InvNo1x1): 6}
+	cfg.Seed = 303
+
+	a, _ := SelectBoardMixShortlist(pool, cfg)
+	b, _ := SelectBoardMixShortlist(pool, cfg)
+	if !sameFamilySet(a, b) {
+		t.Fatalf("same seed selected different family sets: %v vs %v", familiesOf(a), familiesOf(b))
+	}
+	assertUniqueFamilies(t, a)
+}
+
 func TestCheckpointCacheUnaffectedPASS(t *testing.T) {
 	dir := t.TempDir()
 	path := filepath.Join(dir, "checkpoint.json")
 	cp := BoardMixCheckpoint{
-		Version:               BoardMixVersion,
-		CompletedAttemptKeys:  []string{"fam|FlushTop|0"},
-		Rejected:              map[string]int{"unsolvable": 1},
-		Pool:                  []BoardMixAccepted{{FamilyID: "keep"}},
+		Version:              BoardMixVersion,
+		CompletedAttemptKeys: []string{"fam|FlushTop|0"},
+		Rejected:             map[string]int{"unsolvable": 1},
+		Pool:                 []BoardMixAccepted{{FamilyID: "keep"}},
 	}
 	if err := SaveBoardMixCheckpoint(path, cp); err != nil {
 		t.Fatal(err)
@@ -303,13 +347,7 @@ func TestOuterZoneRelevantQuotaPASS(t *testing.T) {
 
 func TestUniqueFamilyPASS(t *testing.T) {
 	sel, _ := SelectBoardMixShortlist(syntheticDiversityPool(), DefaultBoardMixConfig())
-	seen := map[string]bool{}
-	for _, c := range sel {
-		if seen[c.FamilyID] {
-			t.Fatal(c.FamilyID)
-		}
-		seen[c.FamilyID] = true
-	}
+	assertUniqueFamilies(t, sel)
 }
 
 func TestCandidatePoolDistributionReportedPASS(t *testing.T) {
@@ -379,4 +417,61 @@ func syntheticDiversityPool() []BoardMixAccepted {
 		})
 	}
 	return pool
+}
+
+func seededAlternativePool() []BoardMixAccepted {
+	pool := []BoardMixAccepted{}
+	for i := 0; i < 18; i++ {
+		pool = append(pool, BoardMixAccepted{
+			FamilyID:        fmt.Sprintf("SeedFam%02d", i),
+			BaseCandidateID: fmt.Sprintf("Base%02d", i),
+			InventoryClass:  InvNo1x1,
+			BoardUtil: BoardUtilizationMetrics{
+				BoardShapeClass:   ShapeShiftedCore,
+				OuterZoneRelevant: true,
+			},
+			SelectionBand:  "medium",
+			Embedding:      EmbedFlushTop,
+			ReplayVerified: true,
+		})
+	}
+	return pool
+}
+
+func assertUniqueFamilies(t *testing.T, sel []BoardMixAccepted) {
+	t.Helper()
+	seen := map[string]bool{}
+	for _, c := range sel {
+		if seen[c.FamilyID] {
+			t.Fatal(c.FamilyID)
+		}
+		seen[c.FamilyID] = true
+	}
+}
+
+func sameFamilySet(a, b []BoardMixAccepted) bool {
+	if len(a) != len(b) {
+		return false
+	}
+	seen := map[string]int{}
+	for _, c := range a {
+		seen[c.FamilyID]++
+	}
+	for _, c := range b {
+		seen[c.FamilyID]--
+	}
+	for _, v := range seen {
+		if v != 0 {
+			return false
+		}
+	}
+	return true
+}
+
+func familiesOf(sel []BoardMixAccepted) []string {
+	out := make([]string, 0, len(sel))
+	for _, c := range sel {
+		out = append(out, c.FamilyID)
+	}
+	return out
 }

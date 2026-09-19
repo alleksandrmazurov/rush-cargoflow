@@ -163,9 +163,10 @@ func CompareBoardMixPilots(controlDir, secondDir, outputDir string) (PilotCompar
 		report.RecommendationNote = "Four genuinely new candidates selected for causal, target-row, shape, inventory, and optimal-gesture diversity."
 	}
 	if report.NewStateCount == 0 {
-		report.SeedIndependenceConclusion = "Changing seed did not change any accepted start state. Boardmix currently does not consume Config.Seed, so this is a deterministic rerun, not an independent sampled set."
+		report.SeedIndependenceConclusion = "Changing seed did not change any accepted start state. Either the available accepted alternatives collapsed to the same final set, or the compared run predates seeded Boardmix selection."
 	} else {
-		report.SeedIndependenceConclusion = "Accepted states changed, but Boardmix does not consume Config.Seed; differences arise from concurrent scheduling/pool cutoff, not seeded sampling."
+		report.SeedAffectsBoardMix = true
+		report.SeedIndependenceConclusion = "Accepted states changed. In Boardmix v1.7.2+, Config.Seed participates in deterministic job ordering, per-family retention, and final selection tie-breaks among admissible alternatives."
 	}
 
 	if outputDir != "" {

@@ -72,6 +72,7 @@ func buildBoardMixJobs(bases []EnrichmentBase, embeds []EmbeddingVariant, cfg Bo
 				}
 			}
 		}
+		orderBoardMixJobs(jobs, cfg.Seed)
 		return jobs
 	}
 
@@ -116,7 +117,27 @@ func buildBoardMixJobs(bases []EnrichmentBase, embeds []EmbeddingVariant, cfg Bo
 			}
 		}
 	}
+	orderBoardMixJobs(jobs, cfg.Seed)
 	return jobs
+}
+
+func orderBoardMixJobs(jobs []boardMixJob, seed int64) {
+	sort.SliceStable(jobs, func(i, j int) bool {
+		a, b := jobs[i], jobs[j]
+		if a.pass != b.pass {
+			return a.pass < b.pass
+		}
+		if seed != 0 {
+			ra := seededPRNGRank(seed, "job", a.pass, a.base.CandidateID, a.base.FamilyID, a.embed, a.mode)
+			rb := seededPRNGRank(seed, "job", b.pass, b.base.CandidateID, b.base.FamilyID, b.embed, b.mode)
+			if ra != rb {
+				return ra < rb
+			}
+		}
+		ka := boardMixJobKey(a.base.CandidateID, a.embed, a.mode)
+		kb := boardMixJobKey(b.base.CandidateID, b.embed, b.mode)
+		return ka < kb
+	})
 }
 
 func embeddingsForSource(base EnrichmentBase, configured []EmbeddingVariant, sourceAware bool) []EmbeddingVariant {
@@ -368,4 +389,69 @@ func shouldAcceptFamilyVariant(pool []BoardMixAccepted, fam string, requestedFam
 		return true
 	}
 	return false
+}
+
+func insertBoardMixPoolCandidate(pool []BoardMixAccepted, cand BoardMixAccepted, cfg BoardMixConfig) ([]BoardMixAccepted, bool) {
+	capPerFamily := cfg.PerFamilyPoolCap
+	if capPerFamily <= 0 {
+		capPerFamily = 4
+	}
+	next := append(pool, cand)
+	familyIdx := []int{}
+	for i := range next {
+		if next[i].FamilyID == cand.FamilyID {
+			familyIdx = append(familyIdx, i)
+		}
+	}
+	if len(familyIdx) <= capPerFamily {
+		return next, true
+	}
+	sort.SliceStable(familyIdx, func(i, j int) bool {
+		a, b := next[familyIdx[i]], next[familyIdx[j]]
+		sa, sb := boardMixPoolRetentionScore(a), boardMixPoolRetentionScore(b)
+		if sa != sb {
+			return sa > sb
+		}
+		return seededCandidateLess(cfg.Seed, "pool-family-cap", a, b)
+	})
+	keep := map[int]bool{}
+	candKept := false
+	for i := 0; i < capPerFamily && i < len(familyIdx); i++ {
+		keep[familyIdx[i]] = true
+		if familyIdx[i] == len(next)-1 {
+			candKept = true
+		}
+	}
+	pruned := next[:0]
+	for i, c := range next {
+		if c.FamilyID == cand.FamilyID && !keep[i] {
+			continue
+		}
+		pruned = append(pruned, c)
+	}
+	return pruned, candKept
+}
+
+func boardMixPoolRetentionScore(c BoardMixAccepted) int {
+	score := 0
+	if IsCausalExpanded(c) {
+		score += 10_000
+	}
+	if IsGenuineCoreExpanded(c) {
+		score += 5_000
+	}
+	if c.ReplayVerified {
+		score += 1_000
+	}
+	if c.TargetTopRow >= 5 {
+		score += 500
+	}
+	if c.TargetTopRow == 6 {
+		score += 250
+	}
+	if c.BoardUtil.OuterZoneRelevant {
+		score += 100
+	}
+	score += c.OptimalGestures
+	return score
 }

@@ -16,23 +16,23 @@ const EnrichmentRoleDiversityVersion = "enrich-1x1-roles-v1"
 
 // EnrichmentConfig bounds the RUSH-010 / RUSH-010.1 / RUSH-010.2 enrichment pilots.
 type EnrichmentConfig struct {
-	BatchDir             string
-	CuratorReportPath    string
-	OutputDir            string
-	TargetAccepted       int
-	BaseCount            int
-	MaxPlacements1       int
-	MaxPlacements2       int
-	MaxPlacements3       int
-	Min1x1Moves          int
-	Max1x1Moves          int
-	MinOptimalDelta      int
-	MaxOptimalDelta      int
-	SoftMinDelta         int
-	SoftMaxDelta         int
-	SolveTimeLimit       time.Duration
-	MaxVisitedStates     int
-	Seed                 int64
+	BatchDir          string
+	CuratorReportPath string
+	OutputDir         string
+	TargetAccepted    int
+	BaseCount         int
+	MaxPlacements1    int
+	MaxPlacements2    int
+	MaxPlacements3    int
+	Min1x1Moves       int
+	Max1x1Moves       int
+	MinOptimalDelta   int
+	MaxOptimalDelta   int
+	SoftMinDelta      int
+	SoftMaxDelta      int
+	SolveTimeLimit    time.Duration
+	MaxVisitedStates  int
+	Seed              int64
 	// RUSH-010.1 role diversity controls.
 	RoleDiversity        bool
 	PreferOffCorridor    bool
@@ -94,19 +94,19 @@ func DefaultRoleDiversityConfig(batchDir string) EnrichmentConfig {
 
 // EnrichmentBase is one RUSH-009 shortlist level selected for enrichment.
 type EnrichmentBase struct {
-	CandidateID       string
-	FamilyID          string
-	SourcePuzzleID    string
-	BaseOptimal       int
-	EstDifficulty     float64
-	DependencyDepth   int
-	VisitedStates     int
-	Board             *Board
-	Level             *LevelJSON
-	Solution          Solution
-	BaseMetrics       CandidateMetrics
-	BaseSignals       DifficultySignals
-	SelectionBand     string // lower-mid | medium | hard
+	CandidateID     string
+	FamilyID        string
+	SourcePuzzleID  string
+	BaseOptimal     int
+	EstDifficulty   float64
+	DependencyDepth int
+	VisitedStates   int
+	Board           *Board
+	Level           *LevelJSON
+	Solution        Solution
+	BaseMetrics     CandidateMetrics
+	BaseSignals     DifficultySignals
+	SelectionBand   string // lower-mid | medium | hard
 }
 
 // EnrichmentAccepted is one validated enriched candidate.
@@ -147,17 +147,17 @@ type EnrichmentAccepted struct {
 
 // EnrichmentBatchResult summarizes a RUSH-010 / RUSH-010.1 run.
 type EnrichmentBatchResult struct {
-	Config                   EnrichmentConfig
-	BasesAttempted           int
-	PlacementsEvaluated      int
-	DirectPlacementsEval     int
+	Config                    EnrichmentConfig
+	BasesAttempted            int
+	PlacementsEvaluated       int
+	DirectPlacementsEval      int
 	OffCorridorPlacementsEval int
-	ExactSolves              int
-	NecessitySolves          int
-	Accepted                 []EnrichmentAccepted
-	Rejected                 map[string]int
-	TotalElapsed             time.Duration
-	PerBaseMs                []int64
+	ExactSolves               int
+	NecessitySolves           int
+	Accepted                  []EnrichmentAccepted
+	Rejected                  map[string]int
+	TotalElapsed              time.Duration
+	PerBaseMs                 []int64
 }
 
 type curatorShortlistRow struct {
@@ -202,6 +202,13 @@ func SelectEnrichmentBases(cfg EnrichmentConfig) ([]EnrichmentBase, error) {
 	sort.SliceStable(items, func(i, j int) bool {
 		if items[i].score != items[j].score {
 			return items[i].score > items[j].score
+		}
+		if cfg.Seed != 0 {
+			ri := seededPRNGRank(cfg.Seed, "enrichment-base", items[i].row.CandidateID, items[i].row.FamilyID)
+			rj := seededPRNGRank(cfg.Seed, "enrichment-base", items[j].row.CandidateID, items[j].row.FamilyID)
+			if ri != rj {
+				return ri < rj
+			}
 		}
 		return items[i].row.CandidateID < items[j].row.CandidateID
 	})
@@ -990,21 +997,21 @@ func (r EnrichmentBatchResult) ToManifest() map[string]interface{} {
 	cands := []map[string]interface{}{}
 	for _, c := range r.Accepted {
 		cands = append(cands, map[string]interface{}{
-			"candidateId":                     c.CandidateID,
-			"baseCandidateId":                 c.Base.CandidateID,
-			"baseFamilyId":                    c.Base.FamilyID,
-			"baseSourcePuzzleId":              c.Base.SourcePuzzleID,
-			"baseOptimal":                     c.Base.BaseOptimal,
-			"enrichedOptimal":                 c.EnrichedOptimal,
-			"optimalDelta":                    c.OptimalDelta,
-			"added1x1Count":                   c.Added1x1Count,
-			"oneByOneMoves":                   c.OneByOneMovesInOptimal,
-			"essential1x1Count":               c.Essential1x1Count,
-			"oneByOneRole":                    string(c.RoleEvidence.Role),
+			"candidateId":                       c.CandidateID,
+			"baseCandidateId":                   c.Base.CandidateID,
+			"baseFamilyId":                      c.Base.FamilyID,
+			"baseSourcePuzzleId":                c.Base.SourcePuzzleID,
+			"baseOptimal":                       c.Base.BaseOptimal,
+			"enrichedOptimal":                   c.EnrichedOptimal,
+			"optimalDelta":                      c.OptimalDelta,
+			"added1x1Count":                     c.Added1x1Count,
+			"oneByOneMoves":                     c.OneByOneMovesInOptimal,
+			"essential1x1Count":                 c.Essential1x1Count,
+			"oneByOneRole":                      string(c.RoleEvidence.Role),
 			"oneByOneInitiallyInTargetCorridor": c.RoleEvidence.InitiallyInTargetCorridor,
-			"levelFile":                       "Candidates/" + c.CandidateID + ".json",
-			"solutionFile":                    "Solutions/" + c.CandidateID + ".solution.json",
-			"replayVerified":                  c.ReplayVerified,
+			"levelFile":                         "Candidates/" + c.CandidateID + ".json",
+			"solutionFile":                      "Solutions/" + c.CandidateID + ".solution.json",
+			"replayVerified":                    c.ReplayVerified,
 		})
 	}
 	return map[string]interface{}{
@@ -1020,23 +1027,23 @@ func (r EnrichmentBatchResult) ToReport() map[string]interface{} {
 	rows := []map[string]interface{}{}
 	for _, c := range r.Accepted {
 		rows = append(rows, map[string]interface{}{
-			"candidate":                   c.CandidateID,
-			"baseCandidate":               c.Base.CandidateID,
-			"familyId":                    c.Base.FamilyID,
-			"baseOptimal":                 c.Base.BaseOptimal,
-			"enrichedOptimal":             c.EnrichedOptimal,
-			"delta":                       c.OptimalDelta,
-			"oneByOneRole":                string(c.RoleEvidence.Role),
-			"initiallyInTargetCorridor":   c.RoleEvidence.InitiallyInTargetCorridor,
-			"oneByOneMoves":               c.OneByOneMovesInOptimal,
-			"essential":                   c.Essential1x1Count,
-			"dependencyEvidence":          c.RoleEvidence.Summary,
-			"releasedCells":               c.RoleEvidence.ReleasedCells,
-			"subsequentPieceClass":        c.RoleEvidence.SubsequentPieceClass,
-			"dependencyBefore":            c.BaseDependencyDepth,
-			"dependencyAfter":             c.EnrichedDependencyDepth,
-			"replay":                      c.ReplayVerified,
-			"placementCells":              c.PlacementCells,
+			"candidate":                 c.CandidateID,
+			"baseCandidate":             c.Base.CandidateID,
+			"familyId":                  c.Base.FamilyID,
+			"baseOptimal":               c.Base.BaseOptimal,
+			"enrichedOptimal":           c.EnrichedOptimal,
+			"delta":                     c.OptimalDelta,
+			"oneByOneRole":              string(c.RoleEvidence.Role),
+			"initiallyInTargetCorridor": c.RoleEvidence.InitiallyInTargetCorridor,
+			"oneByOneMoves":             c.OneByOneMovesInOptimal,
+			"essential":                 c.Essential1x1Count,
+			"dependencyEvidence":        c.RoleEvidence.Summary,
+			"releasedCells":             c.RoleEvidence.ReleasedCells,
+			"subsequentPieceClass":      c.RoleEvidence.SubsequentPieceClass,
+			"dependencyBefore":          c.BaseDependencyDepth,
+			"dependencyAfter":           c.EnrichedDependencyDepth,
+			"replay":                    c.ReplayVerified,
+			"placementCells":            c.PlacementCells,
 		})
 	}
 	inN, outN := r.CorridorFlags()
@@ -1048,25 +1055,25 @@ func (r EnrichmentBatchResult) ToReport() map[string]interface{} {
 	}
 	return map[string]interface{}{
 		"performance": map[string]interface{}{
-			"basesAttempted":              r.BasesAttempted,
-			"placementsEvaluated":         r.PlacementsEvaluated,
-			"directPlacementsEvaluated":   r.DirectPlacementsEval,
+			"basesAttempted":                 r.BasesAttempted,
+			"placementsEvaluated":            r.PlacementsEvaluated,
+			"directPlacementsEvaluated":      r.DirectPlacementsEval,
 			"offCorridorPlacementsEvaluated": r.OffCorridorPlacementsEval,
-			"exactSolves":                 r.ExactSolves,
-			"necessitySolves":             r.NecessitySolves,
-			"accepted":                    len(r.Accepted),
-			"totalElapsedMs":              r.TotalElapsed.Milliseconds(),
-			"avgPerBaseMs":                avg,
-			"medianPerBaseMs":             med,
-			"maxPerBaseMs":                maxV,
+			"exactSolves":                    r.ExactSolves,
+			"necessitySolves":                r.NecessitySolves,
+			"accepted":                       len(r.Accepted),
+			"totalElapsedMs":                 r.TotalElapsed.Milliseconds(),
+			"avgPerBaseMs":                   avg,
+			"medianPerBaseMs":                med,
+			"maxPerBaseMs":                   maxV,
 		},
 		"roleDistribution": r.RoleDistribution(),
 		"corridorFlags": map[string]int{
 			"initiallyInTargetCorridor": inN,
 			"outsideTargetCorridor":     outN,
 		},
-		"rejected":  r.Rejected,
-		"accepted":  rows,
+		"rejected": r.Rejected,
+		"accepted": rows,
 		"limitations": []string{
 			"DirectTargetBlocker remains valid but is quota-capped in role-diversity mode.",
 			"Role labels are explainable heuristics from solution occupancy, not ML.",

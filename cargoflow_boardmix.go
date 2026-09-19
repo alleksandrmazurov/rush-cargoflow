@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-const BoardMixVersion = "boardmix-v1.7.1"
+const BoardMixVersion = "boardmix-v1.7.2"
 
 // BoardMixConfig drives RUSH-010.3 / 010.4 / 010.4.1 board-space diversity generation.
 type BoardMixConfig struct {
@@ -384,6 +384,7 @@ func RunBoardMixPilot(cfg BoardMixConfig, cancel <-chan struct{}) (BoardMixResul
 		BaseCount:         cfg.BaseCount,
 		SolveTimeLimit:    time.Duration(cfg.SolveTimeLimitMs) * time.Millisecond,
 		MaxVisitedStates:  cfg.MaxVisitedStates,
+		Seed:              cfg.Seed,
 	})
 	if err != nil {
 		return out, err
@@ -606,11 +607,6 @@ func RunBoardMixPilot(cfg BoardMixConfig, cancel <-chan struct{}) (BoardMixResul
 					if c == nil {
 						continue
 					}
-					if !shouldAcceptFamilyVariant(pool, c.FamilyID, requestedFamilies, cfg.PerFamilyPoolCap) {
-						out.Rejected["PerFamilyCap"]++
-						noteFamilyAttempt(funnelMap, j.base.FamilyID, "PerFamilyCap", exact, 0, 0)
-						continue
-					}
 					filtered = append(filtered, c)
 				}
 				cands = filtered
@@ -626,12 +622,6 @@ func RunBoardMixPilot(cfg BoardMixConfig, cancel <-chan struct{}) (BoardMixResul
 				if doEnrich {
 					for _, plain := range plainList {
 						if plain == nil || plain.Board == nil {
-							continue
-						}
-						mu.Lock()
-						allowEnrich := shouldAcceptFamilyVariant(pool, plain.FamilyID, requestedFamilies, cfg.PerFamilyPoolCap)
-						mu.Unlock()
-						if !allowEnrich {
 							continue
 						}
 						tmp := BoardMixResult{Rejected: map[string]int{}, Stats: BoardMixStats{}}
@@ -651,21 +641,23 @@ func RunBoardMixPilot(cfg BoardMixConfig, cancel <-chan struct{}) (BoardMixResul
 					if plain == nil {
 						continue
 					}
-					if !shouldAcceptFamilyVariant(pool, plain.FamilyID, requestedFamilies, cfg.PerFamilyPoolCap) {
+					var kept bool
+					pool, kept = insertBoardMixPoolCandidate(pool, *plain, cfg)
+					if !kept {
 						out.Rejected["PerFamilyCap"]++
 						continue
 					}
-					pool = append(pool, *plain)
 					acceptedNow++
 				}
 				for _, e := range enriched {
 					e.FamilyID = j.base.FamilyID
 					e.BaseCandidateID = j.base.CandidateID
-					if !shouldAcceptFamilyVariant(pool, e.FamilyID, requestedFamilies, cfg.PerFamilyPoolCap) {
+					var kept bool
+					pool, kept = insertBoardMixPoolCandidate(pool, e, cfg)
+					if !kept {
 						out.Rejected["PerFamilyCap"]++
 						continue
 					}
-					pool = append(pool, e)
 					acceptedNow++
 				}
 				noteFamilyAttempt(funnelMap, j.base.FamilyID, reason, exact, augProposed, acceptedNow)
