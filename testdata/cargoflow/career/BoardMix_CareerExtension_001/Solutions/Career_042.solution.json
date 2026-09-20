@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "levelId": "Career_042",
+  "solved": true,
+  "optimal": true,
+  "optimalGestures": 9,
+  "visitedStates": 44728,
+  "elapsedMs": 0,
+  "timedOut": false,
+  "budgetExceeded": false,
+  "replayPass": true,
+  "replayVerified": true,
+  "fingerprint": "unity 7x8 exit=3\n.......\n.......\n.BBBBBB\n.BBBBB.\n.BBBBB.\n.BBT.BB\n.B.T..B\n.BBBBBB\n",
+  "moves": [
+    {
+      "pieceId": "P02",
+      "fromX": 1,
+      "fromY": 4,
+      "toX": 1,
+      "toY": 6,
+      "axis": "vertical",
+      "distance": 2,
+      "isExit": false
+    },
+    {
+      "pieceId": "P04",
+      "fromX": 2,
+      "fromY": 4,
+      "toX": 2,
+      "toY": 6,
+      "axis": "vertical",
+      "distance": 2,
+      "isExit": false
+    },
+    {
+      "pieceId": "P06",
+      "fromX": 1,
+      "fromY": 0,
+      "toX": 0,
+      "toY": 0,
+      "axis": "horizontal",
+      "distance": 1,
+      "isExit": false
+    },
+    {
+      "pieceId": "P07",
+      "fromX": 4,
+      "fromY": 0,
+      "toX": 3,
+      "toY": 0,
+      "axis": "horizontal",
+      "distance": 1,
+      "isExit": false
+    },
+    {
+      "pieceId": "P09",
+      "fromX": 3,
+      "fromY": 4,
+      "toX": 1,
+      "toY": 4,
+      "axis": "horizontal",
+      "distance": 2,
+      "isExit": false
+    },
+    {
+      "pieceId": "P10",
+      "fromX": 3,
+      "fromY": 5,
+      "toX": 1,
+      "toY": 5,
+      "axis": "horizontal",
+      "distance": 2,
+      "isExit": false
+    },
+    {
+      "pieceId": "C3",
+      "fromX": 5,
+      "fromY": 2,
+      "toX": 5,
+      "toY": 0,
+      "axis": "vertical",
+      "distance": 2,
+      "isExit": false
+    },
+    {
+      "pieceId": "P08",
+      "fromX": 3,
+      "fromY": 3,
+      "toX": 4,
+      "toY": 3,
+      "axis": "horizontal",
+      "distance": 1,
+      "isExit": false
+    },
+    {
+      "pieceId": "target",
+      "fromX": 3,
+      "fromY": 1,
+      "toX": 3,
+      "toY": 8,
+      "axis": "vertical",
+      "distance": 7,
+      "isExit": true
+    }
+  ]
+}

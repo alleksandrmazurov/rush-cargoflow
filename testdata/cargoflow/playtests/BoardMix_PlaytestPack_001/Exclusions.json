@@ -1,0 +1,74 @@
+[
+    {
+        "Source":  "SeededPilot_003/Candidate_010",
+        "FamilyId":  "F013",
+        "Reason":  "exact start-state duplicate of DeepTargetPilot_001/Candidate_004",
+        "Optimal":  22
+    },
+    {
+        "Source":  "DeepTargetPilot_001/Candidate_002",
+        "FamilyId":  "F050",
+        "Reason":  "FamilyId F050 already taken by SeededPilot_003/Candidate_005",
+        "Optimal":  9
+    },
+    {
+        "Source":  "DeepTargetPilot_001/Candidate_003",
+        "FamilyId":  "F035",
+        "Reason":  "not selected for pack diversity / family uniqueness",
+        "Optimal":  40
+    },
+    {
+        "Source":  "DeepTargetPilot_001/Candidate_007",
+        "FamilyId":  "F130",
+        "Reason":  "FamilyId F130 already taken by SeededPilot_003/Candidate_006",
+        "Optimal":  11
+    },
+    {
+        "Source":  "DeepTargetPilot_001/Candidate_009",
+        "FamilyId":  "F063",
+        "Reason":  "not selected for pack diversity / family uniqueness",
+        "Optimal":  3
+    },
+    {
+        "Source":  "DeepTargetPilot_001/Candidate_010",
+        "FamilyId":  "F095",
+        "Reason":  "not selected for pack diversity / family uniqueness",
+        "Optimal":  3
+    },
+    {
+        "Source":  "DeepTargetPilot_001/Candidate_012",
+        "FamilyId":  "F015",
+        "Reason":  "not selected for pack diversity / family uniqueness",
+        "Optimal":  8
+    },
+    {
+        "Source":  "SeededPilot_003/Candidate_001",
+        "FamilyId":  "F014",
+        "Reason":  "FamilyId F014 already taken by DeepTargetPilot_001/Candidate_001",
+        "Optimal":  12
+    },
+    {
+        "Source":  "SeededPilot_003/Candidate_002",
+        "FamilyId":  "F086",
+        "Reason":  "FamilyId F086 already taken by DeepTargetPilot_001/Candidate_011",
+        "Optimal":  10
+    },
+    {
+        "Source":  "SeededPilot_003/Candidate_007",
+        "FamilyId":  "F065",
+        "Reason":  "FamilyId F065 already taken by DeepTargetPilot_001/Candidate_005",
+        "Optimal":  4
+    },
+    {
+        "Source":  "SeededPilot_003/Candidate_008",
+        "FamilyId":  "F036",
+        "Reason":  "FamilyId F036 already taken by DeepTargetPilot_001/Candidate_006",
+        "Optimal":  28
+    },
+    {
+        "Source":  "SeededPilot_003/Candidate_011",
+        "FamilyId":  "F015",
+        "Reason":  "not selected for pack diversity / family uniqueness",
+        "Optimal":  13
+    }
+]

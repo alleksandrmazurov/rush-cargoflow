@@ -153,9 +153,28 @@ Unity batch validation. A normalized translation / horizontal-mirror check
 matched only one candidate to the control set, so the new batch is not primarily
 shifted or mirrored copies.
 
+A later isolated Native7x8 generation experiment (branch
+`experiment/native-7x8-generator`) produced technically valid full-board
+layouts, but human play found a monotonous static-wall corridor with a 1×1
+chain. That approach was **not** accepted for the main BoardMix set; BoardMix
+remains primary and the “6×6 core inside 7×8” look is accepted as a known
+limitation of the current version.
+
+The first sequential human playtest pack of existing BoardMix levels is
+`testdata/cargoflow/playtests/BoardMix_PlaytestPack_001` (12 unique FamilyId
+levels drawn from DeepTargetPilot_001 and SeededPilot_003).
+
+Those 12 manually accepted levels are preserved in
+`testdata/cargoflow/career/BoardMix_CareerExtension_001`, a 30-level candidate
+extension for future career positions 31–60. The other 18 levels come from the
+existing SeededPilot_003 checkpoint pool and have automated exact-solve/replay
+validation only. No additional pilot run or Native7x8 content was used. The
+repository does not contain the authoritative APK career 1–30 dataset, so Unity
+integration must still check cross-career duplicates.
+
 The current repository documentation does not define a later RUSH-010 stage
-beyond this reproducibility check. Further improvement of native 7×8 spatial
-usage remains a separate task and is not part of this validation.
+beyond this playtest packaging. Further native 7×8 redesign remains optional
+and separate from BoardMix.
 
 ## Output
 

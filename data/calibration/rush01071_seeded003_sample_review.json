@@ -1,0 +1,14 @@
+{
+  "corpusId": "rush01071_seeded_pilot_003_sample_review",
+  "note": "User reported a positive play session after trying the recommended SeededPilot_003 sample Candidate_008, Candidate_005, Candidate_006, and Candidate_001. This is sample-level feedback only; no per-candidate scores were given.",
+  "batchDir": "output/RUSH01071_SeededPilot_003",
+  "recommendedSampleCandidateIds": [
+    "Candidate_008",
+    "Candidate_005",
+    "Candidate_006",
+    "Candidate_001"
+  ],
+  "completedSamplePlay": true,
+  "perCandidateScores": null,
+  "scopeWarning": "Do not invent individual ratings for these four levels. Treat the note as feedback on the recommended sample as a group."
+}

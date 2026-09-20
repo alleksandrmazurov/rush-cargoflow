@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "levelId": "Career_048",
+  "solved": true,
+  "optimal": true,
+  "optimalGestures": 3,
+  "visitedStates": 105,
+  "elapsedMs": 0,
+  "timedOut": false,
+  "budgetExceeded": false,
+  "replayPass": true,
+  "replayVerified": true,
+  "fingerprint": "unity 7x8 exit=3\n.......\n.......\n.BB..B.\n.BB..B.\n.BBBBB.\n.BB.BBB\n.BxTB.B\n.x.TBBB\n",
+  "moves": [
+    {
+      "pieceId": "P04",
+      "fromX": 5,
+      "fromY": 3,
+      "toX": 5,
+      "toY": 4,
+      "axis": "vertical",
+      "distance": 1,
+      "isExit": false
+    },
+    {
+      "pieceId": "P08",
+      "fromX": 3,
+      "fromY": 3,
+      "toX": 4,
+      "toY": 3,
+      "axis": "horizontal",
+      "distance": 1,
+      "isExit": false
+    },
+    {
+      "pieceId": "target",
+      "fromX": 3,
+      "fromY": 0,
+      "toX": 3,
+      "toY": 8,
+      "axis": "vertical",
+      "distance": 8,
+      "isExit": true
+    }
+  ]
+}

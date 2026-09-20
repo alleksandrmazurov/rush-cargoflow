@@ -1,0 +1,182 @@
+{
+  "schemaVersion": 1,
+  "levelId": "Career_041",
+  "width": 7,
+  "height": 8,
+  "coordinateSpace": "unity",
+  "exit": {
+    "side": "top",
+    "column": 3
+  },
+  "pieces": [
+    {
+      "id": "target",
+      "type": "target",
+      "x": 3,
+      "y": 0,
+      "width": 1,
+      "height": 2,
+      "movable": true
+    },
+    {
+      "id": "P01",
+      "type": "movable1x3",
+      "x": 1,
+      "y": 0,
+      "width": 1,
+      "height": 3,
+      "movable": true
+    },
+    {
+      "id": "P02",
+      "type": "movable1x2",
+      "x": 1,
+      "y": 3,
+      "width": 1,
+      "height": 2,
+      "movable": true
+    },
+    {
+      "id": "P03",
+      "type": "movable1x2",
+      "x": 2,
+      "y": 0,
+      "width": 1,
+      "height": 2,
+      "movable": true
+    },
+    {
+      "id": "P04",
+      "type": "movable1x3",
+      "x": 2,
+      "y": 2,
+      "width": 1,
+      "height": 3,
+      "movable": true
+    },
+    {
+      "id": "P05",
+      "type": "movable1x2",
+      "x": 4,
+      "y": 4,
+      "width": 1,
+      "height": 2,
+      "movable": true
+    },
+    {
+      "id": "P06",
+      "type": "movable1x2",
+      "x": 5,
+      "y": 2,
+      "width": 1,
+      "height": 2,
+      "movable": true
+    },
+    {
+      "id": "P07",
+      "type": "movable1x2",
+      "x": 6,
+      "y": 0,
+      "width": 1,
+      "height": 2,
+      "movable": true
+    },
+    {
+      "id": "P08",
+      "type": "movable1x2",
+      "x": 4,
+      "y": 0,
+      "width": 2,
+      "height": 1,
+      "movable": true
+    },
+    {
+      "id": "P09",
+      "type": "movable1x2",
+      "x": 3,
+      "y": 2,
+      "width": 2,
+      "height": 1,
+      "movable": true
+    },
+    {
+      "id": "P10",
+      "type": "movable1x2",
+      "x": 3,
+      "y": 3,
+      "width": 2,
+      "height": 1,
+      "movable": true
+    },
+    {
+      "id": "P11",
+      "type": "movable1x2",
+      "x": 5,
+      "y": 4,
+      "width": 2,
+      "height": 1,
+      "movable": true
+    },
+    {
+      "id": "P12",
+      "type": "movable1x2",
+      "x": 1,
+      "y": 5,
+      "width": 2,
+      "height": 1,
+      "movable": true
+    },
+    {
+      "id": "P13",
+      "type": "movable1x2",
+      "x": 5,
+      "y": 5,
+      "width": 2,
+      "height": 1,
+      "movable": true
+    }
+  ],
+  "canonicalGestures": 9,
+  "source": "RushDatabaseBoardMix",
+  "transplant": {
+    "sourceDataset": "rush",
+    "sourcePuzzleId": "rush:L0001640",
+    "sourceLine": 1640,
+    "originalBoard": "BBBCCMDDEEEMAAJKooIoJKFFIoGGLNHHooLN",
+    "originalOptimalMoves": 36,
+    "originalClusterSize": 3904,
+    "transformRotation": "CW90",
+    "embeddingVariant": "FlushBottom",
+    "offsetX": 1,
+    "offsetY": 2,
+    "cargoFlowOptimalGestures": 7
+  },
+  "boardSpace": {
+    "boardShapeClass": "ShiftedCore",
+    "boardUtilizationRatio": 0.536,
+    "occupiedBoundingBoxWidth": 6,
+    "occupiedBoundingBoxHeight": 6,
+    "occupiedRows": 6,
+    "occupiedColumns": 6,
+    "outerRowUsage": 0,
+    "outerColumnUsage": 0,
+    "piecesOutsideOriginal6x6Core": 0,
+    "optimalMovesUsingOuterZone": 2,
+    "outerZoneRelevant": true,
+    "outerZoneEvidence": "optimal-move-touches-outer",
+    "coreOffsetX": 1,
+    "coreOffsetY": 2,
+    "embeddingVariant": "FlushBottom",
+    "best6x6MeaningfulContainmentRatio": 1,
+    "canMeaningfulStructureFitInAny6x6": true,
+    "dependencyRowsUsed": 6,
+    "dependencyColumnsUsed": 4,
+    "targetTopRow": 6,
+    "targetDepthClass": "Unknown",
+    "exitCorridorLength": 6,
+    "exitCorridorBlockingPieceCount": 2,
+    "exitCorridorDependencyPieceCount": 4,
+    "exitCorridorDependencyMoves": 6,
+    "rowsBetweenTargetAndExitUsed": 4
+  }
+}
