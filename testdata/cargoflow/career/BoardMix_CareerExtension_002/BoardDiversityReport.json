@@ -1,0 +1,13 @@
+{
+  "accepted": 30,
+  "note": "This is not a new BoardMix pilot. It assembles existing validated checkpoint states; generation details remain in GenerationSources.json.",
+  "packId": "BoardMix_CareerExtension_002",
+  "reportType": "career-package-assembly",
+  "reports": [
+    "NoveltyAuditReport.json",
+    "FamilyAvailabilityReport.json",
+    "ValidationReport.json",
+    "ProximityReport.json"
+  ],
+  "revision": "Career_077 replaced after provenance/novelty audit"
+}

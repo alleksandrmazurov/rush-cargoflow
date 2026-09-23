@@ -1,0 +1,45 @@
+{
+  "actualJSONExactComparison": {
+    "normalization": "ID-independent; retains types, sizes, coordinates, movement axes/movability, CargoFlow rules, exit and static obstacles",
+    "relativeToCareer31To60Duplicates": 0,
+    "withinPackDuplicates": 0
+  },
+  "families": {
+    "newRelativeToCareer31To60": 0,
+    "uniqueInPack": 24,
+    "variantsOfPreviouslyUsedFamilies": 30
+  },
+  "firstThirtyCareerComparison": {
+    "authoritativeDatasetAvailable": false,
+    "conclusion": "Positions 1-30 remain unverified until the Unity agent compares against the shipped career."
+  },
+  "generation": {
+    "newPilotDurationMs": 0,
+    "newPilotRuns": 0,
+    "reason": "FamilyAvailabilityReport.json"
+  },
+  "noveltyAudit": {
+    "manualReviewRequired": 0,
+    "report": "NoveltyAuditReport.json"
+  },
+  "packId": "BoardMix_CareerExtension_002",
+  "revision": {
+    "preAuditSnapshot": "testdata/cargoflow/career/BoardMix_CareerExtension_002_PreAudit_20260923",
+    "replacedId": "Career_077",
+    "sourceCheckpoint": "output/RUSH01071_SeededPilot_003/checkpoint.json",
+    "sourcePoolIndex": 11
+  },
+  "schemaVersion": 2,
+  "storedSolutionReplayAndRecomputedOptimum": {
+    "auditComplete": true,
+    "expected": 30,
+    "pass": 30
+  },
+  "unityBatchValidation": {
+    "ok": true,
+    "dir": "testdata/cargoflow/career/BoardMix_CareerExtension_002",
+    "accepted": 30,
+    "levelJsonCount": 30,
+    "solutionJsonCount": 30
+  }
+}

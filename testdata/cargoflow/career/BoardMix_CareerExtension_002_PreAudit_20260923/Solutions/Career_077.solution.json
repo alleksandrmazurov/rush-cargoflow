@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "levelId": "Career_077",
+  "solved": true,
+  "optimal": true,
+  "optimalGestures": 13,
+  "visitedStates": 1424565,
+  "elapsedMs": 2881,
+  "timedOut": false,
+  "budgetExceeded": false,
+  "replayPass": true,
+  "replayVerified": true,
+  "fingerprint": "unity 7x8 exit=3\n.BBBBB.\n..BBBB.\n.BBBBBB\n.BBBB.B\n.B.TB.B\n.BBT..B\n.......\n..BBB..\n",
+  "moves": [
+    {
+      "pieceId": "C3",
+      "fromX": 2,
+      "fromY": 0,
+      "toX": 0,
+      "toY": 0,
+      "axis": "horizontal",
+      "distance": 2,
+      "isExit": false
+    },
+    {
+      "pieceId": "target",
+      "fromX": 3,
+      "fromY": 2,
+      "toX": 3,
+      "toY": 0,
+      "axis": "vertical",
+      "distance": 2,
+      "isExit": false
+    },
+    {
+      "pieceId": "P06",
+      "fromX": 1,
+      "fromY": 2,
+      "toX": 4,
+      "toY": 2,
+      "axis": "horizontal",
+      "distance": 3,
+      "isExit": false
+    },
+    {
+      "pieceId": "P01",
+      "fromX": 1,
+      "fromY": 3,
+      "toX": 1,
+      "toY": 1,
+      "axis": "vertical",
+      "distance": 2,
+      "isExit": false
+    },
+    {
+      "pieceId": "P07",
+      "fromX": 2,
+      "fromY": 4,
+      "toX": 0,
+      "toY": 4,
+      "axis": "horizontal",
+      "distance": 2,
+      "isExit": false
+    },
+    {
+      "pieceId": "P02",
+      "fromX": 2,
+      "fromY": 5,
+      "toX": 2,
+      "toY": 3,
+      "axis": "vertical",
+      "distance": 2,
+      "isExit": false
+    },
+    {
+      "pieceId": "P08",
+      "fromX": 3,
+      "fromY": 5,
+      "toX": 1,
+      "toY": 5,
+      "axis": "horizontal",
+      "distance": 2,
+      "isExit": false
+    },
+    {
+      "pieceId": "P09",
+      "fromX": 5,
+      "fromY": 5,
+      "toX": 3,
+      "toY": 5,
+      "axis": "horizontal",
+      "distance": 2,
+      "isExit": false
+    },
+    {
+      "pieceId": "P04",
+      "fromX": 5,
+      "fromY": 6,
+      "toX": 5,
+      "toY": 3,
+      "axis": "vertical",
+      "distance": 3,
+      "isExit": false
+    },
+    {
+      "pieceId": "P09",
+      "fromX": 3,
+      "fromY": 5,
+      "toX": 4,
+      "toY": 5,
+      "axis": "horizontal",
+      "distance": 1,
+      "isExit": false
+    },
+    {
+      "pieceId": "P10",
+      "fromX": 3,
+      "fromY": 6,
+      "toX": 1,
+      "toY": 6,
+      "axis": "horizontal",
+      "distance": 2,
+      "isExit": false
+    },
+    {
+      "pieceId": "P12",
+      "fromX": 3,
+      "fromY": 7,
+      "toX": 4,
+      "toY": 7,
+      "axis": "horizontal",
+      "distance": 1,
+      "isExit": false
+    },
+    {
+      "pieceId": "target",
+      "fromX": 3,
+      "fromY": 0,
+      "toX": 3,
+      "toY": 8,
+      "axis": "vertical",
+      "distance": 8,
+      "isExit": true
+    }
+  ]
+}

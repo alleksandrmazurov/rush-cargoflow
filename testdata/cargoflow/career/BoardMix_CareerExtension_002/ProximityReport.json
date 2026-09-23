@@ -1,0 +1,8 @@
+{
+  "method": "Secondary signal only: piece/wall geometry normalized by translation and horizontal mirror. Exact duplicate decisions use NoveltyAuditReport normalization that retains coordinates, exit, rules, types, dimensions, movement axes and obstacles.",
+  "relativeToCareer31To60Count": 0,
+  "relativeToCareer31To60Pairs": [],
+  "schemaVersion": 2,
+  "withinPackCount": 0,
+  "withinPackPairs": []
+}

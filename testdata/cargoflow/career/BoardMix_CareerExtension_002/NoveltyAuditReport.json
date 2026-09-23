@@ -1,0 +1,4149 @@
+{
+  "actualJSONComparison": {
+    "previousCount": 30,
+    "relativeToCareer31To60ExactDuplicates": [],
+    "withinCareer61To90ExactDuplicates": [],
+    "withinCount": 30
+  },
+  "ambiguousPairs": [
+    {
+      "conclusion": "Different checkpoint-pool variants of the same base candidate; not an exact state repeat.",
+      "levelA": "Career_076",
+      "levelAFingerprint": "1fb41ca99236b145f7bb4d6224501eed59f8e0749788f554501a8516f47c9f80",
+      "levelAOrigin": {
+        "augmentation": "Lower1x1SpaceMaker",
+        "embedding": "ShiftDown1MirrorH",
+        "poolIndex": 49,
+        "sourceBatch": "RUSH01071_SeededPilot_003/checkpoint pool",
+        "sourceCandidate": "pool[49]:Candidate_024"
+      },
+      "levelB": "Career_090",
+      "levelBFingerprint": "c953feeb1ba18548334926a8f2fb45b736337a68c83759f6e354a31e64d92ca1",
+      "levelBOrigin": {
+        "augmentation": "LowerParkingUnlock",
+        "embedding": "ShiftDown1MirrorH",
+        "poolIndex": 50,
+        "sourceBatch": "RUSH01071_SeededPilot_003/checkpoint pool",
+        "sourceCandidate": "pool[50]:Candidate_024"
+      },
+      "metricDifferences": {
+        "blockComposition": {
+          "current": {
+            "movable1x1:1x1": 1,
+            "movable1x2:1x2": 4,
+            "movable1x2:2x1": 3,
+            "movable1x3:1x3": 2,
+            "movable1x3:3x1": 1,
+            "static1x1:1x1": 2,
+            "target:1x2": 1
+          },
+          "previous": {
+            "movable1x2:1x2": 5,
+            "movable1x2:2x1": 3,
+            "movable1x3:1x3": 2,
+            "movable1x3:3x1": 1,
+            "static1x1:1x1": 2,
+            "target:1x2": 1
+          }
+        },
+        "dependencyMetrics": {
+          "current": {
+            "belowTargetDependencyMoves": 2,
+            "belowTargetMeaningfulPieceCount": 2,
+            "dependencyColumnsUsed": 4,
+            "dependencyRowsUsed": 5,
+            "exitCorridorBlockingPieceCount": 1,
+            "exitCorridorDependencyMoves": 1,
+            "exitCorridorDependencyPieceCount": 1,
+            "optimalMovesUsingOuterZone": 0,
+            "outerDependencyPieceCount": 0,
+            "outerZoneEvidence": "outer-seal-unsolvable",
+            "rowsBetweenTargetAndExitUsed": 1
+          },
+          "previous": {
+            "belowTargetDependencyMoves": 2,
+            "belowTargetMeaningfulPieceCount": 2,
+            "dependencyColumnsUsed": 4,
+            "dependencyRowsUsed": 6,
+            "exitCorridorBlockingPieceCount": 1,
+            "exitCorridorDependencyMoves": 1,
+            "exitCorridorDependencyPieceCount": 1,
+            "optimalMovesUsingOuterZone": 1,
+            "outerDependencyPieceCount": 0,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "rowsBetweenTargetAndExitUsed": 1
+          }
+        },
+        "movementConstraints": {
+          "current": {
+            "movable1x1:1x1:both:movable=true": 1,
+            "movable1x2:1x2:vertical:movable=true": 4,
+            "movable1x2:2x1:horizontal:movable=true": 3,
+            "movable1x3:1x3:vertical:movable=true": 2,
+            "movable1x3:3x1:horizontal:movable=true": 1,
+            "static1x1:1x1:none:movable=false": 2,
+            "target:1x2:vertical:movable=true": 1
+          },
+          "previous": {
+            "movable1x2:1x2:vertical:movable=true": 5,
+            "movable1x2:2x1:horizontal:movable=true": 3,
+            "movable1x3:1x3:vertical:movable=true": 2,
+            "movable1x3:3x1:horizontal:movable=true": 1,
+            "static1x1:1x1:none:movable=false": 2,
+            "target:1x2:vertical:movable=true": 1
+          }
+        },
+        "solutionStructure": {
+          "current": {
+            "gestures": 5,
+            "distinctMovedPieces": 5,
+            "distinctNonTargetMovedPieces": 4,
+            "targetMoves": 1,
+            "movesBeforeFirstTarget": 4,
+            "movedPieceClasses": {
+              "movable1x1:1x1:vertical": 1,
+              "movable1x2:1x2:vertical": 2,
+              "movable1x3:3x1:horizontal": 1,
+              "target:1x2:vertical": 1
+            }
+          },
+          "previous": {
+            "gestures": 5,
+            "distinctMovedPieces": 5,
+            "distinctNonTargetMovedPieces": 4,
+            "targetMoves": 1,
+            "movesBeforeFirstTarget": 4,
+            "movedPieceClasses": {
+              "movable1x2:1x2:vertical": 3,
+              "movable1x3:3x1:horizontal": 1,
+              "target:1x2:vertical": 1
+            }
+          }
+        }
+      },
+      "sameBaseCandidate": true,
+      "sameExportedState": false
+    },
+    {
+      "conclusion": "Different checkpoint-pool variants of the same base candidate; not an exact state repeat.",
+      "levelA": "Career_067",
+      "levelAFingerprint": "61a84c046ebca31d7bc6a7386a9deb6886097a4395ed2627a480bfbd15ca85c6",
+      "levelAOrigin": {
+        "augmentation": "Lower1x1SpaceMaker",
+        "embedding": "ShiftDown1",
+        "poolIndex": 47,
+        "sourceBatch": "RUSH01071_SeededPilot_003/checkpoint pool",
+        "sourceCandidate": "pool[47]:Candidate_013"
+      },
+      "levelB": "Career_085",
+      "levelBFingerprint": "f09a8b36308bdac8778c10125d68a0782b2385f00d4d09812af6ce8539ef4e62",
+      "levelBOrigin": {
+        "augmentation": "LowerParkingUnlock",
+        "embedding": "FlushBottom",
+        "poolIndex": 6,
+        "sourceBatch": "RUSH01071_SeededPilot_003/checkpoint pool",
+        "sourceCandidate": "pool[6]:Candidate_013"
+      },
+      "metricDifferences": {
+        "blockComposition": {
+          "current": {
+            "movable1x1:1x1": 1,
+            "movable1x2:1x2": 1,
+            "movable1x2:2x1": 4,
+            "movable1x3:1x3": 3,
+            "movable1x3:3x1": 1,
+            "static1x1:1x1": 2,
+            "target:1x2": 1
+          },
+          "previous": {
+            "movable1x2:1x2": 2,
+            "movable1x2:2x1": 4,
+            "movable1x3:1x3": 3,
+            "movable1x3:3x1": 1,
+            "static1x1:1x1": 2,
+            "target:1x2": 1
+          }
+        },
+        "dependencyMetrics": {
+          "current": {
+            "belowTargetDependencyMoves": 0,
+            "belowTargetMeaningfulPieceCount": 0,
+            "dependencyColumnsUsed": 5,
+            "dependencyRowsUsed": 6,
+            "exitCorridorBlockingPieceCount": 3,
+            "exitCorridorDependencyMoves": 7,
+            "exitCorridorDependencyPieceCount": 3,
+            "optimalMovesUsingOuterZone": 2,
+            "outerDependencyPieceCount": 0,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "rowsBetweenTargetAndExitUsed": 4
+          },
+          "previous": {
+            "belowTargetDependencyMoves": 0,
+            "belowTargetMeaningfulPieceCount": 0,
+            "dependencyColumnsUsed": 5,
+            "dependencyRowsUsed": 6,
+            "exitCorridorBlockingPieceCount": 3,
+            "exitCorridorDependencyMoves": 4,
+            "exitCorridorDependencyPieceCount": 3,
+            "optimalMovesUsingOuterZone": 1,
+            "outerDependencyPieceCount": 0,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "rowsBetweenTargetAndExitUsed": 4
+          }
+        },
+        "movementConstraints": {
+          "current": {
+            "movable1x1:1x1:both:movable=true": 1,
+            "movable1x2:1x2:vertical:movable=true": 1,
+            "movable1x2:2x1:horizontal:movable=true": 4,
+            "movable1x3:1x3:vertical:movable=true": 3,
+            "movable1x3:3x1:horizontal:movable=true": 1,
+            "static1x1:1x1:none:movable=false": 2,
+            "target:1x2:vertical:movable=true": 1
+          },
+          "previous": {
+            "movable1x2:1x2:vertical:movable=true": 2,
+            "movable1x2:2x1:horizontal:movable=true": 4,
+            "movable1x3:1x3:vertical:movable=true": 3,
+            "movable1x3:3x1:horizontal:movable=true": 1,
+            "static1x1:1x1:none:movable=false": 2,
+            "target:1x2:vertical:movable=true": 1
+          }
+        },
+        "solutionStructure": {
+          "current": {
+            "gestures": 20,
+            "distinctMovedPieces": 10,
+            "distinctNonTargetMovedPieces": 9,
+            "targetMoves": 4,
+            "movesBeforeFirstTarget": 6,
+            "movedPieceClasses": {
+              "movable1x1:1x1:horizontal": 1,
+              "movable1x2:1x2:vertical": 1,
+              "movable1x2:2x1:horizontal": 7,
+              "movable1x3:1x3:vertical": 5,
+              "movable1x3:3x1:horizontal": 2,
+              "target:1x2:vertical": 4
+            }
+          },
+          "previous": {
+            "gestures": 9,
+            "distinctMovedPieces": 8,
+            "distinctNonTargetMovedPieces": 7,
+            "targetMoves": 1,
+            "movesBeforeFirstTarget": 8,
+            "movedPieceClasses": {
+              "movable1x2:1x2:vertical": 1,
+              "movable1x2:2x1:horizontal": 3,
+              "movable1x3:1x3:vertical": 3,
+              "movable1x3:3x1:horizontal": 1,
+              "target:1x2:vertical": 1
+            }
+          }
+        }
+      },
+      "sameBaseCandidate": true,
+      "sameExportedState": false
+    },
+    {
+      "conclusion": "Different checkpoint-pool variants of the same base candidate; not an exact state repeat.",
+      "levelA": "Career_062",
+      "levelAFingerprint": "e809855c40f02c842d0d334fd0f8df6d4e001ac6d2a48c86400051847c668f3f",
+      "levelAOrigin": {
+        "augmentation": "LowerParkingUnlock",
+        "embedding": "FlushTop",
+        "poolIndex": 81,
+        "sourceBatch": "RUSH01071_DeepTargetPilot_001/checkpoint pool",
+        "sourceCandidate": "pool[81]:Candidate_011"
+      },
+      "levelB": "Career_086",
+      "levelBFingerprint": "2c00a1d544281f34c4e8917f8945b37efcc35ceb1229e267b169afe7dca6b702",
+      "levelBOrigin": {
+        "augmentation": "Lower1x1SpaceMaker",
+        "embedding": "ShiftDown1",
+        "poolIndex": 73,
+        "sourceBatch": "RUSH01071_DeepTargetPilot_001/checkpoint pool",
+        "sourceCandidate": "pool[73]:Candidate_011"
+      },
+      "metricDifferences": {
+        "blockComposition": {
+          "current": {
+            "movable1x2:1x2": 3,
+            "movable1x2:2x1": 7,
+            "movable1x3:3x1": 2,
+            "static1x1:1x1": 1,
+            "target:1x2": 1
+          },
+          "previous": {
+            "movable1x1:1x1": 1,
+            "movable1x2:1x2": 3,
+            "movable1x2:2x1": 6,
+            "movable1x3:3x1": 2,
+            "static1x1:1x1": 1,
+            "target:1x2": 1
+          }
+        },
+        "dependencyMetrics": {
+          "current": {
+            "belowTargetDependencyMoves": 2,
+            "belowTargetMeaningfulPieceCount": 1,
+            "dependencyColumnsUsed": 6,
+            "dependencyRowsUsed": 7,
+            "exitCorridorBlockingPieceCount": 4,
+            "exitCorridorDependencyMoves": 6,
+            "exitCorridorDependencyPieceCount": 5,
+            "optimalMovesUsingOuterZone": 4,
+            "outerDependencyPieceCount": 1,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "rowsBetweenTargetAndExitUsed": 4
+          },
+          "previous": {
+            "belowTargetDependencyMoves": 0,
+            "belowTargetMeaningfulPieceCount": 0,
+            "causalTemplate": "Lower1x1SpaceMaker",
+            "crossRegionDependencyDepth": 17,
+            "crossRegionDependencyEdgeCount": 15,
+            "dependencyColumnsUsed": 6,
+            "dependencyRowsUsed": 6,
+            "exitCorridorBlockingPieceCount": 4,
+            "exitCorridorDependencyMoves": 18,
+            "exitCorridorDependencyPieceCount": 6,
+            "optimalMovesUsingOuterZone": 1,
+            "outerDependencyPieceCount": 0,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "requiredLowerPieceCount": 0,
+            "requiredSidePieceCount": 1,
+            "rowsBetweenTargetAndExitUsed": 4
+          }
+        },
+        "movementConstraints": {
+          "current": {
+            "movable1x2:1x2:vertical:movable=true": 3,
+            "movable1x2:2x1:horizontal:movable=true": 7,
+            "movable1x3:3x1:horizontal:movable=true": 2,
+            "static1x1:1x1:none:movable=false": 1,
+            "target:1x2:vertical:movable=true": 1
+          },
+          "previous": {
+            "movable1x1:1x1:both:movable=true": 1,
+            "movable1x2:1x2:vertical:movable=true": 3,
+            "movable1x2:2x1:horizontal:movable=true": 6,
+            "movable1x3:3x1:horizontal:movable=true": 2,
+            "static1x1:1x1:none:movable=false": 1,
+            "target:1x2:vertical:movable=true": 1
+          }
+        },
+        "solutionStructure": {
+          "current": {
+            "gestures": 15,
+            "distinctMovedPieces": 12,
+            "distinctNonTargetMovedPieces": 11,
+            "targetMoves": 2,
+            "movesBeforeFirstTarget": 1,
+            "movedPieceClasses": {
+              "movable1x2:1x2:vertical": 3,
+              "movable1x2:2x1:horizontal": 9,
+              "movable1x3:3x1:horizontal": 1,
+              "target:1x2:vertical": 2
+            }
+          },
+          "previous": {
+            "gestures": 40,
+            "distinctMovedPieces": 13,
+            "distinctNonTargetMovedPieces": 12,
+            "targetMoves": 6,
+            "movesBeforeFirstTarget": 2,
+            "movedPieceClasses": {
+              "movable1x1:1x1:horizontal": 1,
+              "movable1x2:1x2:vertical": 9,
+              "movable1x2:2x1:horizontal": 17,
+              "movable1x3:3x1:horizontal": 7,
+              "target:1x2:vertical": 6
+            }
+          }
+        }
+      },
+      "sameBaseCandidate": true,
+      "sameExportedState": false
+    }
+  ],
+  "auditedAt": "2026-09-23T13:42:07+03:00",
+  "manualReviewRequired": [],
+  "normalization": "IDs ignored; preserves board dimensions, CargoFlow rules, exit side/column, piece types, sizes, coordinates, movement axes/movability, and static obstacles.",
+  "originAndSolutionAuditPass": true,
+  "originAudit": [
+    {
+      "id": "Career_061",
+      "familyId": "F130",
+      "sourceCheckpoint": "output/RUSH01071_SeededPilot_003/checkpoint.json",
+      "sourcePoolIndex": 4,
+      "baseCandidateId": "Candidate_009",
+      "sourcePuzzleId": "rush:L1882820",
+      "embedding": "FlushBottom",
+      "offsetX": 1,
+      "offsetY": 2,
+      "inventoryClass": "One1x1",
+      "boardShapeClass": "ShiftedCore",
+      "augmentationClass": "Lower1x1SpaceMaker",
+      "causalTemplate": "Lower1x1SpaceMaker",
+      "nativeVariantFingerprint": "Lower1x1SpaceMaker|P0:45:2:1:1|P1:36:2:1:0|P2:15:3:1:0|P3:44:2:1:0|P4:33:3:1:0|P5:53:3:0:0|P6:30:3:0:0|P7:23:3:0:0|P8:16:2:0:0|P9:18:2:0:0|P10:50:1:0:2",
+      "exportedStateFingerprint": "1e724f7c33538ceb274758f67a8d411b74b67891c665b1e0f5aedd578acae76b",
+      "sourceStateFingerprint": "1e724f7c33538ceb274758f67a8d411b74b67891c665b1e0f5aedd578acae76b",
+      "sourceStateMatchesExport": true,
+      "manifestOptimalGestures": 11,
+      "levelCanonicalGestures": 11,
+      "solutionOptimalGestures": 11,
+      "recomputedOptimalGestures": 11,
+      "storedSolutionReplay": true,
+      "optimalMatchesExport": true
+    },
+    {
+      "id": "Career_062",
+      "familyId": "F035",
+      "sourceCheckpoint": "output/RUSH01071_DeepTargetPilot_001/checkpoint.json",
+      "sourcePoolIndex": 81,
+      "baseCandidateId": "Candidate_011",
+      "sourcePuzzleId": "rush:L0000758",
+      "embedding": "FlushTop",
+      "offsetX": 1,
+      "offsetY": 0,
+      "inventoryClass": "No1x1",
+      "boardShapeClass": "Tall",
+      "augmentationClass": "LowerParkingUnlock",
+      "causalTemplate": "LowerParkingUnlock",
+      "nativeVariantFingerprint": "LowerParkingUnlock|P0:31:2:1:1|P1:1:2:1:0|P2:25:2:1:0|P3:13:2:1:0|P4:39:2:0:0|P5:23:2:0:0|P6:26:2:0:0|P7:15:2:0:0|P8:17:3:0:0|P9:9:2:0:0|P10:2:2:0:0|P11:4:3:0:0|P12:51:2:0:0|W41",
+      "exportedStateFingerprint": "e809855c40f02c842d0d334fd0f8df6d4e001ac6d2a48c86400051847c668f3f",
+      "sourceStateFingerprint": "e809855c40f02c842d0d334fd0f8df6d4e001ac6d2a48c86400051847c668f3f",
+      "sourceStateMatchesExport": true,
+      "manifestOptimalGestures": 15,
+      "levelCanonicalGestures": 15,
+      "solutionOptimalGestures": 15,
+      "recomputedOptimalGestures": 15,
+      "storedSolutionReplay": true,
+      "optimalMatchesExport": true
+    },
+    {
+      "id": "Career_063",
+      "familyId": "F013",
+      "sourceCheckpoint": "output/RUSH01071_SeededPilot_003/checkpoint.json",
+      "sourcePoolIndex": 21,
+      "baseCandidateId": "Candidate_001",
+      "sourcePuzzleId": "rush:L0000250",
+      "embedding": "FlushBottom",
+      "offsetX": 1,
+      "offsetY": 2,
+      "inventoryClass": "One1x1",
+      "boardShapeClass": "ShiftedCore",
+      "augmentationClass": "Lower1x1SpaceMaker",
+      "causalTemplate": "Lower1x1SpaceMaker",
+      "nativeVariantFingerprint": "Lower1x1SpaceMaker|P0:38:2:1:1|P1:36:2:1:0|P2:37:2:1:0|P3:18:2:1:0|P4:26:2:1:0|P5:48:2:1:0|P6:27:2:1:0|P7:51:2:0:0|P8:40:2:0:0|P9:29:2:0:0|P10:31:2:0:0|P11:22:3:0:0|P12:15:2:0:0|P13:53:1:0:2|W19|W50",
+      "exportedStateFingerprint": "f8ffa5cfacacff9bccb9119baad7ea89c0c587b76bbdba1abe018ca7813a5fc7",
+      "sourceStateFingerprint": "f8ffa5cfacacff9bccb9119baad7ea89c0c587b76bbdba1abe018ca7813a5fc7",
+      "sourceStateMatchesExport": true,
+      "manifestOptimalGestures": 17,
+      "levelCanonicalGestures": 17,
+      "solutionOptimalGestures": 17,
+      "recomputedOptimalGestures": 17,
+      "storedSolutionReplay": true,
+      "optimalMatchesExport": true
+    },
+    {
+      "id": "Career_064",
+      "familyId": "F063",
+      "sourceCheckpoint": "output/RUSH01071_SeededPilot_003/checkpoint.json",
+      "sourcePoolIndex": 58,
+      "baseCandidateId": "Candidate_003",
+      "sourcePuzzleId": "rush:L0013712",
+      "embedding": "FlushTop",
+      "offsetX": 1,
+      "offsetY": 0,
+      "inventoryClass": "No1x1",
+      "boardShapeClass": "Tall",
+      "augmentationClass": "LowerParkingUnlock",
+      "causalTemplate": "LowerParkingUnlock",
+      "nativeVariantFingerprint": "LowerParkingUnlock|P0:17:2:1:1|P1:15:2:1:0|P2:1:2:1:0|P3:32:2:1:0|P4:5:2:1:0|P5:27:2:1:0|P6:13:2:1:0|P7:29:3:0:0|P8:25:2:0:0|P9:18:2:0:0|P10:9:3:0:0|P11:45:2:0:0",
+      "exportedStateFingerprint": "b1d9e87163a3cec2348e252c40688744870a95be6243d78b4557339cc547125d",
+      "sourceStateFingerprint": "b1d9e87163a3cec2348e252c40688744870a95be6243d78b4557339cc547125d",
+      "sourceStateMatchesExport": true,
+      "manifestOptimalGestures": 7,
+      "levelCanonicalGestures": 7,
+      "solutionOptimalGestures": 7,
+      "recomputedOptimalGestures": 7,
+      "storedSolutionReplay": true,
+      "optimalMatchesExport": true
+    },
+    {
+      "id": "Career_065",
+      "familyId": "F095",
+      "sourceCheckpoint": "output/RUSH01071_SeededPilot_003/checkpoint.json",
+      "sourcePoolIndex": 54,
+      "baseCandidateId": "Candidate_004",
+      "sourcePuzzleId": "rush:L0150488",
+      "embedding": "FlushTop",
+      "offsetX": 1,
+      "offsetY": 0,
+      "inventoryClass": "One1x1",
+      "boardShapeClass": "Wide",
+      "augmentationClass": "SideGate",
+      "nativeVariantFingerprint": "SideGate|P0:17:2:1:1|P1:1:3:1:0|P2:4:2:1:0|P3:27:3:1:0|P4:36:3:0:0|P5:22:2:0:0|P6:25:2:0:0|P7:18:3:0:0|P8:9:2:0:0|P9:0:3:1:0",
+      "exportedStateFingerprint": "52b61f0258fbb39ba7b17a7ab4c32b2a44fcf311f7d4d62a04fcfd0684edac59",
+      "sourceStateFingerprint": "52b61f0258fbb39ba7b17a7ab4c32b2a44fcf311f7d4d62a04fcfd0684edac59",
+      "sourceStateMatchesExport": true,
+      "manifestOptimalGestures": 13,
+      "levelCanonicalGestures": 13,
+      "solutionOptimalGestures": 13,
+      "recomputedOptimalGestures": 13,
+      "storedSolutionReplay": true,
+      "optimalMatchesExport": true
+    },
+    {
+      "id": "Career_066",
+      "familyId": "F084",
+      "sourceCheckpoint": "output/RUSH0107_CrossRegionCausalPilot_001/checkpoint.json",
+      "sourcePoolIndex": 32,
+      "baseCandidateId": "Candidate_023",
+      "sourcePuzzleId": "rush:L0059169",
+      "embedding": "FlushTop",
+      "offsetX": 1,
+      "offsetY": 0,
+      "inventoryClass": "One1x1",
+      "boardShapeClass": "Tall",
+      "augmentationClass": "Lower1x1SpaceMaker",
+      "causalTemplate": "Lower1x1SpaceMaker",
+      "nativeVariantFingerprint": "Lower1x1SpaceMaker|P0:24:2:1:1|P1:8:2:1:0|P2:13:3:1:0|P3:36:2:0:0|P4:38:2:0:0|P5:32:3:0:0|P6:22:2:0:0|P7:16:2:0:0|P8:18:2:0:0|P9:9:3:0:0|P10:1:2:0:0|P11:3:2:0:0|P12:55:1:0:2|W40",
+      "exportedStateFingerprint": "0446665fd185335b0bc1048412a1e456beca368ae17cde685bb7ab2d0c49d217",
+      "sourceStateFingerprint": "0446665fd185335b0bc1048412a1e456beca368ae17cde685bb7ab2d0c49d217",
+      "sourceStateMatchesExport": true,
+      "manifestOptimalGestures": 18,
+      "levelCanonicalGestures": 18,
+      "solutionOptimalGestures": 18,
+      "recomputedOptimalGestures": 18,
+      "storedSolutionReplay": true,
+      "optimalMatchesExport": true
+    },
+    {
+      "id": "Career_067",
+      "familyId": "F050",
+      "sourceCheckpoint": "output/RUSH01071_SeededPilot_003/checkpoint.json",
+      "sourcePoolIndex": 47,
+      "baseCandidateId": "Candidate_013",
+      "sourcePuzzleId": "rush:L0059849",
+      "embedding": "ShiftDown1",
+      "offsetX": 1,
+      "offsetY": 1,
+      "inventoryClass": "One1x1",
+      "boardShapeClass": "ShiftedCore",
+      "augmentationClass": "Lower1x1SpaceMaker",
+      "causalTemplate": "Lower1x1SpaceMaker",
+      "nativeVariantFingerprint": "Lower1x1SpaceMaker|P0:38:2:1:1|P1:15:3:1:0|P2:11:3:1:0|P3:33:2:1:0|P4:13:3:1:0|P5:46:2:0:0|P6:36:2:0:0|P7:31:2:0:0|P8:16:2:0:0|P9:8:3:0:0|P10:43:1:0:2|W26|W39",
+      "exportedStateFingerprint": "61a84c046ebca31d7bc6a7386a9deb6886097a4395ed2627a480bfbd15ca85c6",
+      "sourceStateFingerprint": "61a84c046ebca31d7bc6a7386a9deb6886097a4395ed2627a480bfbd15ca85c6",
+      "sourceStateMatchesExport": true,
+      "manifestOptimalGestures": 20,
+      "levelCanonicalGestures": 20,
+      "solutionOptimalGestures": 20,
+      "recomputedOptimalGestures": 20,
+      "storedSolutionReplay": true,
+      "optimalMatchesExport": true
+    },
+    {
+      "id": "Career_068",
+      "familyId": "F003",
+      "sourceCheckpoint": "output/RUSH0107_CrossRegionCausalPilot_001/checkpoint.json",
+      "sourcePoolIndex": 28,
+      "baseCandidateId": "Candidate_005",
+      "sourcePuzzleId": "rush:L0001640",
+      "embedding": "FlushTop",
+      "offsetX": 1,
+      "offsetY": 0,
+      "inventoryClass": "No1x1",
+      "boardShapeClass": "Tall",
+      "augmentationClass": "CrossRegionLongGate",
+      "causalTemplate": "CrossRegionLongGate",
+      "nativeVariantFingerprint": "CrossRegionLongGate|P0:31:2:1:1|P1:22:3:1:0|P2:8:2:1:0|P3:30:2:1:0|P4:9:3:1:0|P5:4:2:1:0|P6:19:2:1:0|P7:34:2:1:0|P8:39:2:0:0|P9:24:2:0:0|P10:17:2:0:0|P11:12:2:0:0|P12:1:2:0:0|P13:5:2:0:0|P14:43:3:0:0",
+      "exportedStateFingerprint": "3c708352d8042e9a289da0a24bcd3edabf0a6edf5d5640689e24a23bdac488fb",
+      "sourceStateFingerprint": "3c708352d8042e9a289da0a24bcd3edabf0a6edf5d5640689e24a23bdac488fb",
+      "sourceStateMatchesExport": true,
+      "manifestOptimalGestures": 8,
+      "levelCanonicalGestures": 8,
+      "solutionOptimalGestures": 8,
+      "recomputedOptimalGestures": 8,
+      "storedSolutionReplay": true,
+      "optimalMatchesExport": true
+    },
+    {
+      "id": "Career_069",
+      "familyId": "F015",
+      "sourceCheckpoint": "output/RUSH0107_CrossRegionCausalPilot_001/checkpoint.json",
+      "sourcePoolIndex": 51,
+      "baseCandidateId": "Candidate_006",
+      "sourcePuzzleId": "rush:L1385712",
+      "embedding": "FlushTop",
+      "offsetX": 1,
+      "offsetY": 0,
+      "inventoryClass": "No1x1",
+      "boardShapeClass": "Wide",
+      "augmentationClass": "LowerParkingUnlock",
+      "causalTemplate": "LowerParkingUnlock",
+      "nativeVariantFingerprint": "LowerParkingUnlock|P0:31:2:1:1|P1:1:2:1:0|P2:20:2:1:0|P3:22:2:0:0|P4:24:3:0:0|P5:15:2:0:0|P6:17:3:0:0|P7:3:2:0:0|P8:5:2:0:0|P9:35:2:0:0|W34",
+      "exportedStateFingerprint": "6a6c6a842d709723c2048796e0178d18404ba299284df261d02514a4491f080d",
+      "sourceStateFingerprint": "6a6c6a842d709723c2048796e0178d18404ba299284df261d02514a4491f080d",
+      "sourceStateMatchesExport": true,
+      "manifestOptimalGestures": 14,
+      "levelCanonicalGestures": 14,
+      "solutionOptimalGestures": 14,
+      "recomputedOptimalGestures": 14,
+      "storedSolutionReplay": true,
+      "optimalMatchesExport": true
+    },
+    {
+      "id": "Career_070",
+      "familyId": "F049",
+      "sourceCheckpoint": "output/RUSH01071_SeededPilot_003/checkpoint.json",
+      "sourcePoolIndex": 46,
+      "baseCandidateId": "Candidate_017",
+      "sourcePuzzleId": "rush:L0001378",
+      "embedding": "FlushTop",
+      "offsetX": 1,
+      "offsetY": 0,
+      "inventoryClass": "One1x1",
+      "boardShapeClass": "ShiftedCore",
+      "augmentationClass": "DependencyPullRight",
+      "coreExpansionClass": "DependencyPullRight",
+      "nativeVariantFingerprint": "corexpand|DependencyPullRight|16",
+      "exportedStateFingerprint": "b70f1a9c789b920f2fdc07e6d58e885c8049c5ca1955bf81211b94c6a2842dfb",
+      "sourceStateFingerprint": "b70f1a9c789b920f2fdc07e6d58e885c8049c5ca1955bf81211b94c6a2842dfb",
+      "sourceStateMatchesExport": true,
+      "manifestOptimalGestures": 17,
+      "levelCanonicalGestures": 17,
+      "solutionOptimalGestures": 17,
+      "recomputedOptimalGestures": 17,
+      "storedSolutionReplay": true,
+      "optimalMatchesExport": true
+    },
+    {
+      "id": "Career_071",
+      "familyId": "F036",
+      "sourceCheckpoint": "output/RUSH01071_SeededPilot_003/checkpoint.json",
+      "sourcePoolIndex": 3,
+      "baseCandidateId": "Candidate_020",
+      "sourcePuzzleId": "rush:L0000764",
+      "embedding": "ShiftDown1",
+      "offsetX": 1,
+      "offsetY": 1,
+      "inventoryClass": "No1x1",
+      "boardShapeClass": "Tall",
+      "augmentationClass": "CrossRegionLongGate",
+      "causalTemplate": "CrossRegionLongGate",
+      "nativeVariantFingerprint": "CrossRegionLongGate|P0:17:2:1:1|P1:8:2:1:0|P2:39:2:1:0|P3:41:2:1:0|P4:20:3:1:0|P5:43:3:0:0|P6:37:2:0:0|P7:29:2:0:0|P8:31:2:0:0|P9:22:2:0:0|P10:18:2:0:0|P11:9:2:0:0|P12:11:3:0:0|P13:50:3:0:0|W26",
+      "exportedStateFingerprint": "e2cb521426c607e5762420a5cb1536814ad696725c72c1f5d96ff52d5876d4c5",
+      "sourceStateFingerprint": "e2cb521426c607e5762420a5cb1536814ad696725c72c1f5d96ff52d5876d4c5",
+      "sourceStateMatchesExport": true,
+      "manifestOptimalGestures": 28,
+      "levelCanonicalGestures": 28,
+      "solutionOptimalGestures": 28,
+      "recomputedOptimalGestures": 28,
+      "storedSolutionReplay": true,
+      "optimalMatchesExport": true
+    },
+    {
+      "id": "Career_072",
+      "familyId": "F120",
+      "sourceCheckpoint": "output/RUSH01071_SeededPilot_003/checkpoint.json",
+      "sourcePoolIndex": 31,
+      "baseCandidateId": "Candidate_016",
+      "sourcePuzzleId": "rush:L1318631",
+      "embedding": "FlushBottom",
+      "offsetX": 1,
+      "offsetY": 2,
+      "inventoryClass": "One1x1",
+      "boardShapeClass": "ShiftedCore",
+      "augmentationClass": "None",
+      "exportedStateFingerprint": "804b1b6b8e1f031407b212dfd40ef5512f227e9ab3bf69968f08160815535744",
+      "sourceStateFingerprint": "804b1b6b8e1f031407b212dfd40ef5512f227e9ab3bf69968f08160815535744",
+      "sourceStateMatchesExport": true,
+      "manifestOptimalGestures": 7,
+      "levelCanonicalGestures": 7,
+      "solutionOptimalGestures": 7,
+      "recomputedOptimalGestures": 7,
+      "storedSolutionReplay": true,
+      "optimalMatchesExport": true
+    },
+    {
+      "id": "Career_073",
+      "familyId": "F042",
+      "sourceCheckpoint": "output/RUSH01071_SeededPilot_003/checkpoint.json",
+      "sourcePoolIndex": 65,
+      "baseCandidateId": "Candidate_008",
+      "sourcePuzzleId": "rush:L0102964",
+      "embedding": "ShiftDown1",
+      "offsetX": 1,
+      "offsetY": 1,
+      "inventoryClass": "No1x1",
+      "boardShapeClass": "ShiftedCore",
+      "augmentationClass": "None",
+      "exportedStateFingerprint": "1c9f1445eb31e5639ede0366b5c69e8d5742626216848b2e6e0f233ebd5bc9ff",
+      "sourceStateFingerprint": "1c9f1445eb31e5639ede0366b5c69e8d5742626216848b2e6e0f233ebd5bc9ff",
+      "sourceStateMatchesExport": true,
+      "manifestOptimalGestures": 12,
+      "levelCanonicalGestures": 12,
+      "solutionOptimalGestures": 12,
+      "recomputedOptimalGestures": 12,
+      "storedSolutionReplay": true,
+      "optimalMatchesExport": true
+    },
+    {
+      "id": "Career_074",
+      "familyId": "F087",
+      "sourceCheckpoint": "output/RUSH0107_CrossRegionCausalPilot_001/checkpoint.json",
+      "sourcePoolIndex": 60,
+      "baseCandidateId": "Candidate_007",
+      "sourcePuzzleId": "rush:L0064087",
+      "embedding": "FlushTop",
+      "offsetX": 1,
+      "offsetY": 0,
+      "inventoryClass": "No1x1",
+      "boardShapeClass": "Tall",
+      "augmentationClass": "CrossRegionLongGate",
+      "causalTemplate": "CrossRegionLongGate",
+      "nativeVariantFingerprint": "CrossRegionLongGate|P0:31:2:1:1|P1:15:3:1:0|P2:16:2:1:0|P3:25:2:1:0|P4:5:3:1:0|P5:34:2:1:0|P6:39:2:0:0|P7:26:2:0:0|P8:17:2:0:0|P9:8:2:0:0|P10:1:2:0:0|P11:53:3:0:0|W30|W36",
+      "exportedStateFingerprint": "40d23ce9d1d59c2e9715aec1552dd1a6db28ba4ab39a3c3b19ee07a39117a80b",
+      "sourceStateFingerprint": "40d23ce9d1d59c2e9715aec1552dd1a6db28ba4ab39a3c3b19ee07a39117a80b",
+      "sourceStateMatchesExport": true,
+      "manifestOptimalGestures": 16,
+      "levelCanonicalGestures": 16,
+      "solutionOptimalGestures": 16,
+      "recomputedOptimalGestures": 16,
+      "storedSolutionReplay": true,
+      "optimalMatchesExport": true
+    },
+    {
+      "id": "Career_075",
+      "familyId": "F029",
+      "sourceCheckpoint": "output/RUSH0107_CrossRegionCausalPilot_001/checkpoint.json",
+      "sourcePoolIndex": 80,
+      "baseCandidateId": "Candidate_018",
+      "sourcePuzzleId": "rush:L0000811",
+      "embedding": "FlushTop",
+      "offsetX": 1,
+      "offsetY": 0,
+      "inventoryClass": "No1x1",
+      "boardShapeClass": "ShiftedCore",
+      "augmentationClass": "LowerParkingUnlock",
+      "causalTemplate": "LowerParkingUnlock",
+      "nativeVariantFingerprint": "LowerParkingUnlock|P0:31:2:1:1|P1:15:2:1:0|P2:23:2:1:0|P3:11:2:1:0|P4:5:2:1:0|P5:34:2:1:0|P6:36:2:0:0|P7:24:2:0:0|P8:26:2:0:0|P9:16:2:0:0|P10:19:2:0:0|P11:1:2:0:0|P12:39:2:0:0|W29",
+      "exportedStateFingerprint": "4285f7c76fae8689be0c880a7b9a977b961190cbe8c217c137bcc398c61d6b48",
+      "sourceStateFingerprint": "4285f7c76fae8689be0c880a7b9a977b961190cbe8c217c137bcc398c61d6b48",
+      "sourceStateMatchesExport": true,
+      "manifestOptimalGestures": 17,
+      "levelCanonicalGestures": 17,
+      "solutionOptimalGestures": 17,
+      "recomputedOptimalGestures": 17,
+      "storedSolutionReplay": true,
+      "optimalMatchesExport": true
+    },
+    {
+      "id": "Career_076",
+      "familyId": "F101",
+      "sourceCheckpoint": "output/RUSH01071_SeededPilot_003/checkpoint.json",
+      "sourcePoolIndex": 49,
+      "baseCandidateId": "Candidate_024",
+      "sourcePuzzleId": "rush:L0414548",
+      "embedding": "ShiftDown1MirrorH",
+      "offsetX": 1,
+      "offsetY": 1,
+      "inventoryClass": "One1x1",
+      "boardShapeClass": "ShiftedCore",
+      "augmentationClass": "Lower1x1SpaceMaker",
+      "causalTemplate": "Lower1x1SpaceMaker",
+      "nativeVariantFingerprint": "Lower1x1SpaceMaker|P0:17:2:1:1|P1:8:2:1:0|P2:29:2:1:0|P3:18:3:1:0|P4:26:3:1:0|P5:13:2:1:0|P6:27:2:1:0|P7:9:3:0:0|P8:22:2:0:0|P9:38:2:0:0|P10:45:2:0:0|P11:41:1:0:2|W19|W43",
+      "exportedStateFingerprint": "1fb41ca99236b145f7bb4d6224501eed59f8e0749788f554501a8516f47c9f80",
+      "sourceStateFingerprint": "1fb41ca99236b145f7bb4d6224501eed59f8e0749788f554501a8516f47c9f80",
+      "sourceStateMatchesExport": true,
+      "manifestOptimalGestures": 5,
+      "levelCanonicalGestures": 5,
+      "solutionOptimalGestures": 5,
+      "recomputedOptimalGestures": 5,
+      "storedSolutionReplay": true,
+      "optimalMatchesExport": true
+    },
+    {
+      "id": "Career_077",
+      "familyId": "F014",
+      "sourceCheckpoint": "output/RUSH01071_SeededPilot_003/checkpoint.json",
+      "sourcePoolIndex": 11,
+      "baseCandidateId": "Candidate_021",
+      "sourcePuzzleId": "rush:L0000251",
+      "embedding": "FlushBottom",
+      "offsetX": 1,
+      "offsetY": 2,
+      "inventoryClass": "No1x1",
+      "boardShapeClass": "ShiftedCore",
+      "augmentationClass": "LowerParkingUnlock",
+      "causalTemplate": "LowerParkingUnlock",
+      "nativeVariantFingerprint": "LowerParkingUnlock|P0:45:2:1:1|P1:29:3:1:0|P2:23:2:1:0|P3:39:2:1:0|P4:19:2:1:0|P5:41:3:1:0|P6:50:2:0:0|P7:37:2:0:0|P8:31:2:0:0|P9:33:2:0:0|P10:24:2:0:0|P11:15:2:0:0|P12:17:2:0:0|P13:40:2:1:0",
+      "exportedStateFingerprint": "3ce874cf1a975ebc82780962853e45a495b0994a37a7e347e65075364dab7441",
+      "sourceStateFingerprint": "3ce874cf1a975ebc82780962853e45a495b0994a37a7e347e65075364dab7441",
+      "sourceStateMatchesExport": true,
+      "manifestOptimalGestures": 12,
+      "levelCanonicalGestures": 12,
+      "solutionOptimalGestures": 12,
+      "recomputedOptimalGestures": 12,
+      "storedSolutionReplay": true,
+      "optimalMatchesExport": true
+    },
+    {
+      "id": "Career_078",
+      "familyId": "F084",
+      "sourceCheckpoint": "output/RUSH01071_SeededPilot_003/checkpoint.json",
+      "sourcePoolIndex": 71,
+      "baseCandidateId": "Candidate_023",
+      "sourcePuzzleId": "rush:L0059169",
+      "embedding": "FlushTop",
+      "offsetX": 1,
+      "offsetY": 0,
+      "inventoryClass": "No1x1",
+      "boardShapeClass": "ShiftedCore",
+      "augmentationClass": "DependencyPullRight",
+      "coreExpansionClass": "DependencyPullRight",
+      "nativeVariantFingerprint": "corexpand|DependencyPullRight|17",
+      "exportedStateFingerprint": "83a39574159c7597cc410c81ec5ad8475cd29975f941942f9bf62bb2a9efc9c8",
+      "sourceStateFingerprint": "83a39574159c7597cc410c81ec5ad8475cd29975f941942f9bf62bb2a9efc9c8",
+      "sourceStateMatchesExport": true,
+      "manifestOptimalGestures": 17,
+      "levelCanonicalGestures": 17,
+      "solutionOptimalGestures": 17,
+      "recomputedOptimalGestures": 17,
+      "storedSolutionReplay": true,
+      "optimalMatchesExport": true
+    },
+    {
+      "id": "Career_079",
+      "familyId": "F049",
+      "sourceCheckpoint": "output/RUSH0107_CrossRegionCausalPilot_001/checkpoint.json",
+      "sourcePoolIndex": 36,
+      "baseCandidateId": "Candidate_017",
+      "sourcePuzzleId": "rush:L0001378",
+      "embedding": "FlushTop",
+      "offsetX": 1,
+      "offsetY": 0,
+      "inventoryClass": "No1x1",
+      "boardShapeClass": "ShiftedCore",
+      "augmentationClass": "LowerParkingUnlock",
+      "causalTemplate": "LowerParkingUnlock",
+      "nativeVariantFingerprint": "LowerParkingUnlock|P0:24:2:1:1|P1:1:3:1:0|P2:25:2:1:0|P3:11:2:1:0|P4:19:2:1:0|P5:37:2:0:0|P6:33:2:0:0|P7:22:2:0:0|P8:16:2:0:0|P9:2:3:0:0|P10:29:2:1:0|W39",
+      "exportedStateFingerprint": "3997a21a577b4a2cbbea8c8561f54008f090875b82695b73c5298848ccb29f5a",
+      "sourceStateFingerprint": "3997a21a577b4a2cbbea8c8561f54008f090875b82695b73c5298848ccb29f5a",
+      "sourceStateMatchesExport": true,
+      "manifestOptimalGestures": 17,
+      "levelCanonicalGestures": 17,
+      "solutionOptimalGestures": 17,
+      "recomputedOptimalGestures": 17,
+      "storedSolutionReplay": true,
+      "optimalMatchesExport": true
+    },
+    {
+      "id": "Career_080",
+      "familyId": "F086",
+      "sourceCheckpoint": "output/RUSH0107_CrossRegionCausalPilot_001/checkpoint.json",
+      "sourcePoolIndex": 43,
+      "baseCandidateId": "Candidate_014",
+      "sourcePuzzleId": "rush:L0060444",
+      "embedding": "FlushTop",
+      "offsetX": 1,
+      "offsetY": 0,
+      "inventoryClass": "No1x1",
+      "boardShapeClass": "Tall",
+      "augmentationClass": "LowerParkingUnlock",
+      "causalTemplate": "LowerParkingUnlock",
+      "nativeVariantFingerprint": "LowerParkingUnlock|P0:31:2:1:1|P1:1:2:1:0|P2:30:2:1:0|P3:2:2:1:0|P4:25:2:1:0|P5:11:2:1:0|P6:26:2:1:0|P7:27:3:1:0|P8:39:2:0:0|P9:23:2:0:0|P10:19:2:0:0|P11:3:3:0:0|P12:51:2:0:0|W22",
+      "exportedStateFingerprint": "c3833d4dedee7dda4d8e1014538e799dab4f16e857cf40de2bb4b4d672a21bb5",
+      "sourceStateFingerprint": "c3833d4dedee7dda4d8e1014538e799dab4f16e857cf40de2bb4b4d672a21bb5",
+      "sourceStateMatchesExport": true,
+      "manifestOptimalGestures": 9,
+      "levelCanonicalGestures": 9,
+      "solutionOptimalGestures": 9,
+      "recomputedOptimalGestures": 9,
+      "storedSolutionReplay": true,
+      "optimalMatchesExport": true
+    },
+    {
+      "id": "Career_081",
+      "familyId": "F103",
+      "sourceCheckpoint": "output/RUSH0107_CrossRegionCausalPilot_001/checkpoint.json",
+      "sourcePoolIndex": 18,
+      "baseCandidateId": "Candidate_019",
+      "sourcePuzzleId": "rush:L1197225",
+      "embedding": "FlushTop",
+      "offsetX": 1,
+      "offsetY": 0,
+      "inventoryClass": "One1x1",
+      "boardShapeClass": "ShiftedCore",
+      "augmentationClass": "Lower1x1SpaceMaker",
+      "causalTemplate": "Lower1x1SpaceMaker",
+      "nativeVariantFingerprint": "Lower1x1SpaceMaker|P0:31:2:1:1|P1:8:3:1:0|P2:16:2:1:0|P3:25:3:1:0|P4:12:3:1:0|P5:40:2:0:0|P6:17:2:0:0|P7:9:2:0:0|P8:1:2:0:0|P9:37:1:0:2|W29|W30",
+      "exportedStateFingerprint": "2919c936300b7758cff5d45a6d659df306db2febe908ce6dc5e11cdee654be8b",
+      "sourceStateFingerprint": "2919c936300b7758cff5d45a6d659df306db2febe908ce6dc5e11cdee654be8b",
+      "sourceStateMatchesExport": true,
+      "manifestOptimalGestures": 13,
+      "levelCanonicalGestures": 13,
+      "solutionOptimalGestures": 13,
+      "recomputedOptimalGestures": 13,
+      "storedSolutionReplay": true,
+      "optimalMatchesExport": true
+    },
+    {
+      "id": "Career_082",
+      "familyId": "F047",
+      "sourceCheckpoint": "output/RUSH01071_SeededPilot_003/checkpoint.json",
+      "sourcePoolIndex": 52,
+      "baseCandidateId": "Candidate_022",
+      "sourcePuzzleId": "rush:L0001392",
+      "embedding": "FlushTop",
+      "offsetX": 1,
+      "offsetY": 0,
+      "inventoryClass": "One1x1",
+      "boardShapeClass": "Tall",
+      "augmentationClass": "Lower1x1SpaceMaker",
+      "causalTemplate": "Lower1x1SpaceMaker",
+      "nativeVariantFingerprint": "Lower1x1SpaceMaker|P0:31:2:1:1|P1:15:2:1:0|P2:25:2:1:0|P3:19:3:1:0|P4:27:2:1:0|P5:6:3:1:0|P6:39:3:0:0|P7:29:2:0:0|P8:23:2:0:0|P9:16:2:0:0|P10:11:2:0:0|P11:1:2:0:0|P12:3:3:0:0|P13:45:1:0:2|W9|W37",
+      "exportedStateFingerprint": "1fa15f3c369ad34c3a3a2000f9dccb983c2abd503bdfbed84b923a20d2cd5899",
+      "sourceStateFingerprint": "1fa15f3c369ad34c3a3a2000f9dccb983c2abd503bdfbed84b923a20d2cd5899",
+      "sourceStateMatchesExport": true,
+      "manifestOptimalGestures": 13,
+      "levelCanonicalGestures": 13,
+      "solutionOptimalGestures": 13,
+      "recomputedOptimalGestures": 13,
+      "storedSolutionReplay": true,
+      "optimalMatchesExport": true
+    },
+    {
+      "id": "Career_083",
+      "familyId": "F125",
+      "sourceCheckpoint": "output/RUSH01071_SeededPilot_003/checkpoint.json",
+      "sourcePoolIndex": 9,
+      "baseCandidateId": "Candidate_015",
+      "sourcePuzzleId": "rush:L1615211",
+      "embedding": "FlushBottom",
+      "offsetX": 1,
+      "offsetY": 2,
+      "inventoryClass": "No1x1",
+      "boardShapeClass": "ShiftedCore",
+      "augmentationClass": "LowerParkingUnlock",
+      "causalTemplate": "LowerParkingUnlock",
+      "nativeVariantFingerprint": "LowerParkingUnlock|P0:38:2:1:1|P1:29:3:1:0|P2:15:2:1:0|P3:30:2:1:0|P4:16:2:1:0|P5:41:3:1:0|P6:50:3:0:0|P7:53:2:0:0|P8:31:2:0:0|P9:24:2:0:0|P10:17:2:0:0|P11:19:2:0:0|P12:33:2:1:0",
+      "exportedStateFingerprint": "18f64fbb91c5d774b43e7e8679c7c7a81f9266f264890751cb52ed6a92323b3e",
+      "sourceStateFingerprint": "18f64fbb91c5d774b43e7e8679c7c7a81f9266f264890751cb52ed6a92323b3e",
+      "sourceStateMatchesExport": true,
+      "manifestOptimalGestures": 7,
+      "levelCanonicalGestures": 7,
+      "solutionOptimalGestures": 7,
+      "recomputedOptimalGestures": 7,
+      "storedSolutionReplay": true,
+      "optimalMatchesExport": true
+    },
+    {
+      "id": "Career_084",
+      "familyId": "F086",
+      "sourceCheckpoint": "output/RUSH01071_SeededPilot_003/checkpoint.json",
+      "sourcePoolIndex": 40,
+      "baseCandidateId": "Candidate_014",
+      "sourcePuzzleId": "rush:L0060444",
+      "embedding": "FlushBottom",
+      "offsetX": 1,
+      "offsetY": 2,
+      "inventoryClass": "One1x1",
+      "boardShapeClass": "Wide",
+      "augmentationClass": "DependencyPullLeft",
+      "coreExpansionClass": "DependencyPullLeft",
+      "nativeVariantFingerprint": "corexpand|DependencyPullLeft|9",
+      "exportedStateFingerprint": "efa6ae6ae268b67cbad974db825dd4c6359642f739920c93d9a126ab1beeb53f",
+      "sourceStateFingerprint": "efa6ae6ae268b67cbad974db825dd4c6359642f739920c93d9a126ab1beeb53f",
+      "sourceStateMatchesExport": true,
+      "manifestOptimalGestures": 10,
+      "levelCanonicalGestures": 10,
+      "solutionOptimalGestures": 10,
+      "recomputedOptimalGestures": 10,
+      "storedSolutionReplay": true,
+      "optimalMatchesExport": true
+    },
+    {
+      "id": "Career_085",
+      "familyId": "F050",
+      "sourceCheckpoint": "output/RUSH01071_SeededPilot_003/checkpoint.json",
+      "sourcePoolIndex": 6,
+      "baseCandidateId": "Candidate_013",
+      "sourcePuzzleId": "rush:L0059849",
+      "embedding": "FlushBottom",
+      "offsetX": 1,
+      "offsetY": 2,
+      "inventoryClass": "No1x1",
+      "boardShapeClass": "ShiftedCore",
+      "augmentationClass": "LowerParkingUnlock",
+      "causalTemplate": "LowerParkingUnlock",
+      "nativeVariantFingerprint": "LowerParkingUnlock|P0:45:2:1:1|P1:22:3:1:0|P2:18:3:1:0|P3:40:2:1:0|P4:20:3:1:0|P5:53:2:0:0|P6:43:2:0:0|P7:38:2:0:0|P8:23:2:0:0|P9:15:3:0:0|P10:41:2:1:0|W33|W46",
+      "exportedStateFingerprint": "f09a8b36308bdac8778c10125d68a0782b2385f00d4d09812af6ce8539ef4e62",
+      "sourceStateFingerprint": "f09a8b36308bdac8778c10125d68a0782b2385f00d4d09812af6ce8539ef4e62",
+      "sourceStateMatchesExport": true,
+      "manifestOptimalGestures": 9,
+      "levelCanonicalGestures": 9,
+      "solutionOptimalGestures": 9,
+      "recomputedOptimalGestures": 9,
+      "storedSolutionReplay": true,
+      "optimalMatchesExport": true
+    },
+    {
+      "id": "Career_086",
+      "familyId": "F035",
+      "sourceCheckpoint": "output/RUSH01071_DeepTargetPilot_001/checkpoint.json",
+      "sourcePoolIndex": 73,
+      "baseCandidateId": "Candidate_011",
+      "sourcePuzzleId": "rush:L0000758",
+      "embedding": "ShiftDown1",
+      "offsetX": 1,
+      "offsetY": 1,
+      "inventoryClass": "One1x1",
+      "boardShapeClass": "ShiftedCore",
+      "augmentationClass": "Lower1x1SpaceMaker",
+      "causalTemplate": "Lower1x1SpaceMaker",
+      "nativeVariantFingerprint": "Lower1x1SpaceMaker|P0:38:2:1:1|P1:8:2:1:0|P2:32:2:1:0|P3:20:2:1:0|P4:46:2:0:0|P5:30:2:0:0|P6:33:2:0:0|P7:22:2:0:0|P8:24:3:0:0|P9:16:2:0:0|P10:9:2:0:0|P11:11:3:0:0|P12:43:1:0:2|W48",
+      "exportedStateFingerprint": "2c00a1d544281f34c4e8917f8945b37efcc35ceb1229e267b169afe7dca6b702",
+      "sourceStateFingerprint": "2c00a1d544281f34c4e8917f8945b37efcc35ceb1229e267b169afe7dca6b702",
+      "sourceStateMatchesExport": true,
+      "manifestOptimalGestures": 40,
+      "levelCanonicalGestures": 40,
+      "solutionOptimalGestures": 40,
+      "recomputedOptimalGestures": 40,
+      "storedSolutionReplay": true,
+      "optimalMatchesExport": true
+    },
+    {
+      "id": "Career_087",
+      "familyId": "F065",
+      "sourceCheckpoint": "output/RUSH01071_SeededPilot_003/checkpoint.json",
+      "sourcePoolIndex": 77,
+      "baseCandidateId": "Candidate_010",
+      "sourcePuzzleId": "rush:L0563453",
+      "embedding": "FlushTopMirrorH",
+      "offsetX": 1,
+      "offsetY": 0,
+      "inventoryClass": "One1x1",
+      "boardShapeClass": "ShiftedCore",
+      "augmentationClass": "Lower1x1SpaceMaker",
+      "causalTemplate": "Lower1x1SpaceMaker",
+      "nativeVariantFingerprint": "Lower1x1SpaceMaker|P0:10:2:1:1|P1:1:2:1:0|P2:9:3:1:0|P3:26:3:1:0|P4:2:2:0:0|P5:4:3:0:0|P6:18:2:0:0|P7:29:3:0:0|P8:36:2:0:0|P9:38:2:0:0|P10:15:1:0:2",
+      "exportedStateFingerprint": "ceb3e1b0e9745ef4f86eecc9fb3392a1e90e9e5c4cad7c470787cbb1d4d0aaac",
+      "sourceStateFingerprint": "ceb3e1b0e9745ef4f86eecc9fb3392a1e90e9e5c4cad7c470787cbb1d4d0aaac",
+      "sourceStateMatchesExport": true,
+      "manifestOptimalGestures": 4,
+      "levelCanonicalGestures": 4,
+      "solutionOptimalGestures": 4,
+      "recomputedOptimalGestures": 4,
+      "storedSolutionReplay": true,
+      "optimalMatchesExport": true
+    },
+    {
+      "id": "Career_088",
+      "familyId": "F143",
+      "sourceCheckpoint": "output/RUSH01071_SeededPilot_003/checkpoint.json",
+      "sourcePoolIndex": 35,
+      "baseCandidateId": "Candidate_002",
+      "sourcePuzzleId": "rush:L2451148",
+      "embedding": "FlushBottom",
+      "offsetX": 1,
+      "offsetY": 2,
+      "inventoryClass": "One1x1",
+      "boardShapeClass": "ShiftedCore",
+      "augmentationClass": "None",
+      "exportedStateFingerprint": "cc114e9e5475d3ed3f3b9965ff8f5b804e7489d140d916abe6311ab727b2a3f9",
+      "sourceStateFingerprint": "cc114e9e5475d3ed3f3b9965ff8f5b804e7489d140d916abe6311ab727b2a3f9",
+      "sourceStateMatchesExport": true,
+      "manifestOptimalGestures": 8,
+      "levelCanonicalGestures": 8,
+      "solutionOptimalGestures": 8,
+      "recomputedOptimalGestures": 8,
+      "storedSolutionReplay": true,
+      "optimalMatchesExport": true
+    },
+    {
+      "id": "Career_089",
+      "familyId": "F089",
+      "sourceCheckpoint": "output/RUSH0107_CrossRegionCausalPilot_001/checkpoint.json",
+      "sourcePoolIndex": 57,
+      "baseCandidateId": "Candidate_012",
+      "sourcePuzzleId": "rush:L0073058",
+      "embedding": "FlushTop",
+      "offsetX": 1,
+      "offsetY": 0,
+      "inventoryClass": "One1x1",
+      "boardShapeClass": "Tall",
+      "augmentationClass": "Lower1x1SpaceMaker",
+      "causalTemplate": "Lower1x1SpaceMaker",
+      "nativeVariantFingerprint": "Lower1x1SpaceMaker|P0:31:2:1:1|P1:29:2:1:0|P2:15:2:1:0|P3:26:2:1:0|P4:27:2:1:0|P5:13:2:1:0|P6:40:2:0:0|P7:23:3:0:0|P8:17:3:0:0|P9:8:2:0:0|P10:3:2:0:0|P11:50:1:0:2|W2|W11",
+      "exportedStateFingerprint": "408d471eaf7a716ded0e24df1b0430809568fc23f8027cee78a61b743adaab44",
+      "sourceStateFingerprint": "408d471eaf7a716ded0e24df1b0430809568fc23f8027cee78a61b743adaab44",
+      "sourceStateMatchesExport": true,
+      "manifestOptimalGestures": 7,
+      "levelCanonicalGestures": 7,
+      "solutionOptimalGestures": 7,
+      "recomputedOptimalGestures": 7,
+      "storedSolutionReplay": true,
+      "optimalMatchesExport": true
+    },
+    {
+      "id": "Career_090",
+      "familyId": "F101",
+      "sourceCheckpoint": "output/RUSH01071_SeededPilot_003/checkpoint.json",
+      "sourcePoolIndex": 50,
+      "baseCandidateId": "Candidate_024",
+      "sourcePuzzleId": "rush:L0414548",
+      "embedding": "ShiftDown1MirrorH",
+      "offsetX": 1,
+      "offsetY": 1,
+      "inventoryClass": "No1x1",
+      "boardShapeClass": "ShiftedCore",
+      "augmentationClass": "LowerParkingUnlock",
+      "causalTemplate": "LowerParkingUnlock",
+      "nativeVariantFingerprint": "LowerParkingUnlock|P0:17:2:1:1|P1:8:2:1:0|P2:29:2:1:0|P3:18:3:1:0|P4:26:3:1:0|P5:13:2:1:0|P6:27:2:1:0|P7:9:3:0:0|P8:22:2:0:0|P9:38:2:0:0|P10:45:2:0:0|P11:41:2:1:0|W19|W43",
+      "exportedStateFingerprint": "c953feeb1ba18548334926a8f2fb45b736337a68c83759f6e354a31e64d92ca1",
+      "sourceStateFingerprint": "c953feeb1ba18548334926a8f2fb45b736337a68c83759f6e354a31e64d92ca1",
+      "sourceStateMatchesExport": true,
+      "manifestOptimalGestures": 5,
+      "levelCanonicalGestures": 5,
+      "solutionOptimalGestures": 5,
+      "recomputedOptimalGestures": 5,
+      "storedSolutionReplay": true,
+      "optimalMatchesExport": true
+    }
+  ],
+  "preAuditSnapshot": "testdata/cargoflow/career/BoardMix_CareerExtension_002_PreAudit_20260923",
+  "sameFamilyNearestComparisons": [
+    {
+      "id": "Career_061",
+      "familyId": "F130",
+      "nearestPreviousId": "Career_051",
+      "exactDuplicate": false,
+      "stateFingerprint": "1e724f7c33538ceb274758f67a8d411b74b67891c665b1e0f5aedd578acae76b",
+      "previousFingerprint": "da2ee0ef9783b7ffce11be2fdff2f1db2b52ad5cbab598fbdfc0b107908f2824",
+      "differences": {
+        "blockComposition": {
+          "current": {
+            "movable1x1:1x1": 1,
+            "movable1x2:1x2": 2,
+            "movable1x2:2x1": 2,
+            "movable1x3:1x3": 2,
+            "movable1x3:3x1": 3,
+            "target:1x2": 1
+          },
+          "previous": {
+            "movable1x2:1x2": 2,
+            "movable1x2:2x1": 2,
+            "movable1x3:1x3": 3,
+            "movable1x3:3x1": 3,
+            "target:1x2": 1
+          }
+        },
+        "dependencyMetrics": {
+          "current": {
+            "belowTargetDependencyMoves": 0,
+            "belowTargetMeaningfulPieceCount": 0,
+            "dependencyColumnsUsed": 6,
+            "dependencyRowsUsed": 6,
+            "exitCorridorBlockingPieceCount": 3,
+            "exitCorridorDependencyMoves": 3,
+            "exitCorridorDependencyPieceCount": 3,
+            "optimalMovesUsingOuterZone": 1,
+            "outerDependencyPieceCount": 0,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "rowsBetweenTargetAndExitUsed": 4
+          },
+          "previous": {
+            "belowTargetDependencyMoves": 0,
+            "belowTargetMeaningfulPieceCount": 0,
+            "dependencyColumnsUsed": 6,
+            "dependencyRowsUsed": 6,
+            "exitCorridorBlockingPieceCount": 3,
+            "exitCorridorDependencyMoves": 3,
+            "exitCorridorDependencyPieceCount": 3,
+            "optimalMovesUsingOuterZone": 0,
+            "outerDependencyPieceCount": 0,
+            "outerZoneEvidence": "outer-seal-unsolvable",
+            "rowsBetweenTargetAndExitUsed": 4
+          }
+        },
+        "movementConstraints": {
+          "current": {
+            "movable1x1:1x1:both:movable=true": 1,
+            "movable1x2:1x2:vertical:movable=true": 2,
+            "movable1x2:2x1:horizontal:movable=true": 2,
+            "movable1x3:1x3:vertical:movable=true": 2,
+            "movable1x3:3x1:horizontal:movable=true": 3,
+            "target:1x2:vertical:movable=true": 1
+          },
+          "previous": {
+            "movable1x2:1x2:vertical:movable=true": 2,
+            "movable1x2:2x1:horizontal:movable=true": 2,
+            "movable1x3:1x3:vertical:movable=true": 3,
+            "movable1x3:3x1:horizontal:movable=true": 3,
+            "target:1x2:vertical:movable=true": 1
+          }
+        },
+        "solutionStructure": {
+          "current": {
+            "gestures": 11,
+            "distinctMovedPieces": 10,
+            "distinctNonTargetMovedPieces": 9,
+            "targetMoves": 2,
+            "movesBeforeFirstTarget": 0,
+            "movedPieceClasses": {
+              "movable1x1:1x1:horizontal": 1,
+              "movable1x2:1x2:vertical": 2,
+              "movable1x2:2x1:horizontal": 1,
+              "movable1x3:1x3:vertical": 2,
+              "movable1x3:3x1:horizontal": 3,
+              "target:1x2:vertical": 2
+            }
+          },
+          "previous": {
+            "gestures": 11,
+            "distinctMovedPieces": 10,
+            "distinctNonTargetMovedPieces": 9,
+            "targetMoves": 2,
+            "movesBeforeFirstTarget": 0,
+            "movedPieceClasses": {
+              "movable1x2:1x2:vertical": 2,
+              "movable1x2:2x1:horizontal": 1,
+              "movable1x3:1x3:vertical": 3,
+              "movable1x3:3x1:horizontal": 3,
+              "target:1x2:vertical": 2
+            }
+          }
+        }
+      },
+      "meaningfulDifferenceEstablished": true,
+      "manualReviewRequired": false
+    },
+    {
+      "id": "Career_062",
+      "familyId": "F035",
+      "nearestPreviousId": "Career_046",
+      "exactDuplicate": false,
+      "stateFingerprint": "e809855c40f02c842d0d334fd0f8df6d4e001ac6d2a48c86400051847c668f3f",
+      "previousFingerprint": "7e5e387cd2599e396f8c5b3a0920216fc858ccd1960e0ea58f1f36551df2e87e",
+      "differences": {
+        "blockComposition": {
+          "current": {
+            "movable1x2:1x2": 3,
+            "movable1x2:2x1": 7,
+            "movable1x3:3x1": 2,
+            "static1x1:1x1": 1,
+            "target:1x2": 1
+          },
+          "previous": {
+            "movable1x2:1x2": 4,
+            "movable1x2:2x1": 6,
+            "movable1x3:3x1": 2,
+            "static1x1:1x1": 1,
+            "target:1x2": 1
+          }
+        },
+        "dependencyMetrics": {
+          "current": {
+            "belowTargetDependencyMoves": 2,
+            "belowTargetMeaningfulPieceCount": 1,
+            "dependencyColumnsUsed": 6,
+            "dependencyRowsUsed": 7,
+            "exitCorridorBlockingPieceCount": 4,
+            "exitCorridorDependencyMoves": 6,
+            "exitCorridorDependencyPieceCount": 5,
+            "optimalMovesUsingOuterZone": 4,
+            "outerDependencyPieceCount": 1,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "rowsBetweenTargetAndExitUsed": 4
+          },
+          "previous": {
+            "belowTargetDependencyMoves": 0,
+            "belowTargetMeaningfulPieceCount": 0,
+            "dependencyColumnsUsed": 6,
+            "dependencyRowsUsed": 6,
+            "exitCorridorBlockingPieceCount": 4,
+            "exitCorridorDependencyMoves": 6,
+            "exitCorridorDependencyPieceCount": 5,
+            "optimalMovesUsingOuterZone": 2,
+            "outerDependencyPieceCount": 0,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "rowsBetweenTargetAndExitUsed": 4
+          }
+        },
+        "movementConstraints": {
+          "current": {
+            "movable1x2:1x2:vertical:movable=true": 3,
+            "movable1x2:2x1:horizontal:movable=true": 7,
+            "movable1x3:3x1:horizontal:movable=true": 2,
+            "static1x1:1x1:none:movable=false": 1,
+            "target:1x2:vertical:movable=true": 1
+          },
+          "previous": {
+            "movable1x2:1x2:vertical:movable=true": 4,
+            "movable1x2:2x1:horizontal:movable=true": 6,
+            "movable1x3:3x1:horizontal:movable=true": 2,
+            "static1x1:1x1:none:movable=false": 1,
+            "target:1x2:vertical:movable=true": 1
+          }
+        },
+        "solutionStructure": {
+          "current": {
+            "gestures": 15,
+            "distinctMovedPieces": 12,
+            "distinctNonTargetMovedPieces": 11,
+            "targetMoves": 2,
+            "movesBeforeFirstTarget": 1,
+            "movedPieceClasses": {
+              "movable1x2:1x2:vertical": 3,
+              "movable1x2:2x1:horizontal": 9,
+              "movable1x3:3x1:horizontal": 1,
+              "target:1x2:vertical": 2
+            }
+          },
+          "previous": {
+            "gestures": 10,
+            "distinctMovedPieces": 9,
+            "distinctNonTargetMovedPieces": 8,
+            "targetMoves": 1,
+            "movesBeforeFirstTarget": 9,
+            "movedPieceClasses": {
+              "movable1x2:1x2:vertical": 3,
+              "movable1x2:2x1:horizontal": 3,
+              "movable1x3:3x1:horizontal": 3,
+              "target:1x2:vertical": 1
+            }
+          }
+        }
+      },
+      "meaningfulDifferenceEstablished": true,
+      "manualReviewRequired": false
+    },
+    {
+      "id": "Career_063",
+      "familyId": "F013",
+      "nearestPreviousId": "Career_040",
+      "exactDuplicate": false,
+      "stateFingerprint": "f8ffa5cfacacff9bccb9119baad7ea89c0c587b76bbdba1abe018ca7813a5fc7",
+      "previousFingerprint": "f381b851fd55e40900f6d2e7b12e916e221f29d36cf0a50a568aeb55ecb49ba3",
+      "differences": {
+        "blockComposition": {
+          "current": {
+            "movable1x1:1x1": 1,
+            "movable1x2:1x2": 6,
+            "movable1x2:2x1": 5,
+            "movable1x3:3x1": 1,
+            "static1x1:1x1": 2,
+            "target:1x2": 1
+          },
+          "previous": {
+            "movable1x2:1x2": 6,
+            "movable1x2:2x1": 5,
+            "movable1x3:1x3": 1,
+            "movable1x3:3x1": 1,
+            "static1x1:1x1": 2,
+            "target:1x2": 1
+          }
+        },
+        "dependencyMetrics": {
+          "current": {
+            "belowTargetDependencyMoves": 3,
+            "belowTargetMeaningfulPieceCount": 2,
+            "dependencyColumnsUsed": 6,
+            "dependencyRowsUsed": 6,
+            "exitCorridorBlockingPieceCount": 2,
+            "exitCorridorDependencyMoves": 6,
+            "exitCorridorDependencyPieceCount": 4,
+            "optimalMovesUsingOuterZone": 3,
+            "outerDependencyPieceCount": 0,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "rowsBetweenTargetAndExitUsed": 3
+          },
+          "previous": {
+            "belowTargetDependencyMoves": 6,
+            "belowTargetMeaningfulPieceCount": 3,
+            "causalTemplate": "CrossRegionLongGate",
+            "crossRegionDependencyDepth": 4,
+            "crossRegionDependencyEdgeCount": 14,
+            "dependencyColumnsUsed": 6,
+            "dependencyRowsUsed": 6,
+            "exitCorridorBlockingPieceCount": 2,
+            "exitCorridorDependencyMoves": 7,
+            "exitCorridorDependencyPieceCount": 4,
+            "optimalMovesUsingOuterZone": 5,
+            "outerDependencyPieceCount": 0,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "requiredLowerPieceCount": 0,
+            "requiredSidePieceCount": 1,
+            "rowsBetweenTargetAndExitUsed": 3
+          }
+        },
+        "movementConstraints": {
+          "current": {
+            "movable1x1:1x1:both:movable=true": 1,
+            "movable1x2:1x2:vertical:movable=true": 6,
+            "movable1x2:2x1:horizontal:movable=true": 5,
+            "movable1x3:3x1:horizontal:movable=true": 1,
+            "static1x1:1x1:none:movable=false": 2,
+            "target:1x2:vertical:movable=true": 1
+          },
+          "previous": {
+            "movable1x2:1x2:vertical:movable=true": 6,
+            "movable1x2:2x1:horizontal:movable=true": 5,
+            "movable1x3:1x3:vertical:movable=true": 1,
+            "movable1x3:3x1:horizontal:movable=true": 1,
+            "static1x1:1x1:none:movable=false": 2,
+            "target:1x2:vertical:movable=true": 1
+          }
+        },
+        "solutionStructure": {
+          "current": {
+            "gestures": 17,
+            "distinctMovedPieces": 13,
+            "distinctNonTargetMovedPieces": 12,
+            "targetMoves": 2,
+            "movesBeforeFirstTarget": 4,
+            "movedPieceClasses": {
+              "movable1x1:1x1:vertical": 1,
+              "movable1x2:1x2:vertical": 5,
+              "movable1x2:2x1:horizontal": 8,
+              "movable1x3:3x1:horizontal": 1,
+              "target:1x2:vertical": 2
+            }
+          },
+          "previous": {
+            "gestures": 22,
+            "distinctMovedPieces": 14,
+            "distinctNonTargetMovedPieces": 13,
+            "targetMoves": 2,
+            "movesBeforeFirstTarget": 7,
+            "movedPieceClasses": {
+              "movable1x2:1x2:vertical": 6,
+              "movable1x2:2x1:horizontal": 11,
+              "movable1x3:1x3:vertical": 2,
+              "movable1x3:3x1:horizontal": 1,
+              "target:1x2:vertical": 2
+            }
+          }
+        }
+      },
+      "meaningfulDifferenceEstablished": true,
+      "manualReviewRequired": false
+    },
+    {
+      "id": "Career_064",
+      "familyId": "F063",
+      "nearestPreviousId": "Career_044",
+      "exactDuplicate": false,
+      "stateFingerprint": "b1d9e87163a3cec2348e252c40688744870a95be6243d78b4557339cc547125d",
+      "previousFingerprint": "a5f47b9a018ade571989499ecdf77dbabcb6c3c6f7bdfe64e99cd746d64c0d74",
+      "differences": {
+        "blockComposition": {
+          "current": {
+            "movable1x2:1x2": 6,
+            "movable1x2:2x1": 3,
+            "movable1x3:3x1": 2,
+            "target:1x2": 1
+          },
+          "previous": {
+            "movable1x1:1x1": 1,
+            "movable1x2:1x2": 6,
+            "movable1x2:2x1": 2,
+            "movable1x3:3x1": 2,
+            "target:1x2": 1
+          }
+        },
+        "movementConstraints": {
+          "current": {
+            "movable1x2:1x2:vertical:movable=true": 6,
+            "movable1x2:2x1:horizontal:movable=true": 3,
+            "movable1x3:3x1:horizontal:movable=true": 2,
+            "target:1x2:vertical:movable=true": 1
+          },
+          "previous": {
+            "movable1x1:1x1:both:movable=true": 1,
+            "movable1x2:1x2:vertical:movable=true": 6,
+            "movable1x2:2x1:horizontal:movable=true": 2,
+            "movable1x3:3x1:horizontal:movable=true": 2,
+            "target:1x2:vertical:movable=true": 1
+          }
+        },
+        "solutionStructure": {
+          "current": {
+            "gestures": 7,
+            "distinctMovedPieces": 7,
+            "distinctNonTargetMovedPieces": 6,
+            "targetMoves": 1,
+            "movesBeforeFirstTarget": 6,
+            "movedPieceClasses": {
+              "movable1x2:1x2:vertical": 3,
+              "movable1x2:2x1:horizontal": 1,
+              "movable1x3:3x1:horizontal": 2,
+              "target:1x2:vertical": 1
+            }
+          },
+          "previous": {
+            "gestures": 7,
+            "distinctMovedPieces": 7,
+            "distinctNonTargetMovedPieces": 6,
+            "targetMoves": 1,
+            "movesBeforeFirstTarget": 6,
+            "movedPieceClasses": {
+              "movable1x1:1x1:horizontal": 1,
+              "movable1x2:1x2:vertical": 3,
+              "movable1x3:3x1:horizontal": 2,
+              "target:1x2:vertical": 1
+            }
+          }
+        }
+      },
+      "meaningfulDifferenceEstablished": true,
+      "manualReviewRequired": false
+    },
+    {
+      "id": "Career_065",
+      "familyId": "F095",
+      "nearestPreviousId": "Career_043",
+      "exactDuplicate": false,
+      "stateFingerprint": "52b61f0258fbb39ba7b17a7ab4c32b2a44fcf311f7d4d62a04fcfd0684edac59",
+      "previousFingerprint": "c8a10013d045b739c9c0d4a3309c943290968b47141f6b5bc9b9a84f4be1bb0d",
+      "differences": {
+        "blockComposition": {
+          "current": {
+            "movable1x1:1x1": 1,
+            "movable1x2:1x2": 1,
+            "movable1x2:2x1": 3,
+            "movable1x3:1x3": 3,
+            "movable1x3:3x1": 2,
+            "target:1x2": 1
+          },
+          "previous": {
+            "movable1x1:1x1": 2,
+            "movable1x2:1x2": 1,
+            "movable1x2:2x1": 3,
+            "movable1x3:1x3": 3,
+            "movable1x3:3x1": 2,
+            "target:1x2": 1
+          }
+        },
+        "movementConstraints": {
+          "current": {
+            "movable1x1:1x1:both:movable=true": 1,
+            "movable1x2:1x2:vertical:movable=true": 1,
+            "movable1x2:2x1:horizontal:movable=true": 3,
+            "movable1x3:1x3:vertical:movable=true": 3,
+            "movable1x3:3x1:horizontal:movable=true": 2,
+            "target:1x2:vertical:movable=true": 1
+          },
+          "previous": {
+            "movable1x1:1x1:both:movable=true": 2,
+            "movable1x2:1x2:vertical:movable=true": 1,
+            "movable1x2:2x1:horizontal:movable=true": 3,
+            "movable1x3:1x3:vertical:movable=true": 3,
+            "movable1x3:3x1:horizontal:movable=true": 2,
+            "target:1x2:vertical:movable=true": 1
+          }
+        }
+      },
+      "meaningfulDifferenceEstablished": true,
+      "manualReviewRequired": false
+    },
+    {
+      "id": "Career_066",
+      "familyId": "F084",
+      "nearestPreviousId": "Career_037",
+      "exactDuplicate": false,
+      "stateFingerprint": "0446665fd185335b0bc1048412a1e456beca368ae17cde685bb7ab2d0c49d217",
+      "previousFingerprint": "f0b88c96ba7eb3e95582ffb9786371f850f9a585fbeeccabe85401f2c24eff8f",
+      "differences": {
+        "dependencyMetrics": {
+          "current": {
+            "belowTargetDependencyMoves": 2,
+            "belowTargetMeaningfulPieceCount": 1,
+            "causalTemplate": "Lower1x1SpaceMaker",
+            "crossRegionDependencyDepth": 6,
+            "crossRegionDependencyEdgeCount": 7,
+            "dependencyColumnsUsed": 6,
+            "dependencyRowsUsed": 6,
+            "exitCorridorBlockingPieceCount": 3,
+            "exitCorridorDependencyMoves": 7,
+            "exitCorridorDependencyPieceCount": 4,
+            "optimalMovesUsingOuterZone": 2,
+            "outerDependencyPieceCount": 1,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "requiredLowerPieceCount": 1,
+            "requiredSidePieceCount": 0,
+            "rowsBetweenTargetAndExitUsed": 3
+          },
+          "previous": {
+            "belowTargetDependencyMoves": 0,
+            "belowTargetMeaningfulPieceCount": 0,
+            "dependencyColumnsUsed": 0,
+            "dependencyRowsUsed": 0,
+            "exitCorridorBlockingPieceCount": 0,
+            "exitCorridorDependencyMoves": 0,
+            "exitCorridorDependencyPieceCount": 0,
+            "optimalMovesUsingOuterZone": 1,
+            "outerDependencyPieceCount": 0,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "rowsBetweenTargetAndExitUsed": 0
+          }
+        },
+        "solutionStructure": {
+          "current": {
+            "gestures": 18,
+            "distinctMovedPieces": 10,
+            "distinctNonTargetMovedPieces": 9,
+            "targetMoves": 4,
+            "movesBeforeFirstTarget": 5,
+            "movedPieceClasses": {
+              "movable1x1:1x1:horizontal": 1,
+              "movable1x2:1x2:vertical": 2,
+              "movable1x2:2x1:horizontal": 7,
+              "movable1x3:1x3:vertical": 1,
+              "movable1x3:3x1:horizontal": 3,
+              "target:1x2:vertical": 4
+            }
+          },
+          "previous": {
+            "gestures": 18,
+            "distinctMovedPieces": 10,
+            "distinctNonTargetMovedPieces": 9,
+            "targetMoves": 4,
+            "movesBeforeFirstTarget": 4,
+            "movedPieceClasses": {
+              "movable1x1:1x1:horizontal": 1,
+              "movable1x2:1x2:vertical": 2,
+              "movable1x2:2x1:horizontal": 7,
+              "movable1x3:1x3:vertical": 1,
+              "movable1x3:3x1:horizontal": 3,
+              "target:1x2:vertical": 4
+            }
+          }
+        }
+      },
+      "meaningfulDifferenceEstablished": true,
+      "manualReviewRequired": false
+    },
+    {
+      "id": "Career_067",
+      "familyId": "F050",
+      "nearestPreviousId": "Career_039",
+      "exactDuplicate": false,
+      "stateFingerprint": "61a84c046ebca31d7bc6a7386a9deb6886097a4395ed2627a480bfbd15ca85c6",
+      "previousFingerprint": "1ef5abe560f37901312f61a22d5e6724fcb0f69524c5d458372ba00229b5a957",
+      "differences": {
+        "dependencyMetrics": {
+          "current": {
+            "belowTargetDependencyMoves": 0,
+            "belowTargetMeaningfulPieceCount": 0,
+            "dependencyColumnsUsed": 5,
+            "dependencyRowsUsed": 6,
+            "exitCorridorBlockingPieceCount": 3,
+            "exitCorridorDependencyMoves": 7,
+            "exitCorridorDependencyPieceCount": 3,
+            "optimalMovesUsingOuterZone": 2,
+            "outerDependencyPieceCount": 0,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "rowsBetweenTargetAndExitUsed": 4
+          },
+          "previous": {
+            "belowTargetDependencyMoves": 0,
+            "belowTargetMeaningfulPieceCount": 0,
+            "causalTemplate": "Lower1x1SpaceMaker",
+            "crossRegionDependencyDepth": 8,
+            "crossRegionDependencyEdgeCount": 11,
+            "dependencyColumnsUsed": 5,
+            "dependencyRowsUsed": 6,
+            "exitCorridorBlockingPieceCount": 3,
+            "exitCorridorDependencyMoves": 7,
+            "exitCorridorDependencyPieceCount": 3,
+            "optimalMovesUsingOuterZone": 2,
+            "outerDependencyPieceCount": 0,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "requiredLowerPieceCount": 0,
+            "requiredSidePieceCount": 1,
+            "rowsBetweenTargetAndExitUsed": 4
+          }
+        },
+        "solutionStructure": {
+          "current": {
+            "gestures": 20,
+            "distinctMovedPieces": 10,
+            "distinctNonTargetMovedPieces": 9,
+            "targetMoves": 4,
+            "movesBeforeFirstTarget": 6,
+            "movedPieceClasses": {
+              "movable1x1:1x1:horizontal": 1,
+              "movable1x2:1x2:vertical": 1,
+              "movable1x2:2x1:horizontal": 7,
+              "movable1x3:1x3:vertical": 5,
+              "movable1x3:3x1:horizontal": 2,
+              "target:1x2:vertical": 4
+            }
+          },
+          "previous": {
+            "gestures": 20,
+            "distinctMovedPieces": 10,
+            "distinctNonTargetMovedPieces": 9,
+            "targetMoves": 4,
+            "movesBeforeFirstTarget": 5,
+            "movedPieceClasses": {
+              "movable1x1:1x1:horizontal": 1,
+              "movable1x2:1x2:vertical": 1,
+              "movable1x2:2x1:horizontal": 7,
+              "movable1x3:1x3:vertical": 5,
+              "movable1x3:3x1:horizontal": 2,
+              "target:1x2:vertical": 4
+            }
+          }
+        }
+      },
+      "meaningfulDifferenceEstablished": true,
+      "manualReviewRequired": false
+    },
+    {
+      "id": "Career_068",
+      "familyId": "F003",
+      "nearestPreviousId": "Career_041",
+      "exactDuplicate": false,
+      "stateFingerprint": "3c708352d8042e9a289da0a24bcd3edabf0a6edf5d5640689e24a23bdac488fb",
+      "previousFingerprint": "93c1f709d85150b7e403d6ab0c1e5b6dfcf77a07bb30c9da322b6bd82764c892",
+      "differences": {
+        "blockComposition": {
+          "current": {
+            "movable1x2:1x2": 5,
+            "movable1x2:2x1": 6,
+            "movable1x3:1x3": 2,
+            "movable1x3:3x1": 1,
+            "target:1x2": 1
+          },
+          "previous": {
+            "movable1x2:1x2": 5,
+            "movable1x2:2x1": 6,
+            "movable1x3:1x3": 2,
+            "target:1x2": 1
+          }
+        },
+        "dependencyMetrics": {
+          "current": {
+            "belowTargetDependencyMoves": 2,
+            "belowTargetMeaningfulPieceCount": 1,
+            "dependencyColumnsUsed": 5,
+            "dependencyRowsUsed": 7,
+            "exitCorridorBlockingPieceCount": 2,
+            "exitCorridorDependencyMoves": 2,
+            "exitCorridorDependencyPieceCount": 2,
+            "optimalMovesUsingOuterZone": 3,
+            "outerDependencyPieceCount": 1,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "rowsBetweenTargetAndExitUsed": 4
+          },
+          "previous": {
+            "belowTargetDependencyMoves": 0,
+            "belowTargetMeaningfulPieceCount": 0,
+            "dependencyColumnsUsed": 4,
+            "dependencyRowsUsed": 6,
+            "exitCorridorBlockingPieceCount": 2,
+            "exitCorridorDependencyMoves": 6,
+            "exitCorridorDependencyPieceCount": 4,
+            "optimalMovesUsingOuterZone": 2,
+            "outerDependencyPieceCount": 0,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "rowsBetweenTargetAndExitUsed": 4
+          }
+        },
+        "movementConstraints": {
+          "current": {
+            "movable1x2:1x2:vertical:movable=true": 5,
+            "movable1x2:2x1:horizontal:movable=true": 6,
+            "movable1x3:1x3:vertical:movable=true": 2,
+            "movable1x3:3x1:horizontal:movable=true": 1,
+            "target:1x2:vertical:movable=true": 1
+          },
+          "previous": {
+            "movable1x2:1x2:vertical:movable=true": 5,
+            "movable1x2:2x1:horizontal:movable=true": 6,
+            "movable1x3:1x3:vertical:movable=true": 2,
+            "target:1x2:vertical:movable=true": 1
+          }
+        },
+        "solutionStructure": {
+          "current": {
+            "gestures": 8,
+            "distinctMovedPieces": 6,
+            "distinctNonTargetMovedPieces": 5,
+            "targetMoves": 2,
+            "movesBeforeFirstTarget": 1,
+            "movedPieceClasses": {
+              "movable1x2:1x2:vertical": 1,
+              "movable1x2:2x1:horizontal": 4,
+              "movable1x3:3x1:horizontal": 1,
+              "target:1x2:vertical": 2
+            }
+          },
+          "previous": {
+            "gestures": 9,
+            "distinctMovedPieces": 7,
+            "distinctNonTargetMovedPieces": 6,
+            "targetMoves": 1,
+            "movesBeforeFirstTarget": 8,
+            "movedPieceClasses": {
+              "movable1x2:1x2:vertical": 2,
+              "movable1x2:2x1:horizontal": 6,
+              "target:1x2:vertical": 1
+            }
+          }
+        }
+      },
+      "meaningfulDifferenceEstablished": true,
+      "manualReviewRequired": false
+    },
+    {
+      "id": "Career_069",
+      "familyId": "F015",
+      "nearestPreviousId": "Career_032",
+      "exactDuplicate": false,
+      "stateFingerprint": "6a6c6a842d709723c2048796e0178d18404ba299284df261d02514a4491f080d",
+      "previousFingerprint": "0da4c2d10d3ab92f2a0c1d55877c4128e0a03ca2c87f49ce9b07b03f2116a40a",
+      "differences": {
+        "blockComposition": {
+          "current": {
+            "movable1x2:1x2": 2,
+            "movable1x2:2x1": 5,
+            "movable1x3:3x1": 2,
+            "static1x1:1x1": 1,
+            "target:1x2": 1
+          },
+          "previous": {
+            "movable1x1:1x1": 1,
+            "movable1x2:1x2": 2,
+            "movable1x2:2x1": 4,
+            "movable1x3:3x1": 2,
+            "static1x1:1x1": 1,
+            "target:1x2": 1
+          }
+        },
+        "dependencyMetrics": {
+          "current": {
+            "belowTargetDependencyMoves": 0,
+            "belowTargetMeaningfulPieceCount": 0,
+            "causalTemplate": "LowerParkingUnlock",
+            "crossRegionDependencyDepth": 3,
+            "crossRegionDependencyEdgeCount": 5,
+            "dependencyColumnsUsed": 7,
+            "dependencyRowsUsed": 6,
+            "exitCorridorBlockingPieceCount": 3,
+            "exitCorridorDependencyMoves": 8,
+            "exitCorridorDependencyPieceCount": 5,
+            "optimalMovesUsingOuterZone": 3,
+            "outerDependencyPieceCount": 1,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "requiredLowerPieceCount": 0,
+            "requiredSidePieceCount": 1,
+            "rowsBetweenTargetAndExitUsed": 4
+          },
+          "previous": {
+            "belowTargetDependencyMoves": 0,
+            "belowTargetMeaningfulPieceCount": 0,
+            "causalTemplate": "",
+            "crossRegionDependencyDepth": 0,
+            "crossRegionDependencyEdgeCount": 0,
+            "dependencyColumnsUsed": 0,
+            "dependencyRowsUsed": 0,
+            "exitCorridorBlockingPieceCount": 0,
+            "exitCorridorDependencyMoves": 0,
+            "exitCorridorDependencyPieceCount": 0,
+            "optimalMovesUsingOuterZone": 1,
+            "outerDependencyPieceCount": 0,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "requiredLowerPieceCount": 0,
+            "requiredSidePieceCount": 0,
+            "rowsBetweenTargetAndExitUsed": 0
+          }
+        },
+        "movementConstraints": {
+          "current": {
+            "movable1x2:1x2:vertical:movable=true": 2,
+            "movable1x2:2x1:horizontal:movable=true": 5,
+            "movable1x3:3x1:horizontal:movable=true": 2,
+            "static1x1:1x1:none:movable=false": 1,
+            "target:1x2:vertical:movable=true": 1
+          },
+          "previous": {
+            "movable1x1:1x1:both:movable=true": 1,
+            "movable1x2:1x2:vertical:movable=true": 2,
+            "movable1x2:2x1:horizontal:movable=true": 4,
+            "movable1x3:3x1:horizontal:movable=true": 2,
+            "static1x1:1x1:none:movable=false": 1,
+            "target:1x2:vertical:movable=true": 1
+          }
+        },
+        "solutionStructure": {
+          "current": {
+            "gestures": 14,
+            "distinctMovedPieces": 10,
+            "distinctNonTargetMovedPieces": 9,
+            "targetMoves": 2,
+            "movesBeforeFirstTarget": 0,
+            "movedPieceClasses": {
+              "movable1x2:1x2:vertical": 2,
+              "movable1x2:2x1:horizontal": 8,
+              "movable1x3:3x1:horizontal": 2,
+              "target:1x2:vertical": 2
+            }
+          },
+          "previous": {
+            "gestures": 13,
+            "distinctMovedPieces": 10,
+            "distinctNonTargetMovedPieces": 9,
+            "targetMoves": 1,
+            "movesBeforeFirstTarget": 12,
+            "movedPieceClasses": {
+              "movable1x1:1x1:horizontal": 1,
+              "movable1x2:1x2:vertical": 2,
+              "movable1x2:2x1:horizontal": 7,
+              "movable1x3:3x1:horizontal": 2,
+              "target:1x2:vertical": 1
+            }
+          }
+        }
+      },
+      "meaningfulDifferenceEstablished": true,
+      "manualReviewRequired": false
+    },
+    {
+      "id": "Career_070",
+      "familyId": "F049",
+      "nearestPreviousId": "Career_034",
+      "exactDuplicate": false,
+      "stateFingerprint": "b70f1a9c789b920f2fdc07e6d58e885c8049c5ca1955bf81211b94c6a2842dfb",
+      "previousFingerprint": "47bb99b27a255ef817adfd46cfc81748d8b484ef1b17a5558d8c4c787185ffff",
+      "differences": {
+        "blockComposition": {
+          "current": {
+            "movable1x1:1x1": 1,
+            "movable1x2:1x2": 3,
+            "movable1x2:2x1": 4,
+            "movable1x3:1x3": 1,
+            "movable1x3:3x1": 1,
+            "static1x1:1x1": 1,
+            "target:1x2": 1
+          },
+          "previous": {
+            "movable1x2:1x2": 3,
+            "movable1x2:2x1": 5,
+            "movable1x3:1x3": 1,
+            "movable1x3:3x1": 1,
+            "static1x1:1x1": 1,
+            "target:1x2": 1
+          }
+        },
+        "dependencyMetrics": {
+          "current": {
+            "belowTargetDependencyMoves": 0,
+            "belowTargetMeaningfulPieceCount": 0,
+            "dependencyColumnsUsed": 0,
+            "dependencyRowsUsed": 0,
+            "exitCorridorBlockingPieceCount": 0,
+            "exitCorridorDependencyMoves": 0,
+            "exitCorridorDependencyPieceCount": 0,
+            "optimalMovesUsingOuterZone": 2,
+            "outerDependencyPieceCount": 0,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "rowsBetweenTargetAndExitUsed": 0
+          },
+          "previous": {
+            "belowTargetDependencyMoves": 0,
+            "belowTargetMeaningfulPieceCount": 0,
+            "dependencyColumnsUsed": 5,
+            "dependencyRowsUsed": 6,
+            "exitCorridorBlockingPieceCount": 2,
+            "exitCorridorDependencyMoves": 2,
+            "exitCorridorDependencyPieceCount": 2,
+            "optimalMovesUsingOuterZone": 2,
+            "outerDependencyPieceCount": 1,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "rowsBetweenTargetAndExitUsed": 4
+          }
+        },
+        "movementConstraints": {
+          "current": {
+            "movable1x1:1x1:both:movable=true": 1,
+            "movable1x2:1x2:vertical:movable=true": 3,
+            "movable1x2:2x1:horizontal:movable=true": 4,
+            "movable1x3:1x3:vertical:movable=true": 1,
+            "movable1x3:3x1:horizontal:movable=true": 1,
+            "static1x1:1x1:none:movable=false": 1,
+            "target:1x2:vertical:movable=true": 1
+          },
+          "previous": {
+            "movable1x2:1x2:vertical:movable=true": 3,
+            "movable1x2:2x1:horizontal:movable=true": 5,
+            "movable1x3:1x3:vertical:movable=true": 1,
+            "movable1x3:3x1:horizontal:movable=true": 1,
+            "static1x1:1x1:none:movable=false": 1,
+            "target:1x2:vertical:movable=true": 1
+          }
+        },
+        "solutionStructure": {
+          "current": {
+            "gestures": 17,
+            "distinctMovedPieces": 11,
+            "distinctNonTargetMovedPieces": 10,
+            "targetMoves": 2,
+            "movesBeforeFirstTarget": 1,
+            "movedPieceClasses": {
+              "movable1x1:1x1:vertical": 1,
+              "movable1x2:1x2:vertical": 5,
+              "movable1x2:2x1:horizontal": 5,
+              "movable1x3:1x3:vertical": 2,
+              "movable1x3:3x1:horizontal": 2,
+              "target:1x2:vertical": 2
+            }
+          },
+          "previous": {
+            "gestures": 5,
+            "distinctMovedPieces": 5,
+            "distinctNonTargetMovedPieces": 4,
+            "targetMoves": 1,
+            "movesBeforeFirstTarget": 4,
+            "movedPieceClasses": {
+              "movable1x2:2x1:horizontal": 2,
+              "movable1x3:1x3:vertical": 1,
+              "movable1x3:3x1:horizontal": 1,
+              "target:1x2:vertical": 1
+            }
+          }
+        }
+      },
+      "meaningfulDifferenceEstablished": true,
+      "manualReviewRequired": false
+    },
+    {
+      "id": "Career_071",
+      "familyId": "F036",
+      "nearestPreviousId": "Career_047",
+      "exactDuplicate": false,
+      "stateFingerprint": "e2cb521426c607e5762420a5cb1536814ad696725c72c1f5d96ff52d5876d4c5",
+      "previousFingerprint": "31ebdd99fa49aa185b8a5bddc9fc52632a0fdb92e584d38c1a09748684d835bd",
+      "differences": {
+        "blockComposition": {
+          "current": {
+            "movable1x2:1x2": 3,
+            "movable1x2:2x1": 6,
+            "movable1x3:1x3": 1,
+            "movable1x3:3x1": 3,
+            "static1x1:1x1": 1,
+            "target:1x2": 1
+          },
+          "previous": {
+            "movable1x2:1x2": 3,
+            "movable1x2:2x1": 7,
+            "movable1x3:1x3": 1,
+            "movable1x3:3x1": 2,
+            "static1x1:1x1": 1,
+            "target:1x2": 1
+          }
+        },
+        "dependencyMetrics": {
+          "current": {
+            "belowTargetDependencyMoves": 16,
+            "belowTargetMeaningfulPieceCount": 8,
+            "causalTemplate": "CrossRegionLongGate",
+            "crossRegionDependencyDepth": 7,
+            "crossRegionDependencyEdgeCount": 13,
+            "dependencyColumnsUsed": 6,
+            "dependencyRowsUsed": 7,
+            "exitCorridorBlockingPieceCount": 1,
+            "exitCorridorDependencyMoves": 3,
+            "exitCorridorDependencyPieceCount": 2,
+            "optimalMovesUsingOuterZone": 3,
+            "outerDependencyPieceCount": 1,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "requiredLowerPieceCount": 1,
+            "requiredSidePieceCount": 0,
+            "rowsBetweenTargetAndExitUsed": 1
+          },
+          "previous": {
+            "belowTargetDependencyMoves": 16,
+            "belowTargetMeaningfulPieceCount": 8,
+            "causalTemplate": "LowerParkingUnlock",
+            "crossRegionDependencyDepth": 7,
+            "crossRegionDependencyEdgeCount": 13,
+            "dependencyColumnsUsed": 6,
+            "dependencyRowsUsed": 7,
+            "exitCorridorBlockingPieceCount": 1,
+            "exitCorridorDependencyMoves": 3,
+            "exitCorridorDependencyPieceCount": 2,
+            "optimalMovesUsingOuterZone": 3,
+            "outerDependencyPieceCount": 1,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "requiredLowerPieceCount": 1,
+            "requiredSidePieceCount": 0,
+            "rowsBetweenTargetAndExitUsed": 1
+          }
+        },
+        "movementConstraints": {
+          "current": {
+            "movable1x2:1x2:vertical:movable=true": 3,
+            "movable1x2:2x1:horizontal:movable=true": 6,
+            "movable1x3:1x3:vertical:movable=true": 1,
+            "movable1x3:3x1:horizontal:movable=true": 3,
+            "static1x1:1x1:none:movable=false": 1,
+            "target:1x2:vertical:movable=true": 1
+          },
+          "previous": {
+            "movable1x2:1x2:vertical:movable=true": 3,
+            "movable1x2:2x1:horizontal:movable=true": 7,
+            "movable1x3:1x3:vertical:movable=true": 1,
+            "movable1x3:3x1:horizontal:movable=true": 2,
+            "static1x1:1x1:none:movable=false": 1,
+            "target:1x2:vertical:movable=true": 1
+          }
+        },
+        "solutionStructure": {
+          "current": {
+            "gestures": 28,
+            "distinctMovedPieces": 14,
+            "distinctNonTargetMovedPieces": 13,
+            "targetMoves": 4,
+            "movesBeforeFirstTarget": 3,
+            "movedPieceClasses": {
+              "movable1x2:1x2:vertical": 5,
+              "movable1x2:2x1:horizontal": 12,
+              "movable1x3:1x3:vertical": 2,
+              "movable1x3:3x1:horizontal": 5,
+              "target:1x2:vertical": 4
+            }
+          },
+          "previous": {
+            "gestures": 28,
+            "distinctMovedPieces": 14,
+            "distinctNonTargetMovedPieces": 13,
+            "targetMoves": 4,
+            "movesBeforeFirstTarget": 2,
+            "movedPieceClasses": {
+              "movable1x2:1x2:vertical": 5,
+              "movable1x2:2x1:horizontal": 13,
+              "movable1x3:1x3:vertical": 2,
+              "movable1x3:3x1:horizontal": 4,
+              "target:1x2:vertical": 4
+            }
+          }
+        }
+      },
+      "meaningfulDifferenceEstablished": true,
+      "manualReviewRequired": false
+    },
+    {
+      "id": "Career_072",
+      "familyId": "F120",
+      "nearestPreviousId": "Career_052",
+      "exactDuplicate": false,
+      "stateFingerprint": "804b1b6b8e1f031407b212dfd40ef5512f227e9ab3bf69968f08160815535744",
+      "previousFingerprint": "18216442996793f5783755224dc19a891f62bfd4a3171c6f79250b3c17f996f7",
+      "differences": {
+        "blockComposition": {
+          "current": {
+            "movable1x1:1x1": 1,
+            "movable1x2:1x2": 4,
+            "movable1x2:2x1": 2,
+            "movable1x3:1x3": 1,
+            "movable1x3:3x1": 3,
+            "static1x1:1x1": 1,
+            "target:1x2": 1
+          },
+          "previous": {
+            "movable1x2:1x2": 4,
+            "movable1x2:2x1": 2,
+            "movable1x3:1x3": 2,
+            "movable1x3:3x1": 3,
+            "static1x1:1x1": 1,
+            "target:1x2": 1
+          }
+        },
+        "dependencyMetrics": {
+          "current": {
+            "belowTargetDependencyMoves": 0,
+            "belowTargetMeaningfulPieceCount": 0,
+            "dependencyColumnsUsed": 0,
+            "dependencyRowsUsed": 0,
+            "exitCorridorBlockingPieceCount": 0,
+            "exitCorridorDependencyMoves": 0,
+            "exitCorridorDependencyPieceCount": 0,
+            "optimalMovesUsingOuterZone": 4,
+            "outerDependencyPieceCount": 0,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "rowsBetweenTargetAndExitUsed": 0
+          },
+          "previous": {
+            "belowTargetDependencyMoves": 0,
+            "belowTargetMeaningfulPieceCount": 0,
+            "dependencyColumnsUsed": 5,
+            "dependencyRowsUsed": 6,
+            "exitCorridorBlockingPieceCount": 3,
+            "exitCorridorDependencyMoves": 3,
+            "exitCorridorDependencyPieceCount": 3,
+            "optimalMovesUsingOuterZone": 3,
+            "outerDependencyPieceCount": 0,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "rowsBetweenTargetAndExitUsed": 4
+          }
+        },
+        "movementConstraints": {
+          "current": {
+            "movable1x1:1x1:both:movable=true": 1,
+            "movable1x2:1x2:vertical:movable=true": 4,
+            "movable1x2:2x1:horizontal:movable=true": 2,
+            "movable1x3:1x3:vertical:movable=true": 1,
+            "movable1x3:3x1:horizontal:movable=true": 3,
+            "static1x1:1x1:none:movable=false": 1,
+            "target:1x2:vertical:movable=true": 1
+          },
+          "previous": {
+            "movable1x2:1x2:vertical:movable=true": 4,
+            "movable1x2:2x1:horizontal:movable=true": 2,
+            "movable1x3:1x3:vertical:movable=true": 2,
+            "movable1x3:3x1:horizontal:movable=true": 3,
+            "static1x1:1x1:none:movable=false": 1,
+            "target:1x2:vertical:movable=true": 1
+          }
+        },
+        "solutionStructure": {
+          "current": {
+            "gestures": 7,
+            "distinctMovedPieces": 7,
+            "distinctNonTargetMovedPieces": 6,
+            "targetMoves": 1,
+            "movesBeforeFirstTarget": 6,
+            "movedPieceClasses": {
+              "movable1x1:1x1:horizontal": 1,
+              "movable1x2:1x2:vertical": 2,
+              "movable1x2:2x1:horizontal": 2,
+              "movable1x3:3x1:horizontal": 1,
+              "target:1x2:vertical": 1
+            }
+          },
+          "previous": {
+            "gestures": 7,
+            "distinctMovedPieces": 7,
+            "distinctNonTargetMovedPieces": 6,
+            "targetMoves": 1,
+            "movesBeforeFirstTarget": 6,
+            "movedPieceClasses": {
+              "movable1x2:1x2:vertical": 2,
+              "movable1x2:2x1:horizontal": 2,
+              "movable1x3:1x3:vertical": 1,
+              "movable1x3:3x1:horizontal": 1,
+              "target:1x2:vertical": 1
+            }
+          }
+        }
+      },
+      "meaningfulDifferenceEstablished": true,
+      "manualReviewRequired": false
+    },
+    {
+      "id": "Career_073",
+      "familyId": "F042",
+      "nearestPreviousId": "Career_056",
+      "exactDuplicate": false,
+      "stateFingerprint": "1c9f1445eb31e5639ede0366b5c69e8d5742626216848b2e6e0f233ebd5bc9ff",
+      "previousFingerprint": "7c2e4bed6439072542c14d3cc733c69180e5ef9cf3fa0bc04fbdee58db9d6af0",
+      "differences": {
+        "blockComposition": {
+          "current": {
+            "movable1x2:1x2": 5,
+            "movable1x2:2x1": 2,
+            "movable1x3:1x3": 1,
+            "movable1x3:3x1": 2,
+            "static1x1:1x1": 1,
+            "target:1x2": 1
+          },
+          "previous": {
+            "movable1x1:1x1": 1,
+            "movable1x2:1x2": 5,
+            "movable1x2:2x1": 2,
+            "movable1x3:1x3": 1,
+            "movable1x3:3x1": 2,
+            "static1x1:1x1": 1,
+            "target:1x2": 1
+          }
+        },
+        "dependencyMetrics": {
+          "current": {
+            "belowTargetDependencyMoves": 3,
+            "belowTargetMeaningfulPieceCount": 2,
+            "dependencyColumnsUsed": 6,
+            "dependencyRowsUsed": 6,
+            "exitCorridorBlockingPieceCount": 1,
+            "exitCorridorDependencyMoves": 1,
+            "exitCorridorDependencyPieceCount": 1,
+            "optimalMovesUsingOuterZone": 1,
+            "outerDependencyPieceCount": 0,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "rowsBetweenTargetAndExitUsed": 3
+          },
+          "previous": {
+            "belowTargetDependencyMoves": 0,
+            "belowTargetMeaningfulPieceCount": 0,
+            "causalTemplate": "",
+            "crossRegionDependencyDepth": 0,
+            "crossRegionDependencyEdgeCount": 0,
+            "dependencyColumnsUsed": 0,
+            "dependencyRowsUsed": 0,
+            "exitCorridorBlockingPieceCount": 0,
+            "exitCorridorDependencyMoves": 0,
+            "exitCorridorDependencyPieceCount": 0,
+            "optimalMovesUsingOuterZone": 1,
+            "outerDependencyPieceCount": 0,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "requiredLowerPieceCount": 0,
+            "requiredSidePieceCount": 0,
+            "rowsBetweenTargetAndExitUsed": 0
+          }
+        },
+        "movementConstraints": {
+          "current": {
+            "movable1x2:1x2:vertical:movable=true": 5,
+            "movable1x2:2x1:horizontal:movable=true": 2,
+            "movable1x3:1x3:vertical:movable=true": 1,
+            "movable1x3:3x1:horizontal:movable=true": 2,
+            "static1x1:1x1:none:movable=false": 1,
+            "target:1x2:vertical:movable=true": 1
+          },
+          "previous": {
+            "movable1x1:1x1:both:movable=true": 1,
+            "movable1x2:1x2:vertical:movable=true": 5,
+            "movable1x2:2x1:horizontal:movable=true": 2,
+            "movable1x3:1x3:vertical:movable=true": 1,
+            "movable1x3:3x1:horizontal:movable=true": 2,
+            "static1x1:1x1:none:movable=false": 1,
+            "target:1x2:vertical:movable=true": 1
+          }
+        },
+        "solutionStructure": {
+          "current": {
+            "gestures": 12,
+            "distinctMovedPieces": 9,
+            "distinctNonTargetMovedPieces": 8,
+            "targetMoves": 3,
+            "movesBeforeFirstTarget": 0,
+            "movedPieceClasses": {
+              "movable1x2:1x2:vertical": 3,
+              "movable1x2:2x1:horizontal": 3,
+              "movable1x3:1x3:vertical": 1,
+              "movable1x3:3x1:horizontal": 2,
+              "target:1x2:vertical": 3
+            }
+          },
+          "previous": {
+            "gestures": 13,
+            "distinctMovedPieces": 10,
+            "distinctNonTargetMovedPieces": 9,
+            "targetMoves": 3,
+            "movesBeforeFirstTarget": 0,
+            "movedPieceClasses": {
+              "movable1x1:1x1:horizontal": 1,
+              "movable1x2:1x2:vertical": 3,
+              "movable1x2:2x1:horizontal": 3,
+              "movable1x3:1x3:vertical": 1,
+              "movable1x3:3x1:horizontal": 2,
+              "target:1x2:vertical": 3
+            }
+          }
+        }
+      },
+      "meaningfulDifferenceEstablished": true,
+      "manualReviewRequired": false
+    },
+    {
+      "id": "Career_074",
+      "familyId": "F087",
+      "nearestPreviousId": "Career_048",
+      "exactDuplicate": false,
+      "stateFingerprint": "40d23ce9d1d59c2e9715aec1552dd1a6db28ba4ab39a3c3b19ee07a39117a80b",
+      "previousFingerprint": "9a8b89d979c8e05a7395b48090b34ada204deec0d3ace2c36ee39a573e048bd1",
+      "differences": {
+        "blockComposition": {
+          "current": {
+            "movable1x2:1x2": 3,
+            "movable1x2:2x1": 5,
+            "movable1x3:1x3": 2,
+            "movable1x3:3x1": 1,
+            "static1x1:1x1": 2,
+            "target:1x2": 1
+          },
+          "previous": {
+            "movable1x2:1x2": 3,
+            "movable1x2:2x1": 5,
+            "movable1x3:1x3": 2,
+            "static1x1:1x1": 2,
+            "target:1x2": 1
+          }
+        },
+        "dependencyMetrics": {
+          "current": {
+            "belowTargetDependencyMoves": 3,
+            "belowTargetMeaningfulPieceCount": 1,
+            "causalTemplate": "CrossRegionLongGate",
+            "crossRegionDependencyDepth": 6,
+            "crossRegionDependencyEdgeCount": 11,
+            "dependencyColumnsUsed": 6,
+            "dependencyRowsUsed": 7,
+            "exitCorridorBlockingPieceCount": 1,
+            "exitCorridorDependencyMoves": 5,
+            "exitCorridorDependencyPieceCount": 3,
+            "optimalMovesUsingOuterZone": 3,
+            "outerDependencyPieceCount": 1,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "requiredLowerPieceCount": 1,
+            "requiredSidePieceCount": 0,
+            "rowsBetweenTargetAndExitUsed": 4
+          },
+          "previous": {
+            "belowTargetDependencyMoves": 0,
+            "belowTargetMeaningfulPieceCount": 0,
+            "dependencyColumnsUsed": 3,
+            "dependencyRowsUsed": 5,
+            "exitCorridorBlockingPieceCount": 1,
+            "exitCorridorDependencyMoves": 1,
+            "exitCorridorDependencyPieceCount": 1,
+            "optimalMovesUsingOuterZone": 1,
+            "outerDependencyPieceCount": 0,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "rowsBetweenTargetAndExitUsed": 3
+          }
+        },
+        "movementConstraints": {
+          "current": {
+            "movable1x2:1x2:vertical:movable=true": 3,
+            "movable1x2:2x1:horizontal:movable=true": 5,
+            "movable1x3:1x3:vertical:movable=true": 2,
+            "movable1x3:3x1:horizontal:movable=true": 1,
+            "static1x1:1x1:none:movable=false": 2,
+            "target:1x2:vertical:movable=true": 1
+          },
+          "previous": {
+            "movable1x2:1x2:vertical:movable=true": 3,
+            "movable1x2:2x1:horizontal:movable=true": 5,
+            "movable1x3:1x3:vertical:movable=true": 2,
+            "static1x1:1x1:none:movable=false": 2,
+            "target:1x2:vertical:movable=true": 1
+          }
+        },
+        "solutionStructure": {
+          "current": {
+            "gestures": 16,
+            "distinctMovedPieces": 12,
+            "distinctNonTargetMovedPieces": 11,
+            "targetMoves": 2,
+            "movesBeforeFirstTarget": 11,
+            "movedPieceClasses": {
+              "movable1x2:1x2:vertical": 3,
+              "movable1x2:2x1:horizontal": 7,
+              "movable1x3:1x3:vertical": 3,
+              "movable1x3:3x1:horizontal": 1,
+              "target:1x2:vertical": 2
+            }
+          },
+          "previous": {
+            "gestures": 3,
+            "distinctMovedPieces": 3,
+            "distinctNonTargetMovedPieces": 2,
+            "targetMoves": 1,
+            "movesBeforeFirstTarget": 2,
+            "movedPieceClasses": {
+              "movable1x2:2x1:horizontal": 1,
+              "movable1x3:1x3:vertical": 1,
+              "target:1x2:vertical": 1
+            }
+          }
+        }
+      },
+      "meaningfulDifferenceEstablished": true,
+      "manualReviewRequired": false
+    },
+    {
+      "id": "Career_075",
+      "familyId": "F029",
+      "nearestPreviousId": "Career_033",
+      "exactDuplicate": false,
+      "stateFingerprint": "4285f7c76fae8689be0c880a7b9a977b961190cbe8c217c137bcc398c61d6b48",
+      "previousFingerprint": "232f1e38db9d5a54014645507949b086b8f4549fe6b8994ee16cad4083c0e4a5",
+      "differences": {
+        "dependencyMetrics": {
+          "current": {
+            "belowTargetDependencyMoves": 1,
+            "belowTargetMeaningfulPieceCount": 0,
+            "causalTemplate": "LowerParkingUnlock",
+            "crossRegionDependencyDepth": 2,
+            "crossRegionDependencyEdgeCount": 11,
+            "dependencyColumnsUsed": 6,
+            "dependencyRowsUsed": 6,
+            "exitCorridorBlockingPieceCount": 2,
+            "exitCorridorDependencyMoves": 8,
+            "exitCorridorDependencyPieceCount": 5,
+            "optimalMovesUsingOuterZone": 4,
+            "outerDependencyPieceCount": 0,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "requiredLowerPieceCount": 0,
+            "requiredSidePieceCount": 1,
+            "rowsBetweenTargetAndExitUsed": 4
+          },
+          "previous": {
+            "belowTargetDependencyMoves": 2,
+            "belowTargetMeaningfulPieceCount": 0,
+            "dependencyColumnsUsed": 6,
+            "dependencyRowsUsed": 6,
+            "exitCorridorBlockingPieceCount": 2,
+            "exitCorridorDependencyMoves": 8,
+            "exitCorridorDependencyPieceCount": 5,
+            "optimalMovesUsingOuterZone": 5,
+            "outerDependencyPieceCount": 0,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "rowsBetweenTargetAndExitUsed": 4
+          }
+        },
+        "solutionStructure": {
+          "current": {
+            "gestures": 17,
+            "distinctMovedPieces": 11,
+            "distinctNonTargetMovedPieces": 10,
+            "targetMoves": 2,
+            "movesBeforeFirstTarget": 0,
+            "movedPieceClasses": {
+              "movable1x2:1x2:vertical": 5,
+              "movable1x2:2x1:horizontal": 10,
+              "target:1x2:vertical": 2
+            }
+          },
+          "previous": {
+            "gestures": 16,
+            "distinctMovedPieces": 11,
+            "distinctNonTargetMovedPieces": 10,
+            "targetMoves": 2,
+            "movesBeforeFirstTarget": 0,
+            "movedPieceClasses": {
+              "movable1x2:1x2:vertical": 4,
+              "movable1x2:2x1:horizontal": 10,
+              "target:1x2:vertical": 2
+            }
+          }
+        }
+      },
+      "meaningfulDifferenceEstablished": true,
+      "manualReviewRequired": false
+    },
+    {
+      "id": "Career_076",
+      "familyId": "F101",
+      "nearestPreviousId": "Career_036",
+      "exactDuplicate": false,
+      "stateFingerprint": "1fb41ca99236b145f7bb4d6224501eed59f8e0749788f554501a8516f47c9f80",
+      "previousFingerprint": "8acfe4b60c46991e7904b348a713e09bdf4014c326fe30abb4f0229c054a8987",
+      "differences": {
+        "blockComposition": {
+          "current": {
+            "movable1x1:1x1": 1,
+            "movable1x2:1x2": 4,
+            "movable1x2:2x1": 3,
+            "movable1x3:1x3": 2,
+            "movable1x3:3x1": 1,
+            "static1x1:1x1": 2,
+            "target:1x2": 1
+          },
+          "previous": {
+            "movable1x2:1x2": 4,
+            "movable1x2:2x1": 3,
+            "movable1x3:1x3": 2,
+            "movable1x3:3x1": 1,
+            "static1x1:1x1": 2,
+            "target:1x2": 1
+          }
+        },
+        "dependencyMetrics": {
+          "current": {
+            "belowTargetDependencyMoves": 2,
+            "belowTargetMeaningfulPieceCount": 2,
+            "dependencyColumnsUsed": 4,
+            "dependencyRowsUsed": 5,
+            "exitCorridorBlockingPieceCount": 1,
+            "exitCorridorDependencyMoves": 1,
+            "exitCorridorDependencyPieceCount": 1,
+            "optimalMovesUsingOuterZone": 0,
+            "outerDependencyPieceCount": 0,
+            "outerZoneEvidence": "outer-seal-unsolvable",
+            "rowsBetweenTargetAndExitUsed": 1
+          },
+          "previous": {
+            "belowTargetDependencyMoves": 0,
+            "belowTargetMeaningfulPieceCount": 0,
+            "dependencyColumnsUsed": 5,
+            "dependencyRowsUsed": 5,
+            "exitCorridorBlockingPieceCount": 2,
+            "exitCorridorDependencyMoves": 3,
+            "exitCorridorDependencyPieceCount": 2,
+            "optimalMovesUsingOuterZone": 4,
+            "outerDependencyPieceCount": 0,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "rowsBetweenTargetAndExitUsed": 3
+          }
+        },
+        "movementConstraints": {
+          "current": {
+            "movable1x1:1x1:both:movable=true": 1,
+            "movable1x2:1x2:vertical:movable=true": 4,
+            "movable1x2:2x1:horizontal:movable=true": 3,
+            "movable1x3:1x3:vertical:movable=true": 2,
+            "movable1x3:3x1:horizontal:movable=true": 1,
+            "static1x1:1x1:none:movable=false": 2,
+            "target:1x2:vertical:movable=true": 1
+          },
+          "previous": {
+            "movable1x2:1x2:vertical:movable=true": 4,
+            "movable1x2:2x1:horizontal:movable=true": 3,
+            "movable1x3:1x3:vertical:movable=true": 2,
+            "movable1x3:3x1:horizontal:movable=true": 1,
+            "static1x1:1x1:none:movable=false": 2,
+            "target:1x2:vertical:movable=true": 1
+          }
+        },
+        "solutionStructure": {
+          "current": {
+            "gestures": 5,
+            "distinctMovedPieces": 5,
+            "distinctNonTargetMovedPieces": 4,
+            "targetMoves": 1,
+            "movesBeforeFirstTarget": 4,
+            "movedPieceClasses": {
+              "movable1x1:1x1:vertical": 1,
+              "movable1x2:1x2:vertical": 2,
+              "movable1x3:3x1:horizontal": 1,
+              "target:1x2:vertical": 1
+            }
+          },
+          "previous": {
+            "gestures": 15,
+            "distinctMovedPieces": 7,
+            "distinctNonTargetMovedPieces": 6,
+            "targetMoves": 4,
+            "movesBeforeFirstTarget": 2,
+            "movedPieceClasses": {
+              "movable1x2:1x2:vertical": 1,
+              "movable1x2:2x1:horizontal": 6,
+              "movable1x3:1x3:vertical": 4,
+              "target:1x2:vertical": 4
+            }
+          }
+        }
+      },
+      "meaningfulDifferenceEstablished": true,
+      "manualReviewRequired": false
+    },
+    {
+      "id": "Career_077",
+      "familyId": "F014",
+      "nearestPreviousId": "Career_031",
+      "exactDuplicate": false,
+      "stateFingerprint": "3ce874cf1a975ebc82780962853e45a495b0994a37a7e347e65075364dab7441",
+      "previousFingerprint": "3b3a3fbcedb354ca71159b2815c31c64489604bebcca7b82907bc5ad57991ed9",
+      "differences": {
+        "blockComposition": {
+          "current": {
+            "movable1x2:1x2": 4,
+            "movable1x2:2x1": 7,
+            "movable1x3:1x3": 2,
+            "target:1x2": 1
+          },
+          "previous": {
+            "movable1x1:1x1": 1,
+            "movable1x2:1x2": 3,
+            "movable1x2:2x1": 7,
+            "movable1x3:1x3": 2,
+            "target:1x2": 1
+          }
+        },
+        "dependencyMetrics": {
+          "current": {
+            "belowTargetDependencyMoves": 0,
+            "belowTargetMeaningfulPieceCount": 0,
+            "causalTemplate": "LowerParkingUnlock",
+            "crossRegionDependencyDepth": 4,
+            "crossRegionDependencyEdgeCount": 8,
+            "dependencyColumnsUsed": 5,
+            "dependencyRowsUsed": 6,
+            "exitCorridorBlockingPieceCount": 4,
+            "exitCorridorDependencyMoves": 4,
+            "exitCorridorDependencyPieceCount": 4,
+            "optimalMovesUsingOuterZone": 1,
+            "outerDependencyPieceCount": 0,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "requiredLowerPieceCount": 0,
+            "requiredSidePieceCount": 1,
+            "rowsBetweenTargetAndExitUsed": 4
+          },
+          "previous": {
+            "belowTargetDependencyMoves": 0,
+            "belowTargetMeaningfulPieceCount": 0,
+            "causalTemplate": "Lower1x1SpaceMaker",
+            "crossRegionDependencyDepth": 5,
+            "crossRegionDependencyEdgeCount": 7,
+            "dependencyColumnsUsed": 5,
+            "dependencyRowsUsed": 6,
+            "exitCorridorBlockingPieceCount": 4,
+            "exitCorridorDependencyMoves": 4,
+            "exitCorridorDependencyPieceCount": 4,
+            "optimalMovesUsingOuterZone": 1,
+            "outerDependencyPieceCount": 0,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "requiredLowerPieceCount": 0,
+            "requiredSidePieceCount": 1,
+            "rowsBetweenTargetAndExitUsed": 4
+          }
+        },
+        "movementConstraints": {
+          "current": {
+            "movable1x2:1x2:vertical:movable=true": 4,
+            "movable1x2:2x1:horizontal:movable=true": 7,
+            "movable1x3:1x3:vertical:movable=true": 2,
+            "target:1x2:vertical:movable=true": 1
+          },
+          "previous": {
+            "movable1x1:1x1:both:movable=true": 1,
+            "movable1x2:1x2:vertical:movable=true": 3,
+            "movable1x2:2x1:horizontal:movable=true": 7,
+            "movable1x3:1x3:vertical:movable=true": 2,
+            "target:1x2:vertical:movable=true": 1
+          }
+        },
+        "solutionStructure": {
+          "current": {
+            "gestures": 12,
+            "distinctMovedPieces": 11,
+            "distinctNonTargetMovedPieces": 10,
+            "targetMoves": 2,
+            "movesBeforeFirstTarget": 4,
+            "movedPieceClasses": {
+              "movable1x2:1x2:vertical": 4,
+              "movable1x2:2x1:horizontal": 5,
+              "movable1x3:1x3:vertical": 1,
+              "target:1x2:vertical": 2
+            }
+          },
+          "previous": {
+            "gestures": 12,
+            "distinctMovedPieces": 11,
+            "distinctNonTargetMovedPieces": 10,
+            "targetMoves": 2,
+            "movesBeforeFirstTarget": 6,
+            "movedPieceClasses": {
+              "movable1x1:1x1:horizontal": 1,
+              "movable1x2:1x2:vertical": 3,
+              "movable1x2:2x1:horizontal": 5,
+              "movable1x3:1x3:vertical": 1,
+              "target:1x2:vertical": 2
+            }
+          }
+        }
+      },
+      "meaningfulDifferenceEstablished": true,
+      "manualReviewRequired": false
+    },
+    {
+      "id": "Career_078",
+      "familyId": "F084",
+      "nearestPreviousId": "Career_037",
+      "exactDuplicate": false,
+      "stateFingerprint": "83a39574159c7597cc410c81ec5ad8475cd29975f941942f9bf62bb2a9efc9c8",
+      "previousFingerprint": "f0b88c96ba7eb3e95582ffb9786371f850f9a585fbeeccabe85401f2c24eff8f",
+      "differences": {
+        "blockComposition": {
+          "current": {
+            "movable1x2:1x2": 1,
+            "movable1x2:2x1": 7,
+            "movable1x3:1x3": 1,
+            "movable1x3:3x1": 2,
+            "static1x1:1x1": 1,
+            "target:1x2": 1
+          },
+          "previous": {
+            "movable1x1:1x1": 1,
+            "movable1x2:1x2": 1,
+            "movable1x2:2x1": 7,
+            "movable1x3:1x3": 1,
+            "movable1x3:3x1": 2,
+            "static1x1:1x1": 1,
+            "target:1x2": 1
+          }
+        },
+        "dependencyMetrics": {
+          "current": {
+            "belowTargetDependencyMoves": 1,
+            "belowTargetMeaningfulPieceCount": 0,
+            "dependencyColumnsUsed": 6,
+            "dependencyRowsUsed": 5,
+            "exitCorridorBlockingPieceCount": 3,
+            "exitCorridorDependencyMoves": 7,
+            "exitCorridorDependencyPieceCount": 4,
+            "optimalMovesUsingOuterZone": 1,
+            "outerDependencyPieceCount": 0,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "rowsBetweenTargetAndExitUsed": 3
+          },
+          "previous": {
+            "belowTargetDependencyMoves": 0,
+            "belowTargetMeaningfulPieceCount": 0,
+            "dependencyColumnsUsed": 0,
+            "dependencyRowsUsed": 0,
+            "exitCorridorBlockingPieceCount": 0,
+            "exitCorridorDependencyMoves": 0,
+            "exitCorridorDependencyPieceCount": 0,
+            "optimalMovesUsingOuterZone": 1,
+            "outerDependencyPieceCount": 0,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "rowsBetweenTargetAndExitUsed": 0
+          }
+        },
+        "movementConstraints": {
+          "current": {
+            "movable1x2:1x2:vertical:movable=true": 1,
+            "movable1x2:2x1:horizontal:movable=true": 7,
+            "movable1x3:1x3:vertical:movable=true": 1,
+            "movable1x3:3x1:horizontal:movable=true": 2,
+            "static1x1:1x1:none:movable=false": 1,
+            "target:1x2:vertical:movable=true": 1
+          },
+          "previous": {
+            "movable1x1:1x1:both:movable=true": 1,
+            "movable1x2:1x2:vertical:movable=true": 1,
+            "movable1x2:2x1:horizontal:movable=true": 7,
+            "movable1x3:1x3:vertical:movable=true": 1,
+            "movable1x3:3x1:horizontal:movable=true": 2,
+            "static1x1:1x1:none:movable=false": 1,
+            "target:1x2:vertical:movable=true": 1
+          }
+        },
+        "solutionStructure": {
+          "current": {
+            "gestures": 17,
+            "distinctMovedPieces": 9,
+            "distinctNonTargetMovedPieces": 8,
+            "targetMoves": 4,
+            "movesBeforeFirstTarget": 4,
+            "movedPieceClasses": {
+              "movable1x2:1x2:vertical": 2,
+              "movable1x2:2x1:horizontal": 7,
+              "movable1x3:1x3:vertical": 1,
+              "movable1x3:3x1:horizontal": 3,
+              "target:1x2:vertical": 4
+            }
+          },
+          "previous": {
+            "gestures": 18,
+            "distinctMovedPieces": 10,
+            "distinctNonTargetMovedPieces": 9,
+            "targetMoves": 4,
+            "movesBeforeFirstTarget": 4,
+            "movedPieceClasses": {
+              "movable1x1:1x1:horizontal": 1,
+              "movable1x2:1x2:vertical": 2,
+              "movable1x2:2x1:horizontal": 7,
+              "movable1x3:1x3:vertical": 1,
+              "movable1x3:3x1:horizontal": 3,
+              "target:1x2:vertical": 4
+            }
+          }
+        }
+      },
+      "meaningfulDifferenceEstablished": true,
+      "manualReviewRequired": false
+    },
+    {
+      "id": "Career_079",
+      "familyId": "F049",
+      "nearestPreviousId": "Career_034",
+      "exactDuplicate": false,
+      "stateFingerprint": "3997a21a577b4a2cbbea8c8561f54008f090875b82695b73c5298848ccb29f5a",
+      "previousFingerprint": "47bb99b27a255ef817adfd46cfc81748d8b484ef1b17a5558d8c4c787185ffff",
+      "differences": {
+        "blockComposition": {
+          "current": {
+            "movable1x2:1x2": 4,
+            "movable1x2:2x1": 4,
+            "movable1x3:1x3": 1,
+            "movable1x3:3x1": 1,
+            "static1x1:1x1": 1,
+            "target:1x2": 1
+          },
+          "previous": {
+            "movable1x2:1x2": 3,
+            "movable1x2:2x1": 5,
+            "movable1x3:1x3": 1,
+            "movable1x3:3x1": 1,
+            "static1x1:1x1": 1,
+            "target:1x2": 1
+          }
+        },
+        "dependencyMetrics": {
+          "current": {
+            "belowTargetDependencyMoves": 2,
+            "belowTargetMeaningfulPieceCount": 2,
+            "causalTemplate": "LowerParkingUnlock",
+            "crossRegionDependencyDepth": 10,
+            "crossRegionDependencyEdgeCount": 11,
+            "dependencyColumnsUsed": 6,
+            "dependencyRowsUsed": 6,
+            "exitCorridorBlockingPieceCount": 2,
+            "exitCorridorDependencyMoves": 3,
+            "exitCorridorDependencyPieceCount": 2,
+            "optimalMovesUsingOuterZone": 3,
+            "outerDependencyPieceCount": 0,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "requiredLowerPieceCount": 0,
+            "requiredSidePieceCount": 1,
+            "rowsBetweenTargetAndExitUsed": 3
+          },
+          "previous": {
+            "belowTargetDependencyMoves": 0,
+            "belowTargetMeaningfulPieceCount": 0,
+            "dependencyColumnsUsed": 5,
+            "dependencyRowsUsed": 6,
+            "exitCorridorBlockingPieceCount": 2,
+            "exitCorridorDependencyMoves": 2,
+            "exitCorridorDependencyPieceCount": 2,
+            "optimalMovesUsingOuterZone": 2,
+            "outerDependencyPieceCount": 1,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "rowsBetweenTargetAndExitUsed": 4
+          }
+        },
+        "movementConstraints": {
+          "current": {
+            "movable1x2:1x2:vertical:movable=true": 4,
+            "movable1x2:2x1:horizontal:movable=true": 4,
+            "movable1x3:1x3:vertical:movable=true": 1,
+            "movable1x3:3x1:horizontal:movable=true": 1,
+            "static1x1:1x1:none:movable=false": 1,
+            "target:1x2:vertical:movable=true": 1
+          },
+          "previous": {
+            "movable1x2:1x2:vertical:movable=true": 3,
+            "movable1x2:2x1:horizontal:movable=true": 5,
+            "movable1x3:1x3:vertical:movable=true": 1,
+            "movable1x3:3x1:horizontal:movable=true": 1,
+            "static1x1:1x1:none:movable=false": 1,
+            "target:1x2:vertical:movable=true": 1
+          }
+        },
+        "solutionStructure": {
+          "current": {
+            "gestures": 17,
+            "distinctMovedPieces": 11,
+            "distinctNonTargetMovedPieces": 10,
+            "targetMoves": 2,
+            "movesBeforeFirstTarget": 2,
+            "movedPieceClasses": {
+              "movable1x2:1x2:vertical": 6,
+              "movable1x2:2x1:horizontal": 5,
+              "movable1x3:1x3:vertical": 2,
+              "movable1x3:3x1:horizontal": 2,
+              "target:1x2:vertical": 2
+            }
+          },
+          "previous": {
+            "gestures": 5,
+            "distinctMovedPieces": 5,
+            "distinctNonTargetMovedPieces": 4,
+            "targetMoves": 1,
+            "movesBeforeFirstTarget": 4,
+            "movedPieceClasses": {
+              "movable1x2:2x1:horizontal": 2,
+              "movable1x3:1x3:vertical": 1,
+              "movable1x3:3x1:horizontal": 1,
+              "target:1x2:vertical": 1
+            }
+          }
+        }
+      },
+      "meaningfulDifferenceEstablished": true,
+      "manualReviewRequired": false
+    },
+    {
+      "id": "Career_080",
+      "familyId": "F086",
+      "nearestPreviousId": "Career_057",
+      "exactDuplicate": false,
+      "stateFingerprint": "c3833d4dedee7dda4d8e1014538e799dab4f16e857cf40de2bb4b4d672a21bb5",
+      "previousFingerprint": "b117ef7f70a250394de4d232168cf0e2ad066ed59ba557c24774bde5dc58e406",
+      "differences": {
+        "blockComposition": {
+          "current": {
+            "movable1x2:1x2": 6,
+            "movable1x2:2x1": 4,
+            "movable1x3:1x3": 1,
+            "movable1x3:3x1": 1,
+            "static1x1:1x1": 1,
+            "target:1x2": 1
+          },
+          "previous": {
+            "movable1x1:1x1": 2,
+            "movable1x2:1x2": 6,
+            "movable1x2:2x1": 3,
+            "movable1x3:1x3": 1,
+            "movable1x3:3x1": 1,
+            "static1x1:1x1": 1,
+            "target:1x2": 1
+          }
+        },
+        "dependencyMetrics": {
+          "current": {
+            "belowTargetDependencyMoves": 2,
+            "belowTargetMeaningfulPieceCount": 1,
+            "dependencyColumnsUsed": 4,
+            "dependencyRowsUsed": 5,
+            "exitCorridorBlockingPieceCount": 2,
+            "exitCorridorDependencyMoves": 2,
+            "exitCorridorDependencyPieceCount": 2,
+            "optimalMovesUsingOuterZone": 4,
+            "outerDependencyPieceCount": 1,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "rowsBetweenTargetAndExitUsed": 2
+          },
+          "previous": {
+            "belowTargetDependencyMoves": 0,
+            "belowTargetMeaningfulPieceCount": 0,
+            "dependencyColumnsUsed": 0,
+            "dependencyRowsUsed": 0,
+            "exitCorridorBlockingPieceCount": 0,
+            "exitCorridorDependencyMoves": 0,
+            "exitCorridorDependencyPieceCount": 0,
+            "optimalMovesUsingOuterZone": 5,
+            "outerDependencyPieceCount": 0,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "rowsBetweenTargetAndExitUsed": 0
+          }
+        },
+        "movementConstraints": {
+          "current": {
+            "movable1x2:1x2:vertical:movable=true": 6,
+            "movable1x2:2x1:horizontal:movable=true": 4,
+            "movable1x3:1x3:vertical:movable=true": 1,
+            "movable1x3:3x1:horizontal:movable=true": 1,
+            "static1x1:1x1:none:movable=false": 1,
+            "target:1x2:vertical:movable=true": 1
+          },
+          "previous": {
+            "movable1x1:1x1:both:movable=true": 2,
+            "movable1x2:1x2:vertical:movable=true": 6,
+            "movable1x2:2x1:horizontal:movable=true": 3,
+            "movable1x3:1x3:vertical:movable=true": 1,
+            "movable1x3:3x1:horizontal:movable=true": 1,
+            "static1x1:1x1:none:movable=false": 1,
+            "target:1x2:vertical:movable=true": 1
+          }
+        },
+        "solutionStructure": {
+          "current": {
+            "gestures": 9,
+            "distinctMovedPieces": 8,
+            "distinctNonTargetMovedPieces": 7,
+            "targetMoves": 2,
+            "movesBeforeFirstTarget": 1,
+            "movedPieceClasses": {
+              "movable1x2:1x2:vertical": 3,
+              "movable1x2:2x1:horizontal": 3,
+              "movable1x3:3x1:horizontal": 1,
+              "target:1x2:vertical": 2
+            }
+          },
+          "previous": {
+            "gestures": 10,
+            "distinctMovedPieces": 10,
+            "distinctNonTargetMovedPieces": 9,
+            "targetMoves": 1,
+            "movesBeforeFirstTarget": 9,
+            "movedPieceClasses": {
+              "movable1x1:1x1:horizontal": 1,
+              "movable1x2:1x2:vertical": 5,
+              "movable1x2:2x1:horizontal": 2,
+              "movable1x3:3x1:horizontal": 1,
+              "target:1x2:vertical": 1
+            }
+          }
+        }
+      },
+      "meaningfulDifferenceEstablished": true,
+      "manualReviewRequired": false
+    },
+    {
+      "id": "Career_081",
+      "familyId": "F103",
+      "nearestPreviousId": "Career_049",
+      "exactDuplicate": false,
+      "stateFingerprint": "2919c936300b7758cff5d45a6d659df306db2febe908ce6dc5e11cdee654be8b",
+      "previousFingerprint": "e05033db3590e0652d8396f41287c0488c0bd73555403e93c3250e717c990581",
+      "differences": {
+        "blockComposition": {
+          "current": {
+            "movable1x1:1x1": 1,
+            "movable1x2:1x2": 1,
+            "movable1x2:2x1": 4,
+            "movable1x3:1x3": 3,
+            "static1x1:1x1": 2,
+            "target:1x2": 1
+          },
+          "previous": {
+            "movable1x1:1x1": 2,
+            "movable1x2:1x2": 1,
+            "movable1x2:2x1": 4,
+            "movable1x3:1x3": 3,
+            "static1x1:1x1": 2,
+            "target:1x2": 1
+          }
+        },
+        "dependencyMetrics": {
+          "current": {
+            "belowTargetDependencyMoves": 0,
+            "belowTargetMeaningfulPieceCount": 0,
+            "dependencyColumnsUsed": 6,
+            "dependencyRowsUsed": 6,
+            "exitCorridorBlockingPieceCount": 2,
+            "exitCorridorDependencyMoves": 3,
+            "exitCorridorDependencyPieceCount": 2,
+            "optimalMovesUsingOuterZone": 1,
+            "outerDependencyPieceCount": 0,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "rowsBetweenTargetAndExitUsed": 4
+          },
+          "previous": {
+            "belowTargetDependencyMoves": 0,
+            "belowTargetMeaningfulPieceCount": 0,
+            "causalTemplate": "",
+            "crossRegionDependencyDepth": 0,
+            "crossRegionDependencyEdgeCount": 0,
+            "dependencyColumnsUsed": 0,
+            "dependencyRowsUsed": 0,
+            "exitCorridorBlockingPieceCount": 0,
+            "exitCorridorDependencyMoves": 0,
+            "exitCorridorDependencyPieceCount": 0,
+            "optimalMovesUsingOuterZone": 1,
+            "outerDependencyPieceCount": 0,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "requiredLowerPieceCount": 0,
+            "requiredSidePieceCount": 0,
+            "rowsBetweenTargetAndExitUsed": 0
+          }
+        },
+        "movementConstraints": {
+          "current": {
+            "movable1x1:1x1:both:movable=true": 1,
+            "movable1x2:1x2:vertical:movable=true": 1,
+            "movable1x2:2x1:horizontal:movable=true": 4,
+            "movable1x3:1x3:vertical:movable=true": 3,
+            "static1x1:1x1:none:movable=false": 2,
+            "target:1x2:vertical:movable=true": 1
+          },
+          "previous": {
+            "movable1x1:1x1:both:movable=true": 2,
+            "movable1x2:1x2:vertical:movable=true": 1,
+            "movable1x2:2x1:horizontal:movable=true": 4,
+            "movable1x3:1x3:vertical:movable=true": 3,
+            "static1x1:1x1:none:movable=false": 2,
+            "target:1x2:vertical:movable=true": 1
+          }
+        },
+        "solutionStructure": {
+          "current": {
+            "gestures": 13,
+            "distinctMovedPieces": 9,
+            "distinctNonTargetMovedPieces": 8,
+            "targetMoves": 2,
+            "movesBeforeFirstTarget": 0,
+            "movedPieceClasses": {
+              "movable1x1:1x1:horizontal": 1,
+              "movable1x2:1x2:vertical": 1,
+              "movable1x2:2x1:horizontal": 5,
+              "movable1x3:1x3:vertical": 4,
+              "target:1x2:vertical": 2
+            }
+          },
+          "previous": {
+            "gestures": 9,
+            "distinctMovedPieces": 9,
+            "distinctNonTargetMovedPieces": 8,
+            "targetMoves": 1,
+            "movesBeforeFirstTarget": 8,
+            "movedPieceClasses": {
+              "movable1x1:1x1:horizontal": 2,
+              "movable1x2:1x2:vertical": 1,
+              "movable1x2:2x1:horizontal": 3,
+              "movable1x3:1x3:vertical": 2,
+              "target:1x2:vertical": 1
+            }
+          }
+        }
+      },
+      "meaningfulDifferenceEstablished": true,
+      "manualReviewRequired": false
+    },
+    {
+      "id": "Career_082",
+      "familyId": "F047",
+      "nearestPreviousId": "Career_035",
+      "exactDuplicate": false,
+      "stateFingerprint": "1fa15f3c369ad34c3a3a2000f9dccb983c2abd503bdfbed84b923a20d2cd5899",
+      "previousFingerprint": "31810379166e2c65c9515f4707076f9612f954940885814d65c87eda98c25f45",
+      "differences": {
+        "blockComposition": {
+          "current": {
+            "movable1x1:1x1": 1,
+            "movable1x2:1x2": 3,
+            "movable1x2:2x1": 5,
+            "movable1x3:1x3": 2,
+            "movable1x3:3x1": 2,
+            "static1x1:1x1": 2,
+            "target:1x2": 1
+          },
+          "previous": {
+            "movable1x2:1x2": 3,
+            "movable1x2:2x1": 6,
+            "movable1x3:1x3": 2,
+            "movable1x3:3x1": 2,
+            "static1x1:1x1": 2,
+            "target:1x2": 1
+          }
+        },
+        "dependencyMetrics": {
+          "current": {
+            "belowTargetDependencyMoves": 2,
+            "belowTargetMeaningfulPieceCount": 1,
+            "dependencyColumnsUsed": 6,
+            "dependencyRowsUsed": 7,
+            "exitCorridorBlockingPieceCount": 3,
+            "exitCorridorDependencyMoves": 3,
+            "exitCorridorDependencyPieceCount": 3,
+            "optimalMovesUsingOuterZone": 4,
+            "outerDependencyPieceCount": 1,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "rowsBetweenTargetAndExitUsed": 4
+          },
+          "previous": {
+            "belowTargetDependencyMoves": 2,
+            "belowTargetMeaningfulPieceCount": 1,
+            "causalTemplate": "LowerParkingUnlock",
+            "crossRegionDependencyDepth": 9,
+            "crossRegionDependencyEdgeCount": 7,
+            "dependencyColumnsUsed": 6,
+            "dependencyRowsUsed": 7,
+            "exitCorridorBlockingPieceCount": 3,
+            "exitCorridorDependencyMoves": 3,
+            "exitCorridorDependencyPieceCount": 3,
+            "optimalMovesUsingOuterZone": 4,
+            "outerDependencyPieceCount": 1,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "requiredLowerPieceCount": 1,
+            "requiredSidePieceCount": 0,
+            "rowsBetweenTargetAndExitUsed": 4
+          }
+        },
+        "movementConstraints": {
+          "current": {
+            "movable1x1:1x1:both:movable=true": 1,
+            "movable1x2:1x2:vertical:movable=true": 3,
+            "movable1x2:2x1:horizontal:movable=true": 5,
+            "movable1x3:1x3:vertical:movable=true": 2,
+            "movable1x3:3x1:horizontal:movable=true": 2,
+            "static1x1:1x1:none:movable=false": 2,
+            "target:1x2:vertical:movable=true": 1
+          },
+          "previous": {
+            "movable1x2:1x2:vertical:movable=true": 3,
+            "movable1x2:2x1:horizontal:movable=true": 6,
+            "movable1x3:1x3:vertical:movable=true": 2,
+            "movable1x3:3x1:horizontal:movable=true": 2,
+            "static1x1:1x1:none:movable=false": 2,
+            "target:1x2:vertical:movable=true": 1
+          }
+        },
+        "solutionStructure": {
+          "current": {
+            "gestures": 13,
+            "distinctMovedPieces": 10,
+            "distinctNonTargetMovedPieces": 9,
+            "targetMoves": 3,
+            "movesBeforeFirstTarget": 1,
+            "movedPieceClasses": {
+              "movable1x1:1x1:horizontal": 1,
+              "movable1x2:1x2:vertical": 2,
+              "movable1x2:2x1:horizontal": 4,
+              "movable1x3:1x3:vertical": 1,
+              "movable1x3:3x1:horizontal": 2,
+              "target:1x2:vertical": 3
+            }
+          },
+          "previous": {
+            "gestures": 13,
+            "distinctMovedPieces": 10,
+            "distinctNonTargetMovedPieces": 9,
+            "targetMoves": 3,
+            "movesBeforeFirstTarget": 1,
+            "movedPieceClasses": {
+              "movable1x2:1x2:vertical": 2,
+              "movable1x2:2x1:horizontal": 5,
+              "movable1x3:1x3:vertical": 1,
+              "movable1x3:3x1:horizontal": 2,
+              "target:1x2:vertical": 3
+            }
+          }
+        }
+      },
+      "meaningfulDifferenceEstablished": true,
+      "manualReviewRequired": false
+    },
+    {
+      "id": "Career_083",
+      "familyId": "F125",
+      "nearestPreviousId": "Career_042",
+      "exactDuplicate": false,
+      "stateFingerprint": "18f64fbb91c5d774b43e7e8679c7c7a81f9266f264890751cb52ed6a92323b3e",
+      "previousFingerprint": "af268b690c462cb8aeabbb4467f4f463576bfb38134a7f57fa31df11e8e6ada6",
+      "differences": {
+        "blockComposition": {
+          "current": {
+            "movable1x2:1x2": 4,
+            "movable1x2:2x1": 5,
+            "movable1x3:1x3": 2,
+            "movable1x3:3x1": 1,
+            "target:1x2": 1
+          },
+          "previous": {
+            "movable1x2:1x2": 3,
+            "movable1x2:2x1": 5,
+            "movable1x3:1x3": 3,
+            "movable1x3:3x1": 1,
+            "target:1x2": 1
+          }
+        },
+        "dependencyMetrics": {
+          "current": {
+            "belowTargetDependencyMoves": 0,
+            "belowTargetMeaningfulPieceCount": 0,
+            "dependencyColumnsUsed": 5,
+            "dependencyRowsUsed": 5,
+            "exitCorridorBlockingPieceCount": 3,
+            "exitCorridorDependencyMoves": 3,
+            "exitCorridorDependencyPieceCount": 3,
+            "optimalMovesUsingOuterZone": 2,
+            "outerDependencyPieceCount": 0,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "rowsBetweenTargetAndExitUsed": 3
+          },
+          "previous": {
+            "belowTargetDependencyMoves": 3,
+            "belowTargetMeaningfulPieceCount": 2,
+            "causalTemplate": "CrossRegionLongGate",
+            "crossRegionDependencyDepth": 2,
+            "crossRegionDependencyEdgeCount": 6,
+            "dependencyColumnsUsed": 5,
+            "dependencyRowsUsed": 6,
+            "exitCorridorBlockingPieceCount": 3,
+            "exitCorridorDependencyMoves": 3,
+            "exitCorridorDependencyPieceCount": 3,
+            "optimalMovesUsingOuterZone": 3,
+            "outerDependencyPieceCount": 0,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "requiredLowerPieceCount": 0,
+            "requiredSidePieceCount": 1,
+            "rowsBetweenTargetAndExitUsed": 3
+          }
+        },
+        "movementConstraints": {
+          "current": {
+            "movable1x2:1x2:vertical:movable=true": 4,
+            "movable1x2:2x1:horizontal:movable=true": 5,
+            "movable1x3:1x3:vertical:movable=true": 2,
+            "movable1x3:3x1:horizontal:movable=true": 1,
+            "target:1x2:vertical:movable=true": 1
+          },
+          "previous": {
+            "movable1x2:1x2:vertical:movable=true": 3,
+            "movable1x2:2x1:horizontal:movable=true": 5,
+            "movable1x3:1x3:vertical:movable=true": 3,
+            "movable1x3:3x1:horizontal:movable=true": 1,
+            "target:1x2:vertical:movable=true": 1
+          }
+        },
+        "solutionStructure": {
+          "current": {
+            "gestures": 7,
+            "distinctMovedPieces": 7,
+            "distinctNonTargetMovedPieces": 6,
+            "targetMoves": 1,
+            "movesBeforeFirstTarget": 6,
+            "movedPieceClasses": {
+              "movable1x2:1x2:vertical": 3,
+              "movable1x2:2x1:horizontal": 3,
+              "target:1x2:vertical": 1
+            }
+          },
+          "previous": {
+            "gestures": 9,
+            "distinctMovedPieces": 9,
+            "distinctNonTargetMovedPieces": 8,
+            "targetMoves": 1,
+            "movesBeforeFirstTarget": 8,
+            "movedPieceClasses": {
+              "movable1x2:1x2:vertical": 2,
+              "movable1x2:2x1:horizontal": 4,
+              "movable1x3:1x3:vertical": 1,
+              "movable1x3:3x1:horizontal": 1,
+              "target:1x2:vertical": 1
+            }
+          }
+        }
+      },
+      "meaningfulDifferenceEstablished": true,
+      "manualReviewRequired": false
+    },
+    {
+      "id": "Career_084",
+      "familyId": "F086",
+      "nearestPreviousId": "Career_057",
+      "exactDuplicate": false,
+      "stateFingerprint": "efa6ae6ae268b67cbad974db825dd4c6359642f739920c93d9a126ab1beeb53f",
+      "previousFingerprint": "b117ef7f70a250394de4d232168cf0e2ad066ed59ba557c24774bde5dc58e406",
+      "differences": {
+        "blockComposition": {
+          "current": {
+            "movable1x1:1x1": 1,
+            "movable1x2:1x2": 6,
+            "movable1x2:2x1": 3,
+            "movable1x3:1x3": 1,
+            "movable1x3:3x1": 1,
+            "static1x1:1x1": 1,
+            "target:1x2": 1
+          },
+          "previous": {
+            "movable1x1:1x1": 2,
+            "movable1x2:1x2": 6,
+            "movable1x2:2x1": 3,
+            "movable1x3:1x3": 1,
+            "movable1x3:3x1": 1,
+            "static1x1:1x1": 1,
+            "target:1x2": 1
+          }
+        },
+        "dependencyMetrics": {
+          "current": {
+            "belowTargetDependencyMoves": 0,
+            "belowTargetMeaningfulPieceCount": 0,
+            "causalTemplate": "",
+            "crossRegionDependencyDepth": 0,
+            "crossRegionDependencyEdgeCount": 0,
+            "dependencyColumnsUsed": 0,
+            "dependencyRowsUsed": 0,
+            "exitCorridorBlockingPieceCount": 0,
+            "exitCorridorDependencyMoves": 0,
+            "exitCorridorDependencyPieceCount": 0,
+            "optimalMovesUsingOuterZone": 4,
+            "outerDependencyPieceCount": 0,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "requiredLowerPieceCount": 0,
+            "requiredSidePieceCount": 0,
+            "rowsBetweenTargetAndExitUsed": 0
+          },
+          "previous": {
+            "belowTargetDependencyMoves": 0,
+            "belowTargetMeaningfulPieceCount": 0,
+            "dependencyColumnsUsed": 0,
+            "dependencyRowsUsed": 0,
+            "exitCorridorBlockingPieceCount": 0,
+            "exitCorridorDependencyMoves": 0,
+            "exitCorridorDependencyPieceCount": 0,
+            "optimalMovesUsingOuterZone": 5,
+            "outerDependencyPieceCount": 0,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "rowsBetweenTargetAndExitUsed": 0
+          }
+        },
+        "movementConstraints": {
+          "current": {
+            "movable1x1:1x1:both:movable=true": 1,
+            "movable1x2:1x2:vertical:movable=true": 6,
+            "movable1x2:2x1:horizontal:movable=true": 3,
+            "movable1x3:1x3:vertical:movable=true": 1,
+            "movable1x3:3x1:horizontal:movable=true": 1,
+            "static1x1:1x1:none:movable=false": 1,
+            "target:1x2:vertical:movable=true": 1
+          },
+          "previous": {
+            "movable1x1:1x1:both:movable=true": 2,
+            "movable1x2:1x2:vertical:movable=true": 6,
+            "movable1x2:2x1:horizontal:movable=true": 3,
+            "movable1x3:1x3:vertical:movable=true": 1,
+            "movable1x3:3x1:horizontal:movable=true": 1,
+            "static1x1:1x1:none:movable=false": 1,
+            "target:1x2:vertical:movable=true": 1
+          }
+        }
+      },
+      "meaningfulDifferenceEstablished": true,
+      "manualReviewRequired": false
+    },
+    {
+      "id": "Career_085",
+      "familyId": "F050",
+      "nearestPreviousId": "Career_039",
+      "exactDuplicate": false,
+      "stateFingerprint": "f09a8b36308bdac8778c10125d68a0782b2385f00d4d09812af6ce8539ef4e62",
+      "previousFingerprint": "1ef5abe560f37901312f61a22d5e6724fcb0f69524c5d458372ba00229b5a957",
+      "differences": {
+        "blockComposition": {
+          "current": {
+            "movable1x2:1x2": 2,
+            "movable1x2:2x1": 4,
+            "movable1x3:1x3": 3,
+            "movable1x3:3x1": 1,
+            "static1x1:1x1": 2,
+            "target:1x2": 1
+          },
+          "previous": {
+            "movable1x1:1x1": 1,
+            "movable1x2:1x2": 1,
+            "movable1x2:2x1": 4,
+            "movable1x3:1x3": 3,
+            "movable1x3:3x1": 1,
+            "static1x1:1x1": 2,
+            "target:1x2": 1
+          }
+        },
+        "dependencyMetrics": {
+          "current": {
+            "belowTargetDependencyMoves": 0,
+            "belowTargetMeaningfulPieceCount": 0,
+            "dependencyColumnsUsed": 5,
+            "dependencyRowsUsed": 6,
+            "exitCorridorBlockingPieceCount": 3,
+            "exitCorridorDependencyMoves": 4,
+            "exitCorridorDependencyPieceCount": 3,
+            "optimalMovesUsingOuterZone": 1,
+            "outerDependencyPieceCount": 0,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "rowsBetweenTargetAndExitUsed": 4
+          },
+          "previous": {
+            "belowTargetDependencyMoves": 0,
+            "belowTargetMeaningfulPieceCount": 0,
+            "causalTemplate": "Lower1x1SpaceMaker",
+            "crossRegionDependencyDepth": 8,
+            "crossRegionDependencyEdgeCount": 11,
+            "dependencyColumnsUsed": 5,
+            "dependencyRowsUsed": 6,
+            "exitCorridorBlockingPieceCount": 3,
+            "exitCorridorDependencyMoves": 7,
+            "exitCorridorDependencyPieceCount": 3,
+            "optimalMovesUsingOuterZone": 2,
+            "outerDependencyPieceCount": 0,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "requiredLowerPieceCount": 0,
+            "requiredSidePieceCount": 1,
+            "rowsBetweenTargetAndExitUsed": 4
+          }
+        },
+        "movementConstraints": {
+          "current": {
+            "movable1x2:1x2:vertical:movable=true": 2,
+            "movable1x2:2x1:horizontal:movable=true": 4,
+            "movable1x3:1x3:vertical:movable=true": 3,
+            "movable1x3:3x1:horizontal:movable=true": 1,
+            "static1x1:1x1:none:movable=false": 2,
+            "target:1x2:vertical:movable=true": 1
+          },
+          "previous": {
+            "movable1x1:1x1:both:movable=true": 1,
+            "movable1x2:1x2:vertical:movable=true": 1,
+            "movable1x2:2x1:horizontal:movable=true": 4,
+            "movable1x3:1x3:vertical:movable=true": 3,
+            "movable1x3:3x1:horizontal:movable=true": 1,
+            "static1x1:1x1:none:movable=false": 2,
+            "target:1x2:vertical:movable=true": 1
+          }
+        },
+        "solutionStructure": {
+          "current": {
+            "gestures": 9,
+            "distinctMovedPieces": 8,
+            "distinctNonTargetMovedPieces": 7,
+            "targetMoves": 1,
+            "movesBeforeFirstTarget": 8,
+            "movedPieceClasses": {
+              "movable1x2:1x2:vertical": 1,
+              "movable1x2:2x1:horizontal": 3,
+              "movable1x3:1x3:vertical": 3,
+              "movable1x3:3x1:horizontal": 1,
+              "target:1x2:vertical": 1
+            }
+          },
+          "previous": {
+            "gestures": 20,
+            "distinctMovedPieces": 10,
+            "distinctNonTargetMovedPieces": 9,
+            "targetMoves": 4,
+            "movesBeforeFirstTarget": 5,
+            "movedPieceClasses": {
+              "movable1x1:1x1:horizontal": 1,
+              "movable1x2:1x2:vertical": 1,
+              "movable1x2:2x1:horizontal": 7,
+              "movable1x3:1x3:vertical": 5,
+              "movable1x3:3x1:horizontal": 2,
+              "target:1x2:vertical": 4
+            }
+          }
+        }
+      },
+      "meaningfulDifferenceEstablished": true,
+      "manualReviewRequired": false
+    },
+    {
+      "id": "Career_086",
+      "familyId": "F035",
+      "nearestPreviousId": "Career_046",
+      "exactDuplicate": false,
+      "stateFingerprint": "2c00a1d544281f34c4e8917f8945b37efcc35ceb1229e267b169afe7dca6b702",
+      "previousFingerprint": "7e5e387cd2599e396f8c5b3a0920216fc858ccd1960e0ea58f1f36551df2e87e",
+      "differences": {
+        "blockComposition": {
+          "current": {
+            "movable1x1:1x1": 1,
+            "movable1x2:1x2": 3,
+            "movable1x2:2x1": 6,
+            "movable1x3:3x1": 2,
+            "static1x1:1x1": 1,
+            "target:1x2": 1
+          },
+          "previous": {
+            "movable1x2:1x2": 4,
+            "movable1x2:2x1": 6,
+            "movable1x3:3x1": 2,
+            "static1x1:1x1": 1,
+            "target:1x2": 1
+          }
+        },
+        "dependencyMetrics": {
+          "current": {
+            "belowTargetDependencyMoves": 0,
+            "belowTargetMeaningfulPieceCount": 0,
+            "causalTemplate": "Lower1x1SpaceMaker",
+            "crossRegionDependencyDepth": 17,
+            "crossRegionDependencyEdgeCount": 15,
+            "dependencyColumnsUsed": 6,
+            "dependencyRowsUsed": 6,
+            "exitCorridorBlockingPieceCount": 4,
+            "exitCorridorDependencyMoves": 18,
+            "exitCorridorDependencyPieceCount": 6,
+            "optimalMovesUsingOuterZone": 1,
+            "outerDependencyPieceCount": 0,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "requiredLowerPieceCount": 0,
+            "requiredSidePieceCount": 1,
+            "rowsBetweenTargetAndExitUsed": 4
+          },
+          "previous": {
+            "belowTargetDependencyMoves": 0,
+            "belowTargetMeaningfulPieceCount": 0,
+            "dependencyColumnsUsed": 6,
+            "dependencyRowsUsed": 6,
+            "exitCorridorBlockingPieceCount": 4,
+            "exitCorridorDependencyMoves": 6,
+            "exitCorridorDependencyPieceCount": 5,
+            "optimalMovesUsingOuterZone": 2,
+            "outerDependencyPieceCount": 0,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "rowsBetweenTargetAndExitUsed": 4
+          }
+        },
+        "movementConstraints": {
+          "current": {
+            "movable1x1:1x1:both:movable=true": 1,
+            "movable1x2:1x2:vertical:movable=true": 3,
+            "movable1x2:2x1:horizontal:movable=true": 6,
+            "movable1x3:3x1:horizontal:movable=true": 2,
+            "static1x1:1x1:none:movable=false": 1,
+            "target:1x2:vertical:movable=true": 1
+          },
+          "previous": {
+            "movable1x2:1x2:vertical:movable=true": 4,
+            "movable1x2:2x1:horizontal:movable=true": 6,
+            "movable1x3:3x1:horizontal:movable=true": 2,
+            "static1x1:1x1:none:movable=false": 1,
+            "target:1x2:vertical:movable=true": 1
+          }
+        },
+        "solutionStructure": {
+          "current": {
+            "gestures": 40,
+            "distinctMovedPieces": 13,
+            "distinctNonTargetMovedPieces": 12,
+            "targetMoves": 6,
+            "movesBeforeFirstTarget": 2,
+            "movedPieceClasses": {
+              "movable1x1:1x1:horizontal": 1,
+              "movable1x2:1x2:vertical": 9,
+              "movable1x2:2x1:horizontal": 17,
+              "movable1x3:3x1:horizontal": 7,
+              "target:1x2:vertical": 6
+            }
+          },
+          "previous": {
+            "gestures": 10,
+            "distinctMovedPieces": 9,
+            "distinctNonTargetMovedPieces": 8,
+            "targetMoves": 1,
+            "movesBeforeFirstTarget": 9,
+            "movedPieceClasses": {
+              "movable1x2:1x2:vertical": 3,
+              "movable1x2:2x1:horizontal": 3,
+              "movable1x3:3x1:horizontal": 3,
+              "target:1x2:vertical": 1
+            }
+          }
+        }
+      },
+      "meaningfulDifferenceEstablished": true,
+      "manualReviewRequired": false
+    },
+    {
+      "id": "Career_087",
+      "familyId": "F065",
+      "nearestPreviousId": "Career_055",
+      "exactDuplicate": false,
+      "stateFingerprint": "ceb3e1b0e9745ef4f86eecc9fb3392a1e90e9e5c4cad7c470787cbb1d4d0aaac",
+      "previousFingerprint": "c5b6fd7f0123ff34efb13eaef2752ec6f2b789f497703030f905feeea3346d09",
+      "differences": {
+        "blockComposition": {
+          "current": {
+            "movable1x1:1x1": 1,
+            "movable1x2:1x2": 1,
+            "movable1x2:2x1": 4,
+            "movable1x3:1x3": 2,
+            "movable1x3:3x1": 2,
+            "target:1x2": 1
+          },
+          "previous": {
+            "movable1x2:1x2": 1,
+            "movable1x2:2x1": 5,
+            "movable1x3:1x3": 2,
+            "movable1x3:3x1": 2,
+            "target:1x2": 1
+          }
+        },
+        "dependencyMetrics": {
+          "current": {
+            "belowTargetDependencyMoves": 0,
+            "belowTargetMeaningfulPieceCount": 0,
+            "causalTemplate": "Lower1x1SpaceMaker",
+            "crossRegionDependencyDepth": 3,
+            "crossRegionDependencyEdgeCount": 1,
+            "dependencyColumnsUsed": 3,
+            "dependencyRowsUsed": 3,
+            "exitCorridorBlockingPieceCount": 1,
+            "exitCorridorDependencyMoves": 1,
+            "exitCorridorDependencyPieceCount": 1,
+            "optimalMovesUsingOuterZone": 1,
+            "outerDependencyPieceCount": 0,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "requiredLowerPieceCount": 0,
+            "requiredSidePieceCount": 1,
+            "rowsBetweenTargetAndExitUsed": 1
+          },
+          "previous": {
+            "belowTargetDependencyMoves": 5,
+            "belowTargetMeaningfulPieceCount": 4,
+            "dependencyColumnsUsed": 5,
+            "dependencyRowsUsed": 6,
+            "exitCorridorBlockingPieceCount": 1,
+            "exitCorridorDependencyMoves": 1,
+            "exitCorridorDependencyPieceCount": 1,
+            "optimalMovesUsingOuterZone": 3,
+            "outerDependencyPieceCount": 1,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "rowsBetweenTargetAndExitUsed": 1
+          }
+        },
+        "movementConstraints": {
+          "current": {
+            "movable1x1:1x1:both:movable=true": 1,
+            "movable1x2:1x2:vertical:movable=true": 1,
+            "movable1x2:2x1:horizontal:movable=true": 4,
+            "movable1x3:1x3:vertical:movable=true": 2,
+            "movable1x3:3x1:horizontal:movable=true": 2,
+            "target:1x2:vertical:movable=true": 1
+          },
+          "previous": {
+            "movable1x2:1x2:vertical:movable=true": 1,
+            "movable1x2:2x1:horizontal:movable=true": 5,
+            "movable1x3:1x3:vertical:movable=true": 2,
+            "movable1x3:3x1:horizontal:movable=true": 2,
+            "target:1x2:vertical:movable=true": 1
+          }
+        },
+        "solutionStructure": {
+          "current": {
+            "gestures": 4,
+            "distinctMovedPieces": 4,
+            "distinctNonTargetMovedPieces": 3,
+            "targetMoves": 1,
+            "movesBeforeFirstTarget": 3,
+            "movedPieceClasses": {
+              "movable1x1:1x1:horizontal": 1,
+              "movable1x2:1x2:vertical": 1,
+              "movable1x2:2x1:horizontal": 1,
+              "target:1x2:vertical": 1
+            }
+          },
+          "previous": {
+            "gestures": 10,
+            "distinctMovedPieces": 8,
+            "distinctNonTargetMovedPieces": 7,
+            "targetMoves": 2,
+            "movesBeforeFirstTarget": 2,
+            "movedPieceClasses": {
+              "movable1x2:1x2:vertical": 1,
+              "movable1x2:2x1:horizontal": 4,
+              "movable1x3:1x3:vertical": 2,
+              "movable1x3:3x1:horizontal": 1,
+              "target:1x2:vertical": 2
+            }
+          }
+        }
+      },
+      "meaningfulDifferenceEstablished": true,
+      "manualReviewRequired": false
+    },
+    {
+      "id": "Career_088",
+      "familyId": "F143",
+      "nearestPreviousId": "Career_038",
+      "exactDuplicate": false,
+      "stateFingerprint": "cc114e9e5475d3ed3f3b9965ff8f5b804e7489d140d916abe6311ab727b2a3f9",
+      "previousFingerprint": "267c25e6e909cfd565a53f1a2bbabbe4d6d7ab0b7b99effca0a3b274bf3dd76d",
+      "differences": {
+        "blockComposition": {
+          "current": {
+            "movable1x1:1x1": 1,
+            "movable1x2:2x1": 3,
+            "movable1x3:1x3": 3,
+            "movable1x3:3x1": 1,
+            "static1x1:1x1": 1,
+            "target:1x2": 1
+          },
+          "previous": {
+            "movable1x2:1x2": 1,
+            "movable1x2:2x1": 3,
+            "movable1x3:1x3": 3,
+            "movable1x3:3x1": 1,
+            "static1x1:1x1": 1,
+            "target:1x2": 1
+          }
+        },
+        "dependencyMetrics": {
+          "current": {
+            "belowTargetDependencyMoves": 0,
+            "belowTargetMeaningfulPieceCount": 0,
+            "dependencyColumnsUsed": 0,
+            "dependencyRowsUsed": 0,
+            "exitCorridorBlockingPieceCount": 0,
+            "exitCorridorDependencyMoves": 0,
+            "exitCorridorDependencyPieceCount": 0,
+            "optimalMovesUsingOuterZone": 0,
+            "outerDependencyPieceCount": 0,
+            "outerZoneEvidence": "outer-seal-unsolvable",
+            "rowsBetweenTargetAndExitUsed": 0
+          },
+          "previous": {
+            "belowTargetDependencyMoves": 0,
+            "belowTargetMeaningfulPieceCount": 0,
+            "causalTemplate": "LowerParkingUnlock",
+            "crossRegionDependencyDepth": 3,
+            "crossRegionDependencyEdgeCount": 4,
+            "dependencyColumnsUsed": 5,
+            "dependencyRowsUsed": 6,
+            "exitCorridorBlockingPieceCount": 3,
+            "exitCorridorDependencyMoves": 3,
+            "exitCorridorDependencyPieceCount": 3,
+            "optimalMovesUsingOuterZone": 0,
+            "outerDependencyPieceCount": 0,
+            "outerZoneEvidence": "outer-seal-unsolvable",
+            "requiredLowerPieceCount": 0,
+            "requiredSidePieceCount": 1,
+            "rowsBetweenTargetAndExitUsed": 4
+          }
+        },
+        "movementConstraints": {
+          "current": {
+            "movable1x1:1x1:both:movable=true": 1,
+            "movable1x2:2x1:horizontal:movable=true": 3,
+            "movable1x3:1x3:vertical:movable=true": 3,
+            "movable1x3:3x1:horizontal:movable=true": 1,
+            "static1x1:1x1:none:movable=false": 1,
+            "target:1x2:vertical:movable=true": 1
+          },
+          "previous": {
+            "movable1x2:1x2:vertical:movable=true": 1,
+            "movable1x2:2x1:horizontal:movable=true": 3,
+            "movable1x3:1x3:vertical:movable=true": 3,
+            "movable1x3:3x1:horizontal:movable=true": 1,
+            "static1x1:1x1:none:movable=false": 1,
+            "target:1x2:vertical:movable=true": 1
+          }
+        },
+        "solutionStructure": {
+          "current": {
+            "gestures": 8,
+            "distinctMovedPieces": 8,
+            "distinctNonTargetMovedPieces": 7,
+            "targetMoves": 1,
+            "movesBeforeFirstTarget": 7,
+            "movedPieceClasses": {
+              "movable1x1:1x1:horizontal": 1,
+              "movable1x2:2x1:horizontal": 2,
+              "movable1x3:1x3:vertical": 3,
+              "movable1x3:3x1:horizontal": 1,
+              "target:1x2:vertical": 1
+            }
+          },
+          "previous": {
+            "gestures": 8,
+            "distinctMovedPieces": 8,
+            "distinctNonTargetMovedPieces": 7,
+            "targetMoves": 1,
+            "movesBeforeFirstTarget": 7,
+            "movedPieceClasses": {
+              "movable1x2:1x2:vertical": 1,
+              "movable1x2:2x1:horizontal": 2,
+              "movable1x3:1x3:vertical": 3,
+              "movable1x3:3x1:horizontal": 1,
+              "target:1x2:vertical": 1
+            }
+          }
+        }
+      },
+      "meaningfulDifferenceEstablished": true,
+      "manualReviewRequired": false
+    },
+    {
+      "id": "Career_089",
+      "familyId": "F089",
+      "nearestPreviousId": "Career_059",
+      "exactDuplicate": false,
+      "stateFingerprint": "408d471eaf7a716ded0e24df1b0430809568fc23f8027cee78a61b743adaab44",
+      "previousFingerprint": "004a5e7f80302fc166cac5eafaef06130ceea493370613a14d27bb549bcc0720",
+      "differences": {
+        "blockComposition": {
+          "current": {
+            "movable1x1:1x1": 1,
+            "movable1x2:1x2": 5,
+            "movable1x2:2x1": 3,
+            "movable1x3:3x1": 2,
+            "static1x1:1x1": 2,
+            "target:1x2": 1
+          },
+          "previous": {
+            "movable1x2:1x2": 5,
+            "movable1x2:2x1": 4,
+            "movable1x3:3x1": 2,
+            "static1x1:1x1": 2,
+            "target:1x2": 1
+          }
+        },
+        "dependencyMetrics": {
+          "current": {
+            "belowTargetDependencyMoves": 2,
+            "belowTargetMeaningfulPieceCount": 1,
+            "dependencyColumnsUsed": 5,
+            "dependencyRowsUsed": 6,
+            "exitCorridorBlockingPieceCount": 3,
+            "exitCorridorDependencyMoves": 3,
+            "exitCorridorDependencyPieceCount": 3,
+            "optimalMovesUsingOuterZone": 4,
+            "outerDependencyPieceCount": 1,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "rowsBetweenTargetAndExitUsed": 3
+          },
+          "previous": {
+            "belowTargetDependencyMoves": 0,
+            "belowTargetMeaningfulPieceCount": 0,
+            "dependencyColumnsUsed": 6,
+            "dependencyRowsUsed": 7,
+            "exitCorridorBlockingPieceCount": 3,
+            "exitCorridorDependencyMoves": 5,
+            "exitCorridorDependencyPieceCount": 4,
+            "optimalMovesUsingOuterZone": 4,
+            "outerDependencyPieceCount": 1,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "rowsBetweenTargetAndExitUsed": 5
+          }
+        },
+        "movementConstraints": {
+          "current": {
+            "movable1x1:1x1:both:movable=true": 1,
+            "movable1x2:1x2:vertical:movable=true": 5,
+            "movable1x2:2x1:horizontal:movable=true": 3,
+            "movable1x3:3x1:horizontal:movable=true": 2,
+            "static1x1:1x1:none:movable=false": 2,
+            "target:1x2:vertical:movable=true": 1
+          },
+          "previous": {
+            "movable1x2:1x2:vertical:movable=true": 5,
+            "movable1x2:2x1:horizontal:movable=true": 4,
+            "movable1x3:3x1:horizontal:movable=true": 2,
+            "static1x1:1x1:none:movable=false": 2,
+            "target:1x2:vertical:movable=true": 1
+          }
+        },
+        "solutionStructure": {
+          "current": {
+            "gestures": 7,
+            "distinctMovedPieces": 7,
+            "distinctNonTargetMovedPieces": 6,
+            "targetMoves": 1,
+            "movesBeforeFirstTarget": 6,
+            "movedPieceClasses": {
+              "movable1x1:1x1:horizontal": 1,
+              "movable1x2:1x2:vertical": 2,
+              "movable1x2:2x1:horizontal": 1,
+              "movable1x3:3x1:horizontal": 2,
+              "target:1x2:vertical": 1
+            }
+          },
+          "previous": {
+            "gestures": 8,
+            "distinctMovedPieces": 7,
+            "distinctNonTargetMovedPieces": 6,
+            "targetMoves": 1,
+            "movesBeforeFirstTarget": 7,
+            "movedPieceClasses": {
+              "movable1x2:1x2:vertical": 1,
+              "movable1x2:2x1:horizontal": 4,
+              "movable1x3:3x1:horizontal": 2,
+              "target:1x2:vertical": 1
+            }
+          }
+        }
+      },
+      "meaningfulDifferenceEstablished": true,
+      "manualReviewRequired": false
+    },
+    {
+      "id": "Career_090",
+      "familyId": "F101",
+      "nearestPreviousId": "Career_036",
+      "exactDuplicate": false,
+      "stateFingerprint": "c953feeb1ba18548334926a8f2fb45b736337a68c83759f6e354a31e64d92ca1",
+      "previousFingerprint": "8acfe4b60c46991e7904b348a713e09bdf4014c326fe30abb4f0229c054a8987",
+      "differences": {
+        "blockComposition": {
+          "current": {
+            "movable1x2:1x2": 5,
+            "movable1x2:2x1": 3,
+            "movable1x3:1x3": 2,
+            "movable1x3:3x1": 1,
+            "static1x1:1x1": 2,
+            "target:1x2": 1
+          },
+          "previous": {
+            "movable1x2:1x2": 4,
+            "movable1x2:2x1": 3,
+            "movable1x3:1x3": 2,
+            "movable1x3:3x1": 1,
+            "static1x1:1x1": 2,
+            "target:1x2": 1
+          }
+        },
+        "dependencyMetrics": {
+          "current": {
+            "belowTargetDependencyMoves": 2,
+            "belowTargetMeaningfulPieceCount": 2,
+            "dependencyColumnsUsed": 4,
+            "dependencyRowsUsed": 6,
+            "exitCorridorBlockingPieceCount": 1,
+            "exitCorridorDependencyMoves": 1,
+            "exitCorridorDependencyPieceCount": 1,
+            "optimalMovesUsingOuterZone": 1,
+            "outerDependencyPieceCount": 0,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "rowsBetweenTargetAndExitUsed": 1
+          },
+          "previous": {
+            "belowTargetDependencyMoves": 0,
+            "belowTargetMeaningfulPieceCount": 0,
+            "dependencyColumnsUsed": 5,
+            "dependencyRowsUsed": 5,
+            "exitCorridorBlockingPieceCount": 2,
+            "exitCorridorDependencyMoves": 3,
+            "exitCorridorDependencyPieceCount": 2,
+            "optimalMovesUsingOuterZone": 4,
+            "outerDependencyPieceCount": 0,
+            "outerZoneEvidence": "optimal-move-touches-outer",
+            "rowsBetweenTargetAndExitUsed": 3
+          }
+        },
+        "movementConstraints": {
+          "current": {
+            "movable1x2:1x2:vertical:movable=true": 5,
+            "movable1x2:2x1:horizontal:movable=true": 3,
+            "movable1x3:1x3:vertical:movable=true": 2,
+            "movable1x3:3x1:horizontal:movable=true": 1,
+            "static1x1:1x1:none:movable=false": 2,
+            "target:1x2:vertical:movable=true": 1
+          },
+          "previous": {
+            "movable1x2:1x2:vertical:movable=true": 4,
+            "movable1x2:2x1:horizontal:movable=true": 3,
+            "movable1x3:1x3:vertical:movable=true": 2,
+            "movable1x3:3x1:horizontal:movable=true": 1,
+            "static1x1:1x1:none:movable=false": 2,
+            "target:1x2:vertical:movable=true": 1
+          }
+        },
+        "solutionStructure": {
+          "current": {
+            "gestures": 5,
+            "distinctMovedPieces": 5,
+            "distinctNonTargetMovedPieces": 4,
+            "targetMoves": 1,
+            "movesBeforeFirstTarget": 4,
+            "movedPieceClasses": {
+              "movable1x2:1x2:vertical": 3,
+              "movable1x3:3x1:horizontal": 1,
+              "target:1x2:vertical": 1
+            }
+          },
+          "previous": {
+            "gestures": 15,
+            "distinctMovedPieces": 7,
+            "distinctNonTargetMovedPieces": 6,
+            "targetMoves": 4,
+            "movesBeforeFirstTarget": 2,
+            "movedPieceClasses": {
+              "movable1x2:1x2:vertical": 1,
+              "movable1x2:2x1:horizontal": 6,
+              "movable1x3:1x3:vertical": 4,
+              "target:1x2:vertical": 4
+            }
+          }
+        }
+      },
+      "meaningfulDifferenceEstablished": true,
+      "manualReviewRequired": false
+    }
+  ],
+  "schemaVersion": 1
+}

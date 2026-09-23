@@ -1,0 +1,216 @@
+{
+  "schemaVersion": 1,
+  "levelId": "Career_067",
+  "solved": true,
+  "optimal": true,
+  "optimalGestures": 20,
+  "visitedStates": 493068,
+  "elapsedMs": 1318,
+  "timedOut": false,
+  "budgetExceeded": false,
+  "replayPass": true,
+  "replayVerified": true,
+  "fingerprint": "unity 7x8 exit=3\n.......\n.BBBB.B\n.BBBB.B\n.B..BxB\n.B.BBB.\n.BBTxB.\n.o.TBB.\n.......\n",
+  "moves": [
+    {
+      "pieceId": "C1",
+      "fromX": 1,
+      "fromY": 1,
+      "toX": 0,
+      "toY": 1,
+      "axis": "horizontal",
+      "distance": 1,
+      "isExit": false
+    },
+    {
+      "pieceId": "P07",
+      "fromX": 3,
+      "fromY": 3,
+      "toX": 2,
+      "toY": 3,
+      "axis": "horizontal",
+      "distance": 1,
+      "isExit": false
+    },
+    {
+      "pieceId": "P02",
+      "fromX": 4,
+      "fromY": 4,
+      "toX": 4,
+      "toY": 3,
+      "axis": "vertical",
+      "distance": 1,
+      "isExit": false
+    },
+    {
+      "pieceId": "P09",
+      "fromX": 1,
+      "fromY": 6,
+      "toX": 2,
+      "toY": 6,
+      "axis": "horizontal",
+      "distance": 1,
+      "isExit": false
+    },
+    {
+      "pieceId": "P01",
+      "fromX": 1,
+      "fromY": 3,
+      "toX": 1,
+      "toY": 4,
+      "axis": "vertical",
+      "distance": 1,
+      "isExit": false
+    },
+    {
+      "pieceId": "P07",
+      "fromX": 2,
+      "fromY": 3,
+      "toX": 1,
+      "toY": 3,
+      "axis": "horizontal",
+      "distance": 1,
+      "isExit": false
+    },
+    {
+      "pieceId": "target",
+      "fromX": 3,
+      "fromY": 1,
+      "toX": 3,
+      "toY": 2,
+      "axis": "vertical",
+      "distance": 1,
+      "isExit": false
+    },
+    {
+      "pieceId": "P05",
+      "fromX": 4,
+      "fromY": 1,
+      "toX": 1,
+      "toY": 1,
+      "axis": "horizontal",
+      "distance": 3,
+      "isExit": false
+    },
+    {
+      "pieceId": "target",
+      "fromX": 3,
+      "fromY": 2,
+      "toX": 3,
+      "toY": 1,
+      "axis": "vertical",
+      "distance": 1,
+      "isExit": false
+    },
+    {
+      "pieceId": "P03",
+      "fromX": 5,
+      "fromY": 2,
+      "toX": 5,
+      "toY": 1,
+      "axis": "vertical",
+      "distance": 1,
+      "isExit": false
+    },
+    {
+      "pieceId": "P07",
+      "fromX": 1,
+      "fromY": 3,
+      "toX": 2,
+      "toY": 3,
+      "axis": "horizontal",
+      "distance": 1,
+      "isExit": false
+    },
+    {
+      "pieceId": "P01",
+      "fromX": 1,
+      "fromY": 4,
+      "toX": 1,
+      "toY": 3,
+      "axis": "vertical",
+      "distance": 1,
+      "isExit": false
+    },
+    {
+      "pieceId": "P09",
+      "fromX": 2,
+      "fromY": 6,
+      "toX": 0,
+      "toY": 6,
+      "axis": "horizontal",
+      "distance": 2,
+      "isExit": false
+    },
+    {
+      "pieceId": "P02",
+      "fromX": 4,
+      "fromY": 3,
+      "toX": 4,
+      "toY": 4,
+      "axis": "vertical",
+      "distance": 1,
+      "isExit": false
+    },
+    {
+      "pieceId": "P07",
+      "fromX": 2,
+      "fromY": 3,
+      "toX": 4,
+      "toY": 3,
+      "axis": "horizontal",
+      "distance": 2,
+      "isExit": false
+    },
+    {
+      "pieceId": "target",
+      "fromX": 3,
+      "fromY": 1,
+      "toX": 3,
+      "toY": 3,
+      "axis": "vertical",
+      "distance": 2,
+      "isExit": false
+    },
+    {
+      "pieceId": "P06",
+      "fromX": 1,
+      "fromY": 2,
+      "toX": 2,
+      "toY": 2,
+      "axis": "horizontal",
+      "distance": 1,
+      "isExit": false
+    },
+    {
+      "pieceId": "P01",
+      "fromX": 1,
+      "fromY": 3,
+      "toX": 1,
+      "toY": 2,
+      "axis": "vertical",
+      "distance": 1,
+      "isExit": false
+    },
+    {
+      "pieceId": "P08",
+      "fromX": 2,
+      "fromY": 5,
+      "toX": 1,
+      "toY": 5,
+      "axis": "horizontal",
+      "distance": 1,
+      "isExit": false
+    },
+    {
+      "pieceId": "target",
+      "fromX": 3,
+      "fromY": 3,
+      "toX": 3,
+      "toY": 8,
+      "axis": "vertical",
+      "distance": 5,
+      "isExit": true
+    }
+  ]
+}

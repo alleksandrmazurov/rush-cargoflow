@@ -1,0 +1,52 @@
+{
+  "exactStateFingerprints": {
+    "candidateCount": 30,
+    "duplicates": 0,
+    "idIndependent": true,
+    "relativeToCareer31To60Matches": 0,
+    "unique": 30
+  },
+  "families": {
+    "newRelativeToCareer31To60": 0,
+    "repeatedInsidePack": [
+      "F035",
+      "F049",
+      "F050",
+      "F084",
+      "F086",
+      "F101"
+    ],
+    "reusedRelativeToCareer31To60": 30,
+    "uniqueInPack": 24
+  },
+  "firstThirtyCareerComparison": {
+    "authoritativeDatasetAvailable": false,
+    "conclusion": "Not sufficient to claim no overlap with APK career positions 1-30; Unity-agent comparison required.",
+    "partialExactMatches": 0,
+    "partialLegacyFixturesChecked": 7
+  },
+  "generation": {
+    "newPilotDurationMs": 0,
+    "newPilotRuns": 0,
+    "selectionAndSolutionMaterializationMs": 38447
+  },
+  "packId": "BoardMix_CareerExtension_002",
+  "schemaVersion": 1,
+  "softProximity": {
+    "relativeToCareer31To60Pairs": 0,
+    "report": "ProximityReport.json",
+    "withinPackPairs": 0
+  },
+  "storedSolutionReplay": {
+    "errors": null,
+    "fail": 0,
+    "pass": 30
+  },
+  "unityBatchValidation": {
+    "ok": true,
+    "dir": "testdata/cargoflow/career/BoardMix_CareerExtension_002",
+    "accepted": 30,
+    "levelJsonCount": 30,
+    "solutionJsonCount": 30
+  }
+}
